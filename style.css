@@ -1,53 +1,111 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  background: #f7f5fb;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f7f6fb;
   color: #333;
 }
 
-header {
-  background: linear-gradient(135deg, #b993d6, #8ca6db);
-  color: white;
+/* HERO */
+.hero {
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #cbb4f5, #f3c6e8);
+  color: #2d2d2d;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 40px;
+.hero h1 {
+  font-size: 44px;
+  margin-bottom: 10px;
 }
 
-section {
-  padding: 40px 20px;
+.hero p {
+  font-size: 18px;
+}
+
+/* SECTIONS */
+.section {
   max-width: 900px;
-  margin: auto;
+  margin: 60px auto;
+  padding: 0 20px;
 }
 
-h2 {
+.section h2 {
   color: #6a5acd;
+  margin-bottom: 15px;
 }
 
+/* PROJECTS */
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  gap: 25px;
 }
 
 .card {
   background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card h3 {
+  margin-top: 0;
 }
 
 .card a {
-  color: #6a5acd;
   text-decoration: none;
+  color: #6a5acd;
   font-weight: bold;
 }
 
+.tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 12px;
+  font-size: 13px;
+  background: #eee6ff;
+  border-radius: 20px;
+}
+
+/* FOOTER */
 footer {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
   background: #eee;
+}
+
+/* ANIMATIONS */
+.fade {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.slide {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: slideUp 1s forwards;
+}
+
+.delay {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
