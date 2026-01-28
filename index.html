@@ -5,7 +5,6 @@
   <title>Ghazal — Engineered Experience</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
@@ -13,8 +12,11 @@
 </head>
 <body>
 
+<!-- custom cursor -->
+<div class="cursor"></div>
+
 <!-- INTRO -->
-<section class="intro">
+<section class="intro" id="top">
   <div class="terminal">
     <p>Initializing system...</p>
     <p>Loading engineer profile...</p>
@@ -22,7 +24,122 @@
 
   <h1 class="glitch" data-text="GHAZAL">GHAZAL</h1>
   <p class="role">Software Engineer · System Thinker</p>
+
+  <div class="cta">
+    <a class="btn" href="#core">Enter System ↓</a>
+  </div>
 </section>
+
+<!-- CORE -->
+<section class="panel" id="core">
+  <div class="wrap">
+    <h2 class="kicker reveal">SYSTEM CORE</h2>
+    <h3 class="title reveal">I design systems, not just screens.</h3>
+    <p class="desc reveal">
+      Fifth-year Software Engineering student focused on modular design, design patterns,
+      testing mindset, and Flutter mobile development.
+    </p>
+
+    <div class="mini-grid">
+      <div class="chip reveal">Flutter · Dart</div>
+      <div class="chip reveal">Design Patterns</div>
+      <div class="chip reveal">Testing</div>
+      <div class="chip reveal">Security Awareness</div>
+      <div class="chip reveal">System Thinking</div>
+    </div>
+
+    <div class="actions reveal">
+      <a class="btn primary" href="mailto:mohammadghazal423@gmail.com?subject=Portfolio%20Contact">Email</a>
+      <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn ghost" href="#modules">Modules</a>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="panel" id="modules">
+  <div class="wrap">
+    <h2 class="kicker reveal">ENGINEERING MODULES</h2>
+    <p class="desc reveal">Each module is a problem → a design → a solution.</p>
+
+    <div class="modules">
+      <article class="module reveal">
+        <div class="module-head">
+          <span class="badge">SE3</span>
+          <h3>Advanced Banking System</h3>
+        </div>
+        <p>
+          Modular banking system demonstrating structural + behavioral design patterns.
+          (Decorator + tests + admin interface implemented in my contribution.)
+        </p>
+        <div class="module-meta">
+          <span>Patterns</span><span>Testing</span><span>Admin UI</span>
+        </div>
+        <a class="link" href="https://github.com/ghazal-mohammad/advanced_banking_system" target="_blank" rel="noopener">
+          Open Repository →
+        </a>
+      </article>
+
+      <article class="module reveal">
+        <div class="module-head">
+          <span class="badge">Flutter</span>
+          <h3>Government Complaints Mobile App</h3>
+        </div>
+        <p>
+          Flutter mobile application for citizens: OTP auth, complaint submission, tracking,
+          and a clean usable flow.
+        </p>
+        <div class="module-meta">
+          <span>Flutter</span><span>OTP</span><span>UX Flow</span>
+        </div>
+        <a class="link" href="https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main" target="_blank" rel="noopener">
+          Open Repository →
+        </a>
+      </article>
+
+      <article class="module reveal">
+        <div class="module-head">
+          <span class="badge">Private</span>
+          <h3>Civil Registry Automation</h3>
+        </div>
+        <p>
+          Requirements analysis + workflow re-engineering. Private repo until milestones are ready.
+        </p>
+        <div class="module-meta">
+          <span>Requirements</span><span>Workflows</span><span>Traceability</span>
+        </div>
+        <span class="hint">Locked Module 🔒</span>
+      </article>
+
+      <article class="module reveal">
+        <div class="module-head">
+          <span class="badge">Private</span>
+          <h3>Information Systems Security</h3>
+        </div>
+        <p>
+          Academic labs (CSRF, XSS, SQLi) organized safely (redacted). Private for educational use.
+        </p>
+        <div class="module-meta">
+          <span>CSRF</span><span>XSS</span><span>SQLi</span>
+        </div>
+        <span class="hint">Locked Module 🔒</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap reveal">
+    <div class="footer-line"></div>
+    <p class="mono">Initiate Contact Protocol:</p>
+    <div class="actions">
+      <a class="btn primary" href="mailto:mohammadghazal423@gmail.com?subject=Portfolio%20Contact">Email Me</a>
+      <a class="btn ghost" href="#top">Back to Top</a>
+    </div>
+    <p class="tiny">© <span id="y"></span> Ghazal — Engineered Experience</p>
+  </div>
+</footer>
 
 <script src="engine.js"></script>
 </body>
