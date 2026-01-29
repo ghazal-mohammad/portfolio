@@ -49,24 +49,24 @@ if (terminalBox) {
   next();
 }
 
-// ===== THEME TOGGLE (saved) =====
+// ===== THEME TOGGLE =====
 const themeBtn = document.getElementById("themeToggle");
-const savedTheme = localStorage.getItem("theme") || "default";
+let theme = localStorage.getItem("theme") || "dark";
 
-if (savedTheme === "neon") {
-  document.documentElement.setAttribute("data-theme", "neon");
-}
+applyTheme(theme);
 
 if (themeBtn) {
   themeBtn.addEventListener("click", () => {
-    const cur = document.documentElement.getAttribute("data-theme");
-    const next = cur === "neon" ? "default" : "neon";
-    if (next === "neon") document.documentElement.setAttribute("data-theme", "neon");
-    else document.documentElement.removeAttribute("data-theme");
-    localStorage.setItem("theme", next);
-    softClick();
+    theme = theme === "dark" ? "purple" : "dark";
+    localStorage.setItem("theme", theme);
+    applyTheme(theme);
   });
 }
+
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+}
+
 
 // ===== SOUND (cinematic soft) =====
 let soundEnabled = false;
