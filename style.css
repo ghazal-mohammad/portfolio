@@ -7,52 +7,57 @@
   --muted:rgba(230,230,235,.72);
   --stroke:rgba(143,123,255,.18);
   --shadow:0 22px 70px rgba(0,0,0,.45);
+  --bg1: rgba(143,123,255,.12);
+--bg2: rgba(45,226,230,.10);
+--gridA: rgba(143,123,255,.10);
+--gridB: rgba(45,226,230,.07);
+
 }
 
 :root[data-theme="dark"]{
   --primary:#8f7bff;
   --accent:#2de2e6;
   --pink:#ff4ecd;
+  --bg1: rgba(143,123,255,.12);
+  --bg2: rgba(45,226,230,.10);
+  --gridA: rgba(143,123,255,.10);
+  --gridB: rgba(45,226,230,.07);
 }
+
 :root[data-theme="purple"]{
   --primary:#c77dff;
   --accent:#ff9ad5;
   --pink:#ffd1f2;
+  --bg1: rgba(199,125,255,.22);
+  --bg2: rgba(255,154,213,.16);
+  --gridA: rgba(199,125,255,.14);
+  --gridB: rgba(255,154,213,.10);
 }
-:root[data-theme="purple"] body{
-  background:
-    radial-gradient(1200px 600px at 50% 0%, rgba(199,125,255,.18), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, rgba(255,154,213,.14), transparent 55%),
-    #0b0d10;
-}
-:root[data-theme="dark"] body{
-  background:
-    radial-gradient(1200px 600px at 50% 0%, rgba(143,123,255,.12), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, rgba(45,226,230,.10), transparent 55%),
-    #0b0d10;
-}
+
+
 
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 
 body{
   background:
-    radial-gradient(1200px 600px at 50% 0%, rgba(143,123,255,.12), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, rgba(45,226,230,.10), transparent 55%),
+    radial-gradient(1200px 600px at 50% 0%, var(--bg1), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, var(--bg2), transparent 55%),
     var(--bg);
-  color:var(--text);
+  color: var(--text);
   font-family:'Space Grotesk', sans-serif;
-  padding-top:64px; /* topbar space */
+  padding-top:64px;
 }
+
 
 .mono{font-family:'JetBrains Mono', monospace;}
 
 /* cinematic layers */
 .bg-grid{
   position:fixed; inset:0; z-index:-3;
-  background:
-    linear-gradient(rgba(143,123,255,.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(45,226,230,.07) 1px, transparent 1px);
+ background:
+  linear-gradient(var(--gridA) 1px, transparent 1px),
+  linear-gradient(90deg, var(--gridB) 1px, transparent 1px);
   background-size:64px 64px;
   transform:perspective(900px) rotateX(55deg) translateY(-120px);
   transform-origin:top;
