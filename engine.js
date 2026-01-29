@@ -2,7 +2,25 @@
 const y = document.getElementById("y");
 if (y) y.textContent = new Date().getFullYear();
 
-// ===== Custom cursor =====
+// ===== Theme Toggle =====
+const themeBtn = document.getElementById("themeToggle");
+let theme = localStorage.getItem("theme") || "dark";
+applyTheme(theme);
+
+if (themeBtn) {
+  themeBtn.addEventListener("click", () => {
+    theme = theme === "dark" ? "purple" : "dark";
+    localStorage.setItem("theme", theme);
+    applyTheme(theme);
+    softClick();
+  });
+}
+
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+}
+
+// ===== Cursor =====
 const cursor = document.querySelector(".cursor");
 window.addEventListener("mousemove", (e) => {
   cursor.style.left = e.clientX + "px";
@@ -17,56 +35,6 @@ const io = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15 });
 revealEls.forEach(el => io.observe(el));
-
-// ===== Typing terminal =====
-const terminalBox = document.querySelector(".terminal");
-const lines = [
-  "Initializing system...",
-  "Loading engineer profile...",
-  "Status: ACTIVE",
-  "Role: Engineer"
-];
-
-function typeLine(text, cb) {
-  const p = document.createElement("p");
-  terminalBox.appendChild(p);
-  let i = 0;
-  const tick = () => {
-    p.textContent = text.slice(0, i++);
-    if (i <= text.length) setTimeout(tick, 18);
-    else cb && setTimeout(cb, 170);
-  };
-  tick();
-}
-
-if (terminalBox) {
-  terminalBox.innerHTML = "";
-  let idx = 0;
-  const next = () => {
-    if (idx >= lines.length) return;
-    typeLine(lines[idx++], next);
-  };
-  next();
-}
-
-// ===== THEME TOGGLE =====
-const themeBtn = document.getElementById("themeToggle");
-let theme = localStorage.getItem("theme") || "dark";
-
-applyTheme(theme);
-
-if (themeBtn) {
-  themeBtn.addEventListener("click", () => {
-    theme = theme === "dark" ? "purple" : "dark";
-    localStorage.setItem("theme", theme);
-    applyTheme(theme);
-  });
-}
-
-function applyTheme(t){
-  document.documentElement.setAttribute("data-theme", t);
-}
-
 
 // ===== SOUND (cinematic soft) =====
 let soundEnabled = false;
@@ -83,11 +51,11 @@ if (soundBtn) {
     }
 
     soundBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
-    soundEnabled ? softBoot() : softClose();
+    soundEnabled ? softBoot() : softOff();
   });
 }
 
-function playTone(freq, t = 0.06, type = "sine", gainVal = 0.012) {
+function playTone(freq, t = 0.06, type = "sine", gainVal = 0.015) {
   if (!soundEnabled || !audioCtx) return;
 
   const o = audioCtx.createOscillator();
@@ -109,32 +77,169 @@ function playTone(freq, t = 0.06, type = "sine", gainVal = 0.012) {
 
 function softClick(){
   playTone(220, 0.03, "triangle", 0.010);
-  playTone(440, 0.025, "sine", 0.007);
+  playTone(440, 0.02, "sine", 0.006);
 }
 function softOpen(){
-  playTone(392, 0.05, "sine", 0.011);
+  playTone(392, 0.05, "sine", 0.012);
   playTone(784, 0.06, "triangle", 0.010);
 }
-function softClose(){
-  playTone(196, 0.06, "sine", 0.011);
-}
+function softClose(){ playTone(196, 0.06, "sine", 0.012); }
 function softBoot(){
-  playTone(330, 0.06, "sine", 0.011);
+  playTone(330, 0.06, "sine", 0.012);
   setTimeout(() => playTone(494, 0.06, "triangle", 0.010), 70);
   setTimeout(() => playTone(659, 0.07, "sine", 0.010), 140);
 }
+function softOff(){ playTone(247, 0.07, "sine", 0.010); }
 
-// ===== Modal data (with screenshots) =====
+// hover micro sound + cursor
+document.querySelectorAll("a, button, .module").forEach(el => {
+  el.addEventListener("mouseenter", () => {
+    cursor.style.width = "28px";
+    cursor.style.height = "28px";
+    cursor.style.borderColor = "rgba(255,78,205,.75)";
+    softClick();
+  });
+  el.addEventListener("mouseleave", () => {
+    cursor.style.width = "16px";
+    cursor.style.height = "16px";
+    cursor.style.borderColor = "rgba(45,226,230,.65)";
+  });
+});
+
+// ===== Typing terminal =====
+const terminalBox = document.querySelector(".terminal");
+const lines = [
+  "Initializing system...",
+  "Loading engineer profile...",
+  "Status: ACTIVE",
+  "Role: Engineer"
+];
+
+function typeLine(text, cb){
+  const p = document.createElement("p");
+  terminalBox.appendChild(p);
+  let i = 0;
+  const tick = () => {
+    p.textContent = text.slice(0, i++);
+    if (i <= text.length) setTimeout(tick, 18);
+    else cb && setTimeout(cb, 160);
+  };
+  tick();
+}
+
+if (terminalBox){
+  terminalBox.innerHTML = "";
+  let idx = 0;
+  const next = () => {
+    if (idx >= lines.length) return;
+    typeLine(lines[idx++], next);
+  };
+  next();
+}
+
+// ===== Modal data + images =====
 const data = {
   banking: {
     kicker: "SE3 · DESIGN PATTERNS",
     title: "Advanced Banking System",
     desc:
       "Modular banking system demonstrating structural + behavioral patterns. " +
-      "My contribution: Decorator implementation, a full unit testing suite for it, and an admin control interface.",
-    tags: ["Decorator", "Unit Tests", "Admin Interface", "Extensibility"],
+      "My contribution: Decorator implementation, a full unit testing suite, and an admin control interface.",
+    tags: ["Decorator", "Unit Tests", "Admin UI", "Extensibility"],
     link: "https://github.com/ghazal-mohammad/advanced_banking_system",
-    img: "assets/banking.png"
+    images: ["assets/screens/banking-1.png"]
   },
   complaints: {
-    kicker:
+    kicker: "FLUTTER · MOBILE APP",
+    title: "Government Complaints Mobile App",
+    desc:
+      "Flutter citizen-facing app: OTP authentication, complaint submission with attachments, and status tracking with a clean UX flow.",
+    tags: ["Flutter", "OTP", "Forms", "UX Flow", "API Integration"],
+    link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
+    images: ["assets/screens/flutter-1.png"]
+  },
+  civil: {
+    kicker: "SYSTEMS · REQUIREMENTS",
+    title: "Civil Registry Automation",
+    desc:
+      "Requirements analysis + workflow re-engineering for civil status transactions in courts. Private until stable milestones are ready.",
+    tags: ["Requirements", "Workflows", "Traceability", "Concurrency"],
+    link: "#",
+    images: ["assets/screens/civil-1.png"]
+  },
+  security: {
+    kicker: "SECURITY · ACADEMIC LABS",
+    title: "Information Systems Security",
+    desc:
+      "Academic labs organized safely (redacted). Focus on mitigation and defensive thinking.",
+    tags: ["CSRF", "XSS", "SQLi", "Defensive Thinking"],
+    link: "#",
+    images: ["assets/screens/security-1.png"]
+  }
+};
+
+// modal logic
+const modal = document.getElementById("modal");
+const modalClose = document.getElementById("modalClose");
+const modalBack = document.getElementById("modalBack");
+const modalKicker = document.getElementById("modalKicker");
+const modalTitle = document.getElementById("modalTitle");
+const modalDesc = document.getElementById("modalDesc");
+const modalTags = document.getElementById("modalTags");
+const modalImages = document.getElementById("modalImages");
+const modalLink = document.getElementById("modalLink");
+
+function openModal(key){
+  const d = data[key];
+  if (!d) return;
+
+  modalKicker.textContent = d.kicker;
+  modalTitle.textContent = d.title;
+  modalDesc.textContent = d.desc;
+
+  modalTags.innerHTML = "";
+  d.tags.forEach(t => {
+    const s = document.createElement("span");
+    s.textContent = t;
+    modalTags.appendChild(s);
+  });
+
+  modalImages.innerHTML = "";
+  (d.images || []).forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = d.title + " screenshot";
+    modalImages.appendChild(img);
+  });
+
+  if (d.link === "#") modalLink.style.display = "none";
+  else {
+    modalLink.style.display = "inline-flex";
+    modalLink.href = d.link;
+  }
+
+  modal.classList.add("on");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  softOpen();
+}
+
+function closeModal(){
+  modal.classList.remove("on");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  softClose();
+}
+
+document.querySelectorAll("[data-modal]").forEach(el => {
+  el.addEventListener("click", () => openModal(el.dataset.modal));
+});
+
+if (modalClose) modalClose.addEventListener("click", closeModal);
+if (modalBack) modalBack.addEventListener("click", closeModal);
+if (modal) modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("on")) closeModal(); });
+
+// enter sound
+const enterBtn = document.getElementById("enterBtn");
+if (enterBtn) enterBtn.addEventListener("click", () => softOpen());
