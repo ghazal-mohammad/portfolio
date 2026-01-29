@@ -381,4 +381,8 @@ body{
 
 /* make modules clickable */
 .module{ cursor: pointer; }
+#soundToggle{
+  user-select: none;
+}
+
 
