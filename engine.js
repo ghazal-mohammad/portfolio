@@ -224,3 +224,24 @@ window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.clas
 
 const enterBtn = document.getElementById("enterBtn");
 if (enterBtn) enterBtn.addEventListener("click", () => softOpen());
+// ===== FORCE THEME TOGGLE (FINAL PATCH) =====
+window.addEventListener("DOMContentLoaded", () => {
+  const themeBtn = document.getElementById("themeToggle");
+  if (!themeBtn) {
+    console.log("themeToggle button not found");
+    return;
+  }
+
+  const saved = localStorage.getItem("theme") || "cyan";
+  document.documentElement.setAttribute("data-theme", saved);
+  themeBtn.textContent = `Theme: ${saved.toUpperCase()}`;
+
+  themeBtn.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") || "cyan";
+    const next = current === "cyan" ? "rose" : "cyan";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+    themeBtn.textContent = `Theme: ${next.toUpperCase()}`;
+  });
+});
+
