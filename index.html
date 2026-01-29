@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="cyan">
 <head>
   <meta charset="UTF-8" />
   <title>Ghazal — Engineered Experience</title>
@@ -11,19 +11,16 @@
 </head>
 
 <body>
-  <!-- cinematic layers -->
   <div class="bg-grid"></div>
   <div class="scanlines"></div>
   <div class="noise"></div>
-
-  <!-- cursor -->
   <div class="cursor"></div>
 
   <!-- TOP BAR -->
   <header class="topbar">
-<div class="brand mono">Ghazal//Portfolio</div>
+    <div class="brand mono">Ghazal//Portfolio</div>
     <div class="top-actions">
-      <button class="pill" id="themeToggle" type="button">Theme</button>
+      <button class="pill" id="themeToggle" type="button">Theme: CYAN</button>
       <button class="pill" id="soundToggle" type="button">Sound: OFF</button>
       <a class="pill" id="cvBtn" href="assets/cv.pdf" download>Download CV</a>
     </div>
@@ -34,11 +31,15 @@
     <div class="terminal" aria-label="System terminal"></div>
 
     <h1 class="glitch" data-text="GHAZAL">GHAZAL</h1>
-    <p class="role">Software Engineer · System Thinker</p>
+
+    <!-- HR fast lines -->
+    <p class="role strong">Flutter Developer · Software Engineering</p>
+    <p class="role small mono">Bloc · GetX · REST APIs · Animations · Clean UI</p>
 
     <div class="cta">
       <a class="btn primary" href="#core" id="enterBtn">Enter System ↓</a>
       <a class="btn ghost" href="mailto:mohammadghazal423@gmail.com?subject=Portfolio%20Contact">Email</a>
+      <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
     </div>
 
     <div class="hintline">
@@ -52,24 +53,24 @@
   <section class="panel" id="core">
     <div class="wrap">
       <h2 class="kicker reveal">SYSTEM CORE</h2>
-      <h3 class="title reveal">I engineer modular systems, not just UI.</h3>
+      <h3 class="title reveal">I build mobile systems with an engineering mindset.</h3>
+
       <p class="desc reveal">
-        Fifth-year Software Engineering student focused on design patterns, testing mindset,
-        and Flutter mobile development — with strong interest in non-functional requirements
-        (security, scalability, maintainability).
+        I focus on clean architecture, state management, performance basics, and UX details.
+        Below are selected modules that show how I design → implement → test → polish.
       </p>
 
       <div class="mini-grid">
         <div class="chip reveal">Flutter · Dart</div>
+        <div class="chip reveal">Bloc · GetX</div>
+        <div class="chip reveal">REST Integration</div>
+        <div class="chip reveal">Animations & UX</div>
         <div class="chip reveal">Design Patterns</div>
-        <div class="chip reveal">Unit Testing</div>
-        <div class="chip reveal">Security Awareness</div>
-        <div class="chip reveal">Requirements & UML</div>
       </div>
 
       <div class="actions reveal">
         <a class="btn primary" href="#modules">Engineering Modules</a>
-        <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn ghost" href="assets/cv.pdf" target="_blank" rel="noopener">Open CV</a>
       </div>
     </div>
   </section>
@@ -78,7 +79,7 @@
   <section class="panel" id="modules">
     <div class="wrap">
       <h2 class="kicker reveal">ENGINEERING MODULES</h2>
-      <p class="desc reveal">Each module = problem → design → implementation → proof.</p>
+      <p class="desc reveal">Fast overview for HR + deeper case study for engineers.</p>
 
       <div class="modules">
         <article class="module reveal" data-modal="banking">
@@ -86,12 +87,9 @@
             <span class="badge">SE3</span>
             <h3>Advanced Banking System</h3>
           </div>
-          <p>
-            Modular banking system demonstrating structural + behavioral design patterns.
-            My contribution includes Decorator + full tests + admin control interface.
-          </p>
+          <p>Design patterns + modular structure. My contribution: Decorator + tests + admin UI.</p>
           <div class="module-meta">
-            <span>Decorator</span><span>Testing</span><span>Admin UI</span>
+            <span>Decorator</span><span>Unit Tests</span><span>Admin UI</span>
           </div>
           <span class="open">Open Case Study →</span>
         </article>
@@ -99,14 +97,11 @@
         <article class="module reveal" data-modal="complaints">
           <div class="module-head">
             <span class="badge">Flutter</span>
-            <h3>Gov Complaints Mobile App</h3>
+            <h3>Government Complaints Mobile</h3>
           </div>
-          <p>
-            Flutter app: OTP auth, complaint submission with attachments, and status tracking
-            with a clean UX flow.
-          </p>
+          <p>OTP login, complaint form with attachments, and complaint status tracking.</p>
           <div class="module-meta">
-            <span>OTP</span><span>Forms</span><span>UX Flow</span>
+            <span>OTP</span><span>Forms</span><span>API</span>
           </div>
           <span class="open">Open Case Study →</span>
         </article>
@@ -116,12 +111,9 @@
             <span class="badge">Private</span>
             <h3>Civil Registry Automation</h3>
           </div>
-          <p>
-            Requirements analysis + workflow re-engineering for civil status transactions in courts.
-            Private until milestones are ready.
-          </p>
+          <p>Requirements & workflow re-engineering. Private until stable milestones.</p>
           <div class="module-meta">
-            <span>Requirements</span><span>Workflows</span><span>Traceability</span>
+            <span>Requirements</span><span>Traceability</span><span>Workflows</span>
           </div>
           <span class="open">Open Case Study →</span>
         </article>
@@ -131,9 +123,7 @@
             <span class="badge">Private</span>
             <h3>Information Systems Security</h3>
           </div>
-          <p>
-            Academic labs organized safely (redacted). Focus on mitigation & defensive thinking.
-          </p>
+          <p>Academic labs organized safely (redacted). Focus on mitigation & defense.</p>
           <div class="module-meta">
             <span>CSRF</span><span>XSS</span><span>SQLi</span>
           </div>
@@ -143,11 +133,10 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="wrap reveal">
       <div class="footer-line"></div>
-      <p class="mono">Initiate Contact Protocol</p>
+      <p class="mono">Contact</p>
       <div class="actions">
         <a class="btn primary" href="mailto:mohammadghazal423@gmail.com?subject=Portfolio%20Contact">Email Me</a>
         <a class="btn ghost" href="#top">Back to Top</a>
@@ -166,7 +155,6 @@
       <p class="modal-desc" id="modalDesc">Description</p>
 
       <div class="modal-images" id="modalImages"></div>
-
       <div class="modal-tags" id="modalTags"></div>
 
       <div class="modal-actions">
