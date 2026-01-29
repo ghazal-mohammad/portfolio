@@ -1,32 +1,33 @@
-.glitch {
+.glitch{
   position: relative;
   font-size: 72px;
   font-weight: 700;
   letter-spacing: 6px;
   color: var(--primary);
   text-transform: uppercase;
+  text-shadow: 0 0 40px rgba(143,123,255,.22);
 }
 
 .glitch::before,
-.glitch::after {
+.glitch::after{
   content: attr(data-text);
   position: absolute;
   left: 0;
   top: 0;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-.glitch::before {
+.glitch::before{
   color: var(--accent);
   animation: glitchTop 2s infinite linear;
 }
 
-.glitch::after {
-  color: #ff4ecd;
+.glitch::after{
+  color: var(--pink);
   animation: glitchBottom 1.5s infinite linear;
 }
 
-@keyframes glitchTop {
+@keyframes glitchTop{
   0% { transform: translate(0); }
   20% { transform: translate(-2px, -2px); }
   40% { transform: translate(-2px, 2px); }
@@ -35,7 +36,7 @@
   100% { transform: translate(0); }
 }
 
-@keyframes glitchBottom {
+@keyframes glitchBottom{
   0% { transform: translate(0); }
   20% { transform: translate(2px, 2px); }
   40% { transform: translate(2px, -2px); }
@@ -43,4 +44,3 @@
   80% { transform: translate(-1px, -2px); }
   100% { transform: translate(0); }
 }
-
