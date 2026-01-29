@@ -19,6 +19,18 @@
   --accent:#ff9ad5;
   --pink:#ffd1f2;
 }
+:root[data-theme="purple"] body{
+  background:
+    radial-gradient(1200px 600px at 50% 0%, rgba(199,125,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(255,154,213,.14), transparent 55%),
+    #0b0d10;
+}
+:root[data-theme="dark"] body{
+  background:
+    radial-gradient(1200px 600px at 50% 0%, rgba(143,123,255,.12), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(45,226,230,.10), transparent 55%),
+    #0b0d10;
+}
 
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
