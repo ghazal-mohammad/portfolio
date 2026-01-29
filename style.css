@@ -413,4 +413,15 @@ body{
 body{
   padding-top: 64px;
 }
+/* ===== THEMES ===== */
+:root[data-theme="dark"]{
+  --primary: #8f7bff;
+  --accent: #2de2e6;
+}
+
+:root[data-theme="purple"]{
+  --primary: #c77dff;
+  --accent: #ff9ad5;
+}
+
 
