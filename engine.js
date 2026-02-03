@@ -244,24 +244,3 @@ window.addEventListener("DOMContentLoaded", () => {
     themeBtn.textContent = `Theme: ${next.toUpperCase()}`;
   });
 });
-document.addEventListener('DOMContentLoaded', () => {
-    const observerOptions = {
-        threshold: 0.15 // سيبدأ الأنيميشن عندما يظهر 15% من العنصر
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in'); // تأكد أن هذا الكلاس موجود في motion.css
-                observer.unobserve(entry.target); // التوقف عن المراقبة بعد تفعيل الأنيميشن لتحسين الأداء
-            }
-        });
-    }, observerOptions);
-
-    // استهداف جميع الكروت في قسم المشاريع
-    document.querySelectorAll('.module-card').forEach(card => {
-        observer.observe(card);
-    });
-});
-
-
