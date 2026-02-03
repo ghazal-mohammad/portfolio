@@ -1,342 +1,167 @@
-:root{
-  --bg:#0b0d10;
-  --text:#e6e6eb;
-  --muted:rgba(230,230,235,.72);
-
-  --primary:#2de2e6;     /* theme controls */
-  --accent:#8f7bff;
-  --pink:#ff4ecd;
-
-  --bg1: rgba(45,226,230,.14);
-  --bg2: rgba(143,123,255,.10);
-  --gridA: rgba(45,226,230,.12);
-  --gridB: rgba(143,123,255,.08);
-
-  --stroke:rgba(230,230,235,.14);
-  --shadow:0 22px 70px rgba(0,0,0,.45);
+@font-face {
+    font-family: 'SpaceGrotesk';
+    src: url('assets/fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype-variations');
+    font-weight: 300 700;
+    font-display: swap;
 }
 
-:root[data-theme="cyan"]{
-  --primary:#2de2e6;
-  --accent:#8f7bff;
-  --pink:#ff4ecd;
-
-  --bg1: rgba(45,226,230,.16);
-  --bg2: rgba(143,123,255,.10);
-  --gridA: rgba(45,226,230,.12);
-  --gridB: rgba(143,123,255,.08);
+/* الخط البرمجي للنصوص العامة (JetBrains Mono) */
+@font-face {
+    font-family: 'JetBrainsMono';
+    src: url('assets/fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
 }
 
-:root[data-theme="rose"]{
-  --primary:#ff9ad5;
-  --accent:#2de2e6;
-  --pink:#c77dff;
-
-  --bg1: rgba(255,154,213,.20);
-  --bg2: rgba(45,226,230,.10);
-  --gridA: rgba(255,154,213,.14);
-  --gridB: rgba(45,226,230,.07);
+/* الخط البرمجي المائل للتفاصيل الدقيقة */
+@font-face {
+    font-family: 'JetBrainsMono';
+    src: url('assets/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-.mono{font-family:'JetBrains Mono', monospace;}
-
-body{
-  background:
-    radial-gradient(1200px 600px at 50% 0%, var(--bg1), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, var(--bg2), transparent 55%),
-    var(--bg);
-  color:var(--text);
-  font-family:'Space Grotesk', sans-serif;
-  padding-top:64px;
+/* 2. المتغيرات (لحفظ ألوانك وتسهيل التعديل) */
+:root {
+    --primary: #007AFF; /* لون فلاتر أو لونك المفضل */
+    --bg: #0a0a0a;      /* الخلفية الداكنة */
+    --card-bg: #161616; /* خلفية الوحدات الهندسية */
+    --text: #ffffff;
+    --text-dim: #a0a0a0;
+    --font-main: 'JetBrainsMono', monospace;
+    --font-title: 'SpaceGrotesk', sans-serif;
 }
 
-/* layers */
-.bg-grid{
-  position:fixed; inset:0; z-index:-3;
-  background:
-    linear-gradient(var(--gridA) 1px, transparent 1px),
-    linear-gradient(90deg, var(--gridB) 1px, transparent 1px);
-  background-size:64px 64px;
-  transform:perspective(900px) rotateX(55deg) translateY(-120px);
-  transform-origin:top;
-  opacity:.25;
-  animation:gridMove 10s linear infinite;
-}
-@keyframes gridMove{
-  from{background-position:0 0,0 0}
-  to{background-position:0 140px,140px 0}
-}
-.scanlines{
-  position:fixed; inset:0; z-index:-2; pointer-events:none;
-  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.03), rgba(255,255,255,.03) 1px, transparent 2px, transparent 6px);
-  opacity:.12; mix-blend-mode:overlay;
-}
-.noise{
-  position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
-  opacity:.06;
+/* 3. الإعدادات العامة والتوافق مع الموبايل */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
-/* cursor */
-.cursor{
-  width:16px;height:16px;
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:50%;
-  position:fixed; left:0; top:0;
-  pointer-events:none;
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 30px rgba(0,0,0,.25);
-  z-index:999;
-  transition:width .15s ease, height .15s ease, border-color .15s ease;
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-main); /* استخدام JetBrains Mono كخط أساسي */
+    line-height: 1.6;
+    overflow-x: hidden; /* لمنع أي تمرير جانبي على الموبايل */
+    -webkit-font-smoothing: antialiased;
 }
 
-/* topbar */
-.topbar{
-  position:fixed; top:0; left:0; right:0;
-  height:64px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 18px;
-  background:linear-gradient(to bottom, rgba(10,12,16,.85), rgba(10,12,16,.55), transparent);
-  backdrop-filter:blur(10px);
-  z-index:40;
-}
-.brand{letter-spacing:2px; color:var(--primary);}
-.top-actions{display:flex; gap:10px; align-items:center;}
-.pill{
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid rgba(230,230,235,.18);
-  background:rgba(255,255,255,.04);
-  color:var(--text);
-  font-weight:700;
-  cursor:pointer;
-  text-decoration:none;
-  transition: transform .2s ease, border-color .2s ease;
-}
-.pill:hover{border-color:rgba(255,255,255,.35); transform:translateY(-1px);}
-
-/* intro */
-.intro{
-  height:calc(100vh - 64px);
-  display:grid;
-  place-items:center;
-  text-align:center;
-  padding:24px 16px;
-}
-.terminal{
-  font-family:'JetBrains Mono', monospace;
-  font-size:13px;
-  line-height:1.55;
-  color:var(--primary);
-  margin-bottom:18px;
-  min-height:80px;
-}
-.role{
-  margin-top:10px;
-  letter-spacing:1px;
-  color:var(--muted);
-}
-.role.strong{
-  font-size:16px;
-  color:rgba(230,230,235,.88);
-}
-.role.small{
-  font-size:12px;
-  opacity:.9;
+/* 4. الهيدر (Navigation) */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    position: sticky;
+    top: 0;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px); /* تأثير زجاجي حديث */
+    z-index: 1000;
 }
 
-.cta{
-  margin-top:22px;
-  display:flex; gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
+.logo {
+    font-family: var(--font-title);
+    font-weight: 700;
+    letter-spacing: -1px;
+    font-size: 1.3rem;
+    color: var(--text);
 }
-.hintline{
-  margin-top:16px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  opacity:.75;
-}
-.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);}
 
-/* buttons */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:12px 16px;
-  border-radius:14px;
-  text-decoration:none;
-  font-weight:700;
-  color:var(--text);
-  border:1px solid rgba(230,230,235,.16);
-  background:rgba(255,255,255,.04);
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  cursor:pointer;
+/* 5. قسم الهيرو (Hero Section) */
+.hero {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 5%;
 }
-.btn:hover{
-  transform:translateY(-3px);
-  border-color:rgba(255,255,255,.28);
-  box-shadow:0 18px 40px rgba(0,0,0,.35);
-}
-.btn.primary{
-  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 22%, transparent), color-mix(in srgb, var(--pink) 18%, transparent));
-  border-color: color-mix(in srgb, var(--primary) 40%, rgba(255,255,255,.18));
-}
-.btn.ghost{background:rgba(255,255,255,.03);}
 
-/* panels */
-.panel{padding:90px 18px; background:linear-gradient(180deg, transparent, rgba(255,255,255,.02));}
-.wrap{max-width:980px;margin:0 auto;}
-.kicker{
-  font-family:'JetBrains Mono', monospace;
-  letter-spacing:3px;
-  font-size:12px;
-  color: color-mix(in srgb, var(--primary) 80%, white 0%);
-  margin-bottom:14px;
+.hero h1 {
+    font-family: var(--font-title);
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    margin-bottom: 1rem;
+    font-weight: 700;
 }
-.title{font-size:clamp(26px, 4vw, 40px); margin-bottom:12px;}
-.desc{color:var(--muted); line-height:1.8; max-width:72ch;}
-.mini-grid{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;}
-.chip{
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid var(--stroke);
-  background:rgba(255,255,255,.03);
-  font-family:'JetBrains Mono', monospace;
-  font-size:12px;
-  color:rgba(230,230,235,.85);
-}
-.actions{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;}
 
-/* modules */
-.modules{
-  margin-top:28px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
-  gap:18px;
+.hero p {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: var(--text-dim);
+    max-width: 700px;
 }
-.module{
-  position:relative;
-  padding:22px;
-  border-radius:18px;
-  border:1px solid rgba(230,230,235,.12);
-  background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transition:transform .3s ease, border-color .3s ease;
-  cursor:pointer;
-}
-.module::after{
-  content:"";
-  position:absolute; inset:0;
-  background:linear-gradient(120deg, transparent, color-mix(in srgb, var(--primary) 20%, transparent), transparent);
-  transform:translateX(-120%);
-  transition:transform .7s ease;
-}
-.module:hover{transform:translateY(-8px); border-color: color-mix(in srgb, var(--primary) 35%, rgba(230,230,235,.12));}
-.module:hover::after{transform:translateX(120%);}
-.module-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.badge{
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:6px 10px;
-  border-radius:999px;
-  background: color-mix(in srgb, var(--primary) 14%, transparent);
-  border:1px solid color-mix(in srgb, var(--primary) 25%, transparent);
-  color: color-mix(in srgb, var(--primary) 85%, white 0%);
-}
-.module h3{font-size:18px;}
-.module p{margin-top:10px;color:var(--muted);line-height:1.7;}
-.module-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
-.module-meta span{
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(230,230,235,.14);
-  background:rgba(255,255,255,.03);
-}
-.open{display:inline-block;margin-top:16px;font-weight:800;color: color-mix(in srgb, var(--primary) 85%, white 0%);}
 
-/* footer */
-.footer{padding:60px 18px; background:rgba(255,255,255,.02);}
-.footer-line{
-  height:1px;
-  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 40%, transparent), transparent);
-  margin-bottom:18px;
+/* 6. شبكة الموديولات الهندسية */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 4rem 5%;
 }
-.tiny{margin-top:18px;color:rgba(230,230,235,.55);font-size:12px;}
 
-/* reveal */
-.reveal{opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);}
-.reveal.on{opacity:1; transform:translateY(0);}
+.module-card {
+    background: var(--card-bg);
+    border: 1px solid #222;
+    padding: 2rem;
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    will-change: transform, opacity;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
-/* modal */
-.modal{
-  position:fixed; inset:0;
-  display:none;
-  align-items:center; justify-content:center;
-  padding:18px;
-  background:rgba(0,0,0,.65);
-  backdrop-filter:blur(8px);
-  z-index:50;
+.module-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
 }
-.modal.on{display:flex;}
-.modal-box{
-  width:min(900px, 96vw);
-  border-radius:18px;
-  border:1px solid rgba(230,230,235,.18);
-  background:linear-gradient(135deg, rgba(15,18,24,.92), rgba(10,12,16,.92));
-  box-shadow:0 30px 90px rgba(0,0,0,.55);
-  padding:22px;
-  position:relative;
-  animation:pop .28s ease-out;
+
+.module-card h3 {
+    font-family: var(--font-title);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
 }
-@keyframes pop{from{transform:translateY(12px) scale(.98); opacity:0;} to{transform:translateY(0) scale(1); opacity:1;}}
-.modal-close{
-  position:absolute; right:14px; top:12px;
-  width:42px; height:42px;
-  border-radius:12px;
-  border:1px solid rgba(230,230,235,.18);
-  background:rgba(255,255,255,.04);
-  color:var(--text);
-  font-size:22px;
-  cursor:pointer;
+
+.module-card p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
 }
-.modal-kicker{
-  font-family:'JetBrains Mono', monospace;
-  letter-spacing:3px;
-  font-size:12px;
-  color: color-mix(in srgb, var(--primary) 85%, white 0%);
-  margin-bottom:10px;
+
+/* الخط المائل للتفاصيل التقنية */
+.tech-stack {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--primary);
+    margin-top: auto;
 }
-.modal-title{font-size:26px;margin-bottom:10px;}
-.modal-desc{color:var(--muted);line-height:1.8;}
-.modal-images{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(170px,1fr));
-  gap:10px;
+
+/* 7. تحسينات الموبايل */
+@media (max-width: 600px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        padding: 2rem 5%;
+    }
+
+    .hero {
+        min-height: 70vh;
+    }
 }
-.modal-images img{
-  width:100%;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.02);
+
+/* 8. الأنيميشن */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
 }
-.modal-tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;}
-.modal-tags span{
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(230,230,235,.14);
-  background:rgba(255,255,255,.03);
+
+.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.7s ease-out;
 }
-.modal-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;}
