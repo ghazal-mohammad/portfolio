@@ -4,8 +4,6 @@
     font-weight: 300 700;
     font-display: swap;
 }
-
-/* الخط البرمجي للنصوص العامة (JetBrains Mono) */
 @font-face {
     font-family: 'JetBrainsMono';
     src: url('assets/fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype-variations');
@@ -13,8 +11,6 @@
     font-style: normal;
     font-display: swap;
 }
-
-/* الخط البرمجي المائل للتفاصيل الدقيقة */
 @font-face {
     font-family: 'JetBrainsMono';
     src: url('assets/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
@@ -23,18 +19,15 @@
     font-display: swap;
 }
 
-/* 2. المتغيرات (لحفظ ألوانك وتسهيل التعديل) */
 :root {
-    --primary: #007AFF; /* لون فلاتر أو لونك المفضل */
-    --bg: #0a0a0a;      /* الخلفية الداكنة */
-    --card-bg: #161616; /* خلفية الوحدات الهندسية */
+    --primary: #007AFF; 
+    --bg: #0a0a0a;     
+    --card-bg: #161616;
     --text: #ffffff;
     --text-dim: #a0a0a0;
     --font-main: 'JetBrainsMono', monospace;
     --font-title: 'SpaceGrotesk', sans-serif;
 }
-
-/* 3. الإعدادات العامة والتوافق مع الموبايل */
 * {
     margin: 0;
     padding: 0;
@@ -45,13 +38,12 @@
 body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: var(--font-main); /* استخدام JetBrains Mono كخط أساسي */
+    font-family: var(--font-main); 
     line-height: 1.6;
-    overflow-x: hidden; /* لمنع أي تمرير جانبي على الموبايل */
+    overflow-x: hidden; 
     -webkit-font-smoothing: antialiased;
 }
 
-/* 4. الهيدر (Navigation) */
 nav {
     display: flex;
     justify-content: space-between;
@@ -60,7 +52,7 @@ nav {
     position: sticky;
     top: 0;
     background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(12px); /* تأثير زجاجي حديث */
+    backdrop-filter: blur(12px); 
     z-index: 1000;
 }
 
@@ -71,8 +63,6 @@ nav {
     font-size: 1.3rem;
     color: var(--text);
 }
-
-/* 5. قسم الهيرو (Hero Section) */
 .hero {
     min-height: 85vh;
     display: flex;
@@ -133,8 +123,6 @@ nav {
     margin-bottom: 1.5rem;
     flex-grow: 1;
 }
-
-/* الخط المائل للتفاصيل التقنية */
 .tech-stack {
     font-style: italic;
     font-size: 0.85rem;
@@ -142,7 +130,6 @@ nav {
     margin-top: auto;
 }
 
-/* 7. تحسينات الموبايل */
 @media (max-width: 600px) {
     .grid-container {
         grid-template-columns: 1fr;
@@ -153,8 +140,6 @@ nav {
         min-height: 70vh;
     }
 }
-
-/* 8. الأنيميشن */
 .reveal {
     opacity: 0;
     transform: translateY(30px);
