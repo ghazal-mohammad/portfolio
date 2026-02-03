@@ -1,169 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="cyan">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ghazal — Engineered Experience</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="motion.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- لضمان التوافق مع الموبايل -->
+    <title>Ghazal — Engineered Experience</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="motion.css">
 </head>
-
 <body>
-  <div class="bg-grid"></div>
-  <div class="scanlines"></div>
-  <div class="noise"></div>
-  <div class="cursor"></div>
+    <nav>
+        <div class="logo">GHAZAL//PORTFOLIO</div>
+        <a href="assets/cv.pdf" class="download-btn">Download CV</a>
+    </nav>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="brand mono">Ghazal//Portfolio</div>
-    <div class="top-actions">
-<button class="pill" id="themeToggle" type="button">Theme: CYAN</button>
-      <button class="pill" id="soundToggle" type="button">Sound: OFF</button>
-      <a class="pill" id="cvBtn" href="assets/cv.pdf" download>Download CV</a>
-    </div>
-  </header>
+    <header class="hero-section">
+        <h1>Flutter Developer · Software Engineering</h1>
+        <p>Bloc · GetX · REST APIs · Clean UI</p>
+        <button onclick="scrollToModules()">Enter System ↓</button>
+    </header>
 
-  <!-- INTRO -->
-  <section class="intro" id="top">
-    <div class="terminal" aria-label="System terminal"></div>
+    <main id="modules">
+        <section class="core">
+            <h2>SYSTEM CORE</h2>
+            <p>I build mobile systems with an engineering mindset.</p>
+        </section>
 
-    <h1 class="glitch" data-text="GHAZAL">GHAZAL</h1>
+        <!-- Engineering Modules Section [2, 4] -->
+        <section class="grid-container">
+            <div class="module-card">
+                <h3>Advanced Banking System</h3>
+                <p>Design patterns (Decorator) + Unit Tests [5].</p>
+                <a href="#">Open Case Study →</a>
+            </div>
+            <!-- أضف بقية المشاريع هنا مثل Government Complaints [6] -->
+        </section>
+    </main>
 
-    <!-- HR fast lines -->
-    <p class="role strong">Flutter Developer · Software Engineering</p>
-    <p class="role small mono">Bloc · GetX · REST APIs · Animations · Clean UI</p>
-
-    <div class="cta">
-      <a class="btn primary" href="#core" id="enterBtn">Enter System ↓</a>
-      <a class="btn ghost" href="mailto:mohammadghazal423@gmail.com?subject=Portfolio%20Contact">Email</a>
-      <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
-    </div>
-
-    <div class="hintline">
-      <span class="mono">scroll</span>
-      <span class="dot"></span>
-      <span class="mono">explore modules</span>
-    </div>
-  </section>
-
-  <!-- CORE -->
-  <section class="panel" id="core">
-    <div class="wrap">
-      <h2 class="kicker reveal">SYSTEM CORE</h2>
-      <h3 class="title reveal">I build mobile systems with an engineering mindset.</h3>
-
-      <p class="desc reveal">
-        I focus on clean architecture, state management, performance basics, and UX details.
-        Below are selected modules that show how I design → implement → test → polish.
-      </p>
-
-      <div class="mini-grid">
-        <div class="chip reveal">Flutter · Dart</div>
-        <div class="chip reveal">Bloc · GetX</div>
-        <div class="chip reveal">REST Integration</div>
-        <div class="chip reveal">Animations & UX</div>
-        <div class="chip reveal">Design Patterns</div>
-      </div>
-
-      <div class="actions reveal">
-        <a class="btn primary" href="#modules">Engineering Modules</a>
-        <a class="btn ghost" href="assets/cv.pdf" target="_blank" rel="noopener">Open CV</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- MODULES -->
-  <section class="panel" id="modules">
-    <div class="wrap">
-      <h2 class="kicker reveal">ENGINEERING MODULES</h2>
-      <p class="desc reveal">Fast overview for HR + deeper case study for engineers.</p>
-
-      <div class="modules">
-        <article class="module reveal" data-modal="banking">
-          <div class="module-head">
-            <span class="badge">SE3</span>
-            <h3>Advanced Banking System</h3>
-          </div>
-          <p>Design patterns + modular structure. My contribution: Decorator + tests + admin UI.</p>
-          <div class="module-meta">
-            <span>Decorator</span><span>Unit Tests</span><span>Admin UI</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
-
-        <article class="module reveal" data-modal="complaints">
-          <div class="module-head">
-            <span class="badge">Flutter</span>
-            <h3>Government Complaints Mobile</h3>
-          </div>
-          <p>OTP login, complaint form with attachments, and complaint status tracking.</p>
-          <div class="module-meta">
-            <span>OTP</span><span>Forms</span><span>API</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
-
-        <article class="module reveal" data-modal="civil">
-          <div class="module-head">
-            <span class="badge">Private</span>
-            <h3>Civil Registry Automation</h3>
-          </div>
-          <p>Requirements & workflow re-engineering. Private until stable milestones.</p>
-          <div class="module-meta">
-            <span>Requirements</span><span>Traceability</span><span>Workflows</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
-
-        <article class="module reveal" data-modal="security">
-          <div class="module-head">
-            <span class="badge">Private</span>
-            <h3>Information Systems Security</h3>
-          </div>
-          <p>Academic labs organized safely (redacted). Focus on mitigation & defense.</p>
-          <div class="module-meta">
-            <span>CSRF</span><span>XSS</span><span>SQLi</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="wrap reveal">
-      <div class="footer-line"></div>
-      <p class="mono">Contact</p>
-      <div class="actions">
-        <a class="btn primary" href="mailto:mohammadghazal423@gmail.com?subject=Portfolio%20Contact">Email Me</a>
-        <a class="btn ghost" href="#top">Back to Top</a>
-      </div>
-      <p class="tiny">© <span id="y"></span> Ghazal — Engineered Experience</p>
-    </div>
-  </footer>
-
-  <!-- MODAL -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Case study modal">
-      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
-
-      <p class="modal-kicker" id="modalKicker">MODULE</p>
-      <h3 class="modal-title" id="modalTitle">Title</h3>
-      <p class="modal-desc" id="modalDesc">Description</p>
-
-      <div class="modal-images" id="modalImages"></div>
-      <div class="modal-tags" id="modalTags"></div>
-
-      <div class="modal-actions">
-        <a class="btn primary" id="modalLink" href="#" target="_blank" rel="noopener">Open Repo</a>
-        <button class="btn ghost" id="modalBack" type="button">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="engine.js"></script>
+    <script src="engine.js"></script>
 </body>
 </html>
+الخطوة 3: تحديث ملف style.css (السرعة والخطوط المحلية)
+لحل مشكلة الخطوط وضمان التجاوب مع الشاشات:
+/* تعريف الخطوط المحلية */
+@font-face {
+    font-family: 'EngineeringFont';
+    src: url('assets/fonts/inter.woff2') format('woff2');
+    font-display: swap; /* يمنع تأخر ظهور النص */
+}
+
+body {
+    font-family: 'EngineeringFont', sans-serif;
+    margin: 0;
+    overflow-x: hidden; /* يمنع التمرير الجانبي في الموبايل */
+}
+
+/* نظام الشبكة المرن (Responsive Grid) */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* يغير عدد الأعمدة تلقائياً حسب الشاشة */
+    gap: 20px;
+    padding: 20px;
+}
+
+/* تحسين الأداء للأنيميشن */
+.module-card {
+    will-change: transform, opacity;
+    transition: transform 0.3s ease;
+}
