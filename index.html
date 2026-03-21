@@ -131,10 +131,9 @@ body {
   font-family:'Space Grotesk', sans-serif;
 }
 .pill:hover { border-color:rgba(255,255,255,.35); transform:translateY(-1px); }
-/* hide sound button on mobile to save space */
 @media (max-width:480px) {
-  #soundToggle { display:none; }
-  .pill { padding:6px 10px; }
+  .pill { padding:6px 9px; font-size:10px; }
+  .brand { font-size:11px; }
 }
 
 /* ===== BUTTONS ===== */
@@ -537,7 +536,7 @@ h1.glitch:hover::after {
     <p class="role small mono">Bloc · GetX · REST APIs · Animations · Clean Architecture</p>
     <div class="cta">
       <a class="btn primary" href="#core">Enter System ↓</a>
-      <a class="btn ghost" href="mailto:mohammadghazal423@gmail.com">Email</a>
+      <a class="btn ghost" href="/cdn-cgi/l/email-protection#c0adafa8a1adada1a4a7a8a1baa1acf4f2f380a7ada1a9aceea3afad">Email</a>
       <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="hintline">
@@ -697,7 +696,7 @@ h1.glitch:hover::after {
       <div class="footer-line"></div>
       <p class="mono" style="margin-bottom:14px; font-size:12px; letter-spacing:2px; opacity:.7;">CONTACT</p>
       <div class="actions">
-        <a class="btn primary" href="mailto:mohammadghazal423@gmail.com">Email Me</a>
+        <a class="btn primary" href="/cdn-cgi/l/email-protection#2e4341464f43434f4a49464f544f421a1c1d6e49434f4742004d4143">Email Me</a>
         <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/ghazal-mohammad-0b9067" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn ghost" href="#top">↑ Top</a>
@@ -722,7 +721,7 @@ h1.glitch:hover::after {
     </div>
   </div>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ===== YEAR =====
 const y = document.getElementById("y");
 if (y) y.textContent = new Date().getFullYear();
@@ -921,8 +920,4 @@ document.querySelectorAll("[data-modal]").forEach(el => {
 });
 if (modalClose) modalClose.addEventListener("click", closeModal);
 if (modalBack)  modalBack.addEventListener("click", closeModal);
-if (modal) modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
-window.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("on")) closeModal(); });
-  </script>
-</body>
-</html>
+if (modal) modal.addEventListe
