@@ -721,203 +721,229 @@ h1.glitch:hover::after {
     </div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ===== YEAR =====
-const y = document.getElementById("y");
-if (y) y.textContent = new Date().getFullYear();
+  <script>
+(function() {
+  // ===== SOUND FUNCTIONS =====
+  var soundEnabled = false;
+  var audioCtx = null;
 
-// ===== THEME =====
-const themeBtn = document.getElementById("themeToggle");
-let theme = localStorage.getItem("theme") || "cyan";
-applyTheme(theme);
-function applyTheme(t) {
-  document.documentElement.setAttribute("data-theme", t);
-  if (themeBtn) themeBtn.textContent = `Theme: ${t.toUpperCase()}`;
-}
-if (themeBtn) {
-  themeBtn.addEventListener("click", () => {
-    theme = theme === "cyan" ? "rose" : "cyan";
-    localStorage.setItem("theme", theme);
-    applyTheme(theme);
-  });
-}
-
-// ===== CURSOR (desktop only) =====
-const cursor = document.querySelector(".cursor");
-if (cursor && window.matchMedia("(hover:hover)").matches) {
-  window.addEventListener("mousemove", (e) => {
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top  = e.clientY + "px";
-  });
-  document.querySelectorAll("a, button, .module, .exp-card").forEach(el => {
-    el.addEventListener("mouseenter", () => {
-      cursor.style.width = "26px";
-      cursor.style.height = "26px";
-      cursor.style.borderColor = "rgba(255,255,255,.35)";
-    });
-    el.addEventListener("mouseleave", () => {
-      cursor.style.width = "16px";
-      cursor.style.height = "16px";
-      cursor.style.borderColor = "rgba(255,255,255,.22)";
-    });
-  });
-}
-
-// ===== SOUND =====
-let soundEnabled = false;
-let audioCtx = null;
-const soundBtn = document.getElementById("soundToggle");
-if (soundBtn) {
-  soundBtn.addEventListener("click", async () => {
-    soundEnabled = !soundEnabled;
-    if (soundEnabled && !audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === "suspended") await audioCtx.resume();
-    }
-    soundBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
-    soundEnabled ? softBoot() : softOff();
-  });
-}
-function playTone(freq, t = 0.06, type = "sine", gainVal = 0.012) {
-  if (!soundEnabled || !audioCtx) return;
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  const now = audioCtx.currentTime;
-  o.type = type;
-  o.frequency.setValueAtTime(freq, now);
-  g.gain.setValueAtTime(0.0001, now);
-  g.gain.exponentialRampToValueAtTime(gainVal, now + 0.01);
-  g.gain.exponentialRampToValueAtTime(0.0001, now + t);
-  o.connect(g); g.connect(audioCtx.destination);
-  o.start(now); o.stop(now + t);
-}
-function softOpen()  { playTone(392,.05,"sine",.012); playTone(784,.06,"triangle",.010); }
-function softClose() { playTone(196,.06,"sine",.012); }
-function softBoot()  { playTone(330,.06,"sine",.012); setTimeout(()=>playTone(659,.07,"sine",.010),120); }
-function softOff()   { playTone(247,.07,"sine",.010); }
-
-// ===== REVEAL on scroll =====
-const revealEls = document.querySelectorAll(".reveal");
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("on"); });
-}, { threshold: 0.1 });
-revealEls.forEach(el => io.observe(el));
-
-// ===== TERMINAL TYPING =====
-const terminalBox = document.querySelector(".terminal");
-const lines = [
-  "> Initializing profile...",
-  "> Flutter Developer: LOADED",
-  "> Status: AVAILABLE",
-  "> Location: Damascus, Syria"
-];
-function typeLine(text, cb) {
-  const p = document.createElement("p");
-  terminalBox.appendChild(p);
-  let i = 0;
-  const tick = () => {
-    p.textContent = text.slice(0, i++);
-    if (i <= text.length) setTimeout(tick, 22);
-    else cb && setTimeout(cb, 140);
-  };
-  tick();
-}
-if (terminalBox) {
-  terminalBox.innerHTML = "";
-  let idx = 0;
-  const next = () => { if (idx < lines.length) typeLine(lines[idx++], next); };
-  next();
-}
-
-// ===== MODAL DATA =====
-const modalData = {
-  pharmacy: {
-    kicker: "FLUTTER · IN PROGRESS",
-    title: "Pharmacy Management & Medication Recommendation App",
-    desc: "Full Flutter app for managing pharmacy inventory and recommending medications. Built role-based flows for users and pharmacy admins. Integrated REST APIs for dynamic data, implemented Bloc and GetX state management. Focused on clean UI and smooth performance across all device sizes.",
-    tags: ["Flutter", "Dart", "Bloc", "GetX", "REST API", "In Progress"],
-    link: "https://github.com/ghazal-mohammad",
-    images: []
-  },
-  civil: {
-    kicker: "SYSTEMS · IN PROGRESS",
-    title: "Civil Status Automation — Syria",
-    desc: "Team project aiming to digitize civil status processes in Syria. Contributing as a developer on modular architecture and scalable UI components. Active development — actively collaborating and iterating on features.",
-    tags: ["Flutter", "Dart", "Clean Architecture", "Team Project", "Private"],
-    link: "#",
-    images: []
-  },
-  complaints: {
-    kicker: "FLUTTER · MOBILE APP",
-    title: "Government Complaints Mobile",
-    desc: "Flutter app with OTP login, complaint submission with attachments, and real-time status tracking. Built for citizens to interact with government services digitally.",
-    tags: ["Flutter", "OTP", "Forms", "REST API", "UX Flow"],
-    link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
-    images: []
-  },
-  tasktrove: {
-    kicker: "FLUTTER · JOB PLATFORM",
-    title: "Task Trove — Job Platform Mobile App",
-    desc: "Mobile application connecting job seekers with companies. Implemented authentication, profile screens, job listing flows, and admin interfaces. Added animations to improve user experience throughout the app.",
-    tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI"],
-    link: "#",
-    images: []
-  },
-  banking: {
-    kicker: "JAVA · UNIVERSITY PROJECT",
-    title: "Advanced Banking System",
-    desc: "Modular banking system demonstrating software engineering concepts. Designed system structure using OOP principles, implemented account management (create, update, delete), deposit, withdrawal, and transfer operations with data validation and error handling.",
-    tags: ["Java", "OOP", "Data Structures", "Design Patterns"],
-    link: "https://github.com/ghazal-mohammad/advanced_banking_system",
-    images: []
+  function playTone(freq, t, type, gainVal) {
+    t = t || 0.06; type = type || "sine"; gainVal = gainVal || 0.012;
+    if (!soundEnabled || !audioCtx) return;
+    try {
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      var now = audioCtx.currentTime;
+      o.type = type;
+      o.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(gainVal, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + t);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(now); o.stop(now + t);
+    } catch(e) {}
   }
-};
+  function softOpen()  { playTone(392,.05,"sine",.012); setTimeout(function(){playTone(784,.06,"triangle",.010);},60); }
+  function softClose() { playTone(196,.06,"sine",.012); }
+  function softBoot()  { playTone(330,.06,"sine",.012); setTimeout(function(){playTone(659,.07,"sine",.010);},120); }
+  function softOff()   { playTone(247,.07,"sine",.010); }
 
-// ===== MODAL LOGIC =====
-const modal      = document.getElementById("modal");
-const modalClose = document.getElementById("modalClose");
-const modalBack  = document.getElementById("modalBack");
-const modalKicker = document.getElementById("modalKicker");
-const modalTitle  = document.getElementById("modalTitle");
-const modalDesc   = document.getElementById("modalDesc");
-const modalTags   = document.getElementById("modalTags");
-const modalImages = document.getElementById("modalImages");
-const modalLink   = document.getElementById("modalLink");
+  window.addEventListener("DOMContentLoaded", function() {
 
-function openModal(key) {
-  const d = modalData[key];
-  if (!d) return;
-  modalKicker.textContent = d.kicker;
-  modalTitle.textContent  = d.title;
-  modalDesc.textContent   = d.desc;
-  modalTags.innerHTML = "";
-  d.tags.forEach(t => {
-    const s = document.createElement("span");
-    s.textContent = t;
-    modalTags.appendChild(s);
-  });
-  modalImages.innerHTML = "";
-  (d.images || []).forEach(src => {
-    const img = document.createElement("img");
-    img.src = src; img.alt = d.title;
-    modalImages.appendChild(img);
-  });
-  if (d.link === "#") { modalLink.style.display = "none"; }
-  else { modalLink.style.display = "inline-flex"; modalLink.href = d.link; }
-  modal.classList.add("on");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-  softOpen();
-}
-function closeModal() {
-  modal.classList.remove("on");
-  modal.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-  softClose();
-}
-document.querySelectorAll("[data-modal]").forEach(el => {
-  el.addEventListener("click", () => openModal(el.dataset.modal));
-});
-if (modalClose) modalClose.addEventListener("click", closeModal);
-if (modalBack)  modalBack.addEventListener("click", closeModal);
-if (modal) modal.addEventListe
+    // YEAR
+    var y = document.getElementById("y");
+    if (y) y.textContent = new Date().getFullYear();
+
+    // THEME
+    var themeBtn = document.getElementById("themeToggle");
+    var theme = localStorage.getItem("theme") || "cyan";
+    function applyTheme(t) {
+      document.documentElement.setAttribute("data-theme", t);
+      if (themeBtn) themeBtn.textContent = "Theme: " + t.toUpperCase();
+    }
+    applyTheme(theme);
+    if (themeBtn) {
+      themeBtn.addEventListener("click", function() {
+        theme = theme === "cyan" ? "rose" : "cyan";
+        localStorage.setItem("theme", theme);
+        applyTheme(theme);
+      });
+    }
+
+    // SOUND BUTTON
+    var soundBtn = document.getElementById("soundToggle");
+    if (soundBtn) {
+      soundBtn.addEventListener("click", function() {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled && !audioCtx) {
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === "suspended") {
+              audioCtx.resume().then(function() { softBoot(); });
+              soundBtn.textContent = "Sound: ON";
+              return;
+            }
+          } catch(e) { soundEnabled = false; return; }
+        }
+        soundBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
+        if (soundEnabled) softBoot(); else softOff();
+      });
+    }
+
+    // CURSOR (desktop only)
+    var cursor = document.querySelector(".cursor");
+    if (cursor && window.matchMedia("(hover:hover)").matches) {
+      window.addEventListener("mousemove", function(e) {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top  = e.clientY + "px";
+      });
+      document.querySelectorAll("a, button, .module, .exp-card").forEach(function(el) {
+        el.addEventListener("mouseenter", function() {
+          cursor.style.width = "26px";
+          cursor.style.height = "26px";
+          cursor.style.borderColor = "rgba(255,255,255,.35)";
+        });
+        el.addEventListener("mouseleave", function() {
+          cursor.style.width = "16px";
+          cursor.style.height = "16px";
+          cursor.style.borderColor = "rgba(255,255,255,.22)";
+        });
+      });
+    }
+
+    // REVEAL
+    var revealEls = document.querySelectorAll(".reveal");
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("on"); });
+    }, { threshold: 0.1 });
+    revealEls.forEach(function(el) { io.observe(el); });
+
+    // TERMINAL
+    var terminalBox = document.querySelector(".terminal");
+    var lines = [
+      "> Initializing profile...",
+      "> Flutter Developer: LOADED",
+      "> Status: AVAILABLE",
+      "> Location: Damascus, Syria"
+    ];
+    function typeLine(text, cb) {
+      var p = document.createElement("p");
+      terminalBox.appendChild(p);
+      var i = 0;
+      function tick() {
+        p.textContent = text.slice(0, i++);
+        if (i <= text.length) setTimeout(tick, 22);
+        else if (cb) setTimeout(cb, 140);
+      }
+      tick();
+    }
+    if (terminalBox) {
+      terminalBox.innerHTML = "";
+      var idx = 0;
+      function next() { if (idx < lines.length) typeLine(lines[idx++], next); }
+      next();
+    }
+
+    // MODAL DATA
+    var modalData = {
+      pharmacy: {
+        kicker: "FLUTTER · IN PROGRESS",
+        title: "Pharmacy Management & Medication Recommendation App",
+        desc: "Full Flutter app for managing pharmacy inventory and recommending medications. Built role-based flows for users and pharmacy admins. Integrated REST APIs for dynamic data, implemented Bloc and GetX state management.",
+        tags: ["Flutter", "Dart", "Bloc", "GetX", "REST API", "In Progress"],
+        link: "https://github.com/ghazal-mohammad",
+        images: []
+      },
+      civil: {
+        kicker: "SYSTEMS · IN PROGRESS",
+        title: "Civil Status Automation — Syria",
+        desc: "Team project aiming to digitize civil status processes in Syria. Contributing as a developer on modular architecture and scalable UI components. Active development.",
+        tags: ["Flutter", "Dart", "Clean Architecture", "Team Project", "Private"],
+        link: "#",
+        images: []
+      },
+      complaints: {
+        kicker: "FLUTTER · MOBILE APP",
+        title: "Government Complaints Mobile",
+        desc: "Flutter app with OTP login, complaint submission with attachments, and real-time status tracking.",
+        tags: ["Flutter", "OTP", "Forms", "REST API", "UX Flow"],
+        link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
+        images: []
+      },
+      tasktrove: {
+        kicker: "FLUTTER · JOB PLATFORM",
+        title: "Task Trove — Job Platform Mobile App",
+        desc: "Mobile app connecting job seekers with companies. Auth, profile screens, job listing flows, admin interfaces, and animations.",
+        tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI"],
+        link: "#",
+        images: []
+      },
+      banking: {
+        kicker: "JAVA · UNIVERSITY PROJECT",
+        title: "Advanced Banking System",
+        desc: "Modular banking system using OOP principles. Account management, transactions, data validation and error handling.",
+        tags: ["Java", "OOP", "Data Structures", "Design Patterns"],
+        link: "https://github.com/ghazal-mohammad/advanced_banking_system",
+        images: []
+      }
+    };
+
+    // MODAL LOGIC
+    var modal      = document.getElementById("modal");
+    var modalClose = document.getElementById("modalClose");
+    var modalBack  = document.getElementById("modalBack");
+    var modalKicker = document.getElementById("modalKicker");
+    var modalTitle  = document.getElementById("modalTitle");
+    var modalDesc   = document.getElementById("modalDesc");
+    var modalTags   = document.getElementById("modalTags");
+    var modalImages = document.getElementById("modalImages");
+    var modalLink   = document.getElementById("modalLink");
+
+    function openModal(key) {
+      var d = modalData[key];
+      if (!d) return;
+      modalKicker.textContent = d.kicker;
+      modalTitle.textContent  = d.title;
+      modalDesc.textContent   = d.desc;
+      modalTags.innerHTML = "";
+      d.tags.forEach(function(t) {
+        var s = document.createElement("span");
+        s.textContent = t;
+        modalTags.appendChild(s);
+      });
+      modalImages.innerHTML = "";
+      (d.images || []).forEach(function(src) {
+        var img = document.createElement("img");
+        img.src = src; img.alt = d.title;
+        modalImages.appendChild(img);
+      });
+      if (d.link === "#") { modalLink.style.display = "none"; }
+      else { modalLink.style.display = "inline-flex"; modalLink.href = d.link; }
+      modal.classList.add("on");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      softOpen();
+    }
+
+    function closeModal() {
+      modal.classList.remove("on");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      softClose();
+    }
+
+    document.querySelectorAll("[data-modal]").forEach(function(el) {
+      el.addEventListener("click", function() { openModal(el.dataset.modal); });
+    });
+    if (modalClose) modalClose.addEventListener("click", closeModal);
+    if (modalBack)  modalBack.addEventListener("click", closeModal);
+    if (modal) modal.addEventListener("click", function(e) { if (e.target === modal) closeModal(); });
+    window.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && modal.classList.contains("on")) closeModal();
+    });
+
+  }); // end DOMContentLoaded
+})(); // end IIFE
+  </script>
+</body>
+</html>
