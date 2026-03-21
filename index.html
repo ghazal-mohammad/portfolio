@@ -1,47 +1,772 @@
 <!DOCTYPE html>
-// year
+<html lang="en" data-theme="cyan">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ghazal — Flutter Developer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ghazal Mohammad — Flutter Developer & Software Engineer. Portfolio showcasing mobile projects and engineering work.">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* ===== VARIABLES ===== */
+:root {
+  --bg: #0b0d10;
+  --text: #e6e6eb;
+  --muted: rgba(230,230,235,.72);
+  --primary: #2de2e6;
+  --accent: #8f7bff;
+  --pink: #ff4ecd;
+  --bg1: rgba(45,226,230,.16);
+  --bg2: rgba(143,123,255,.10);
+  --gridA: rgba(45,226,230,.12);
+  --gridB: rgba(143,123,255,.08);
+  --stroke: rgba(230,230,235,.14);
+  --shadow: 0 22px 70px rgba(0,0,0,.45);
+}
+:root[data-theme="rose"] {
+  --primary: #ff9ad5;
+  --accent: #2de2e6;
+  --pink: #c77dff;
+  --bg1: rgba(255,154,213,.20);
+  --bg2: rgba(45,226,230,.10);
+  --gridA: rgba(255,154,213,.14);
+  --gridB: rgba(45,226,230,.07);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:
+    radial-gradient(1200px 600px at 50% 0%, var(--bg1), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, var(--bg2), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk', sans-serif;
+  padding-top:64px;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.mono { font-family:'JetBrains Mono', monospace; }
+
+/* ===== BG LAYERS ===== */
+.bg-grid {
+  position:fixed; inset:0; z-index:-3;
+  background:
+    linear-gradient(var(--gridA) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gridB) 1px, transparent 1px);
+  background-size:64px 64px;
+  transform:perspective(900px) rotateX(55deg) translateY(-120px);
+  transform-origin:top;
+  opacity:.2;
+  /* Slowed down grid animation for performance */
+  animation:gridMove 18s linear infinite;
+}
+@keyframes gridMove {
+  from { background-position:0 0,0 0; }
+  to   { background-position:0 140px,140px 0; }
+}
+.scanlines {
+  position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.025), rgba(255,255,255,.025) 1px, transparent 2px, transparent 6px);
+  opacity:.08; mix-blend-mode:overlay;
+}
+.noise {
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  opacity:.04;
+}
+
+/* ===== CURSOR (desktop only) ===== */
+.cursor {
+  width:16px; height:16px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:50%;
+  position:fixed; left:0; top:0;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:999;
+  transition:width .15s ease, height .15s ease, border-color .15s ease;
+  display:none;
+}
+@media (hover:hover) { .cursor { display:block; } }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position:fixed; top:0; left:0; right:0;
+  height:64px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 16px;
+  background:linear-gradient(to bottom, rgba(10,12,16,.92), rgba(10,12,16,.6), transparent);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  z-index:40;
+  gap:10px;
+}
+.brand {
+  letter-spacing:2px;
+  color:var(--primary);
+  font-size:clamp(11px, 2.5vw, 14px);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.top-actions {
+  display:flex;
+  gap:6px;
+  align-items:center;
+  flex-wrap:nowrap;
+  overflow:hidden;
+}
+.pill {
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(230,230,235,.18);
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  font-weight:700;
+  font-size:clamp(10px, 2vw, 13px);
+  cursor:pointer;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:transform .2s ease, border-color .2s ease;
+  font-family:'Space Grotesk', sans-serif;
+}
+.pill:hover { border-color:rgba(255,255,255,.35); transform:translateY(-1px); }
+/* hide sound button on mobile to save space */
+@media (max-width:480px) {
+  #soundToggle { display:none; }
+  .pill { padding:6px 10px; }
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 20px;
+  border-radius:14px;
+  text-decoration:none;
+  font-weight:700;
+  font-size:clamp(13px, 2vw, 15px);
+  color:var(--text);
+  border:1px solid rgba(230,230,235,.16);
+  background:rgba(255,255,255,.04);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  cursor:pointer;
+  white-space:nowrap;
+  font-family:'Space Grotesk', sans-serif;
+}
+.btn:hover {
+  transform:translateY(-3px);
+  border-color:rgba(255,255,255,.28);
+  box-shadow:0 16px 36px rgba(0,0,0,.35);
+}
+.btn.primary {
+  background:linear-gradient(135deg, color-mix(in srgb, var(--primary) 22%, transparent), color-mix(in srgb, var(--pink) 18%, transparent));
+  border-color:color-mix(in srgb, var(--primary) 40%, rgba(255,255,255,.18));
+}
+.btn.ghost { background:rgba(255,255,255,.03); }
+
+/* ===== INTRO ===== */
+.intro {
+  min-height:calc(100vh - 64px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 16px 32px;
+}
+.terminal {
+  font-family:'JetBrains Mono', monospace;
+  font-size:clamp(11px, 2vw, 13px);
+  line-height:1.6;
+  color:var(--primary);
+  margin-bottom:18px;
+  min-height:72px;
+}
+h1.glitch {
+  font-size:clamp(48px, 12vw, 100px);
+  font-weight:700;
+  letter-spacing:4px;
+  line-height:1;
+  position:relative;
+  display:inline-block;
+}
+/* reduced glitch - only on hover for performance */
+h1.glitch::before,
+h1.glitch::after {
+  content:attr(data-text);
+  position:absolute; left:0; top:0;
+  width:100%;
+  overflow:hidden;
+  opacity:0;
+}
+h1.glitch:hover::before {
+  color:var(--pink);
+  clip-path:polygon(0 20%, 100% 20%, 100% 45%, 0 45%);
+  transform:translateX(-3px);
+  opacity:.8;
+  animation:glitch1 .3s steps(2) forwards;
+}
+h1.glitch:hover::after {
+  color:var(--accent);
+  clip-path:polygon(0 55%, 100% 55%, 100% 80%, 0 80%);
+  transform:translateX(3px);
+  opacity:.8;
+  animation:glitch2 .3s steps(2) forwards;
+}
+@keyframes glitch1 { 0%,100%{transform:translateX(-3px);} 50%{transform:translateX(3px);} }
+@keyframes glitch2 { 0%,100%{transform:translateX(3px);}  50%{transform:translateX(-3px);} }
+
+.role {
+  margin-top:10px;
+  letter-spacing:1px;
+  color:var(--muted);
+}
+.role.strong { font-size:clamp(14px, 2.5vw, 17px); color:rgba(230,230,235,.88); }
+.role.small  { font-size:clamp(11px, 1.8vw, 13px); opacity:.85; }
+
+.cta {
+  margin-top:24px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  width:100%;
+  max-width:480px;
+}
+/* Full-width buttons on small phones */
+@media (max-width:380px) {
+  .cta { flex-direction:column; align-items:stretch; }
+  .cta .btn { text-align:center; justify-content:center; }
+}
+
+.hintline {
+  margin-top:18px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  opacity:.6;
+  font-size:12px;
+}
+.dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.35); }
+
+/* ===== PANELS ===== */
+.panel { padding:clamp(50px, 8vw, 90px) 16px; }
+.wrap  { max-width:980px; margin:0 auto; }
+
+.kicker {
+  font-family:'JetBrains Mono', monospace;
+  letter-spacing:3px;
+  font-size:11px;
+  color:color-mix(in srgb, var(--primary) 80%, white 0%);
+  margin-bottom:14px;
+}
+.title { font-size:clamp(22px, 4vw, 38px); margin-bottom:12px; line-height:1.2; }
+.desc  { color:var(--muted); line-height:1.8; max-width:70ch; font-size:clamp(14px, 2vw, 16px); }
+
+.mini-grid { margin-top:22px; display:flex; flex-wrap:wrap; gap:8px; }
+.chip {
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.03);
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:rgba(230,230,235,.85);
+}
+.actions {
+  margin-top:22px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* ===== EXPERIENCE SECTION ===== */
+.experience-grid {
+  margin-top:28px;
+  display:grid;
+  gap:16px;
+}
+.exp-card {
+  padding:20px 22px;
+  border-radius:18px;
+  border:1px solid rgba(230,230,235,.12);
+  background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  box-shadow:var(--shadow);
+  transition:transform .25s ease, border-color .25s ease;
+}
+.exp-card:hover {
+  transform:translateY(-4px);
+  border-color:color-mix(in srgb, var(--primary) 30%, rgba(230,230,235,.12));
+}
+.exp-header {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.exp-title { font-size:17px; font-weight:700; }
+.exp-company { color:var(--primary); font-weight:600; font-size:14px; margin-top:2px; }
+.exp-date {
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:var(--muted);
+  white-space:nowrap;
+  margin-top:2px;
+  padding:4px 10px;
+  border:1px solid var(--stroke);
+  border-radius:999px;
+}
+.exp-badge {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:color-mix(in srgb, var(--pink) 14%, transparent);
+  border:1px solid color-mix(in srgb, var(--pink) 30%, transparent);
+  color:color-mix(in srgb, var(--pink) 90%, white 0%);
+  margin-bottom:10px;
+}
+.exp-bullets { list-style:none; margin-top:10px; }
+.exp-bullets li {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+  padding-left:14px;
+  position:relative;
+}
+.exp-bullets li::before {
+  content:"›";
+  position:absolute; left:0;
+  color:var(--primary);
+}
+
+/* ===== MODULES ===== */
+.modules {
+  margin-top:28px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap:16px;
+}
+.module {
+  position:relative;
+  padding:22px;
+  border-radius:18px;
+  border:1px solid rgba(230,230,235,.12);
+  background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:transform .25s ease, border-color .25s ease;
+  cursor:pointer;
+}
+.module::after {
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(120deg, transparent, color-mix(in srgb, var(--primary) 18%, transparent), transparent);
+  transform:translateX(-120%);
+  transition:transform .5s ease;
+  pointer-events:none;
+}
+.module:hover { transform:translateY(-6px); border-color:color-mix(in srgb, var(--primary) 35%, rgba(230,230,235,.12)); }
+.module:hover::after { transform:translateX(120%); }
+/* tap state for mobile */
+.module:active { transform:translateY(-2px) scale(.99); }
+
+.module-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.badge {
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:color-mix(in srgb, var(--primary) 14%, transparent);
+  border:1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+  color:color-mix(in srgb, var(--primary) 85%, white 0%);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.badge.private {
+  background:color-mix(in srgb, var(--muted) 10%, transparent);
+  border-color:var(--stroke);
+  color:var(--muted);
+}
+.module h3 { font-size:clamp(15px, 2.5vw, 17px); line-height:1.3; }
+.module p  { margin-top:8px; color:var(--muted); line-height:1.7; font-size:14px; }
+.module-meta { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.module-meta span {
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid rgba(230,230,235,.14);
+  background:rgba(255,255,255,.03);
+}
+.open {
+  display:inline-block;
+  margin-top:14px;
+  font-weight:800;
+  font-size:13px;
+  color:color-mix(in srgb, var(--primary) 85%, white 0%);
+}
+
+/* ===== FOOTER ===== */
+.footer { padding:clamp(40px,6vw,60px) 16px; background:rgba(255,255,255,.015); }
+.footer-line {
+  height:1px;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 40%, transparent), transparent);
+  margin-bottom:18px;
+}
+.tiny { margin-top:16px; color:rgba(230,230,235,.5); font-size:12px; }
+
+/* ===== REVEAL ===== */
+.reveal {
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity .55s cubic-bezier(.2,.8,.2,1), transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.reveal.on { opacity:1; transform:translateY(0); }
+
+/* ===== MODAL ===== */
+.modal {
+  position:fixed; inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:50;
+}
+.modal.on { display:flex; }
+.modal-box {
+  width:min(860px, 100%);
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:18px;
+  border:1px solid rgba(230,230,235,.18);
+  background:linear-gradient(135deg, rgba(15,18,24,.96), rgba(10,12,16,.96));
+  box-shadow:0 30px 90px rgba(0,0,0,.6);
+  padding:clamp(18px, 4vw, 28px);
+  position:relative;
+  animation:pop .25s ease-out;
+}
+/* scrollbar styling */
+.modal-box::-webkit-scrollbar { width:4px; }
+.modal-box::-webkit-scrollbar-track { background:transparent; }
+.modal-box::-webkit-scrollbar-thumb { background:var(--stroke); border-radius:4px; }
+
+@keyframes pop { from { transform:translateY(10px) scale(.98); opacity:0; } to { transform:translateY(0) scale(1); opacity:1; } }
+.modal-close {
+  position:absolute; right:12px; top:10px;
+  width:38px; height:38px;
+  border-radius:10px;
+  border:1px solid rgba(230,230,235,.18);
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  font-size:20px;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Grotesk', sans-serif;
+}
+.modal-kicker {
+  font-family:'JetBrains Mono', monospace;
+  letter-spacing:3px;
+  font-size:11px;
+  color:color-mix(in srgb, var(--primary) 85%, white 0%);
+  margin-bottom:10px;
+}
+.modal-title { font-size:clamp(20px, 3vw, 26px); margin-bottom:10px; }
+.modal-desc { color:var(--muted); line-height:1.8; font-size:clamp(13px, 2vw, 15px); }
+.modal-images {
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+  gap:10px;
+}
+.modal-images img {
+  width:100%;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.02);
+}
+.modal-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:7px; }
+.modal-tags span {
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid rgba(230,230,235,.14);
+  background:rgba(255,255,255,.03);
+}
+.modal-actions { margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; }
+
+/* ===== SECTION DIVIDER ===== */
+.section-alt { background:rgba(255,255,255,.018); }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+  <div class="cursor"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand mono">GZL//Portfolio</div>
+    <div class="top-actions">
+      <button class="pill" id="themeToggle" type="button">Theme: CYAN</button>
+      <button class="pill" id="soundToggle" type="button">Sound: OFF</button>
+      <a class="pill" href="assets/cv.pdf" download>↓ CV</a>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro" id="top">
+    <div class="terminal" aria-label="System terminal"></div>
+    <h1 class="glitch" data-text="GHAZAL">GHAZAL</h1>
+    <p class="role strong">Flutter Developer · Software Engineer</p>
+    <p class="role small mono">Bloc · GetX · REST APIs · Animations · Clean Architecture</p>
+    <div class="cta">
+      <a class="btn primary" href="#core">Enter System ↓</a>
+      <a class="btn ghost" href="mailto:mohammadghazal423@gmail.com">Email</a>
+      <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="hintline">
+      <span class="mono">scroll</span>
+      <span class="dot"></span>
+      <span class="mono">explore modules</span>
+    </div>
+  </section>
+
+  <!-- SYSTEM CORE -->
+  <section class="panel section-alt" id="core">
+    <div class="wrap">
+      <h2 class="kicker reveal">SYSTEM CORE</h2>
+      <h3 class="title reveal">I build mobile systems with an engineering mindset.</h3>
+      <p class="desc reveal">
+        Clean architecture, state management, REST integrations, and UX details —
+        from design to deployment. Recognized as top intern at Widespheres for
+        dedication and continuous improvement.
+      </p>
+      <div class="mini-grid">
+        <div class="chip reveal">Flutter · Dart</div>
+        <div class="chip reveal">Bloc · GetX</div>
+        <div class="chip reveal">REST APIs</div>
+        <div class="chip reveal">Animations & UX</div>
+        <div class="chip reveal">Clean Architecture</div>
+        <div class="chip reveal">Java · C++</div>
+      </div>
+      <div class="actions reveal">
+        <a class="btn primary" href="#experience">Experience</a>
+        <a class="btn ghost" href="#modules">Projects</a>
+        <a class="btn ghost" href="assets/cv.pdf" target="_blank" rel="noopener">Open CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="panel" id="experience">
+    <div class="wrap">
+      <h2 class="kicker reveal">EXPERIENCE</h2>
+      <h3 class="title reveal">Where I shipped real work.</h3>
+
+      <div class="experience-grid">
+
+        <!-- Widespheres -->
+        <div class="exp-card reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-title">Flutter Mobile Intern</div>
+              <div class="exp-company">Widespheres</div>
+            </div>
+            <div class="exp-date">2025 · Damascus</div>
+          </div>
+          <div class="exp-badge">🏆 Top Intern of the Week</div>
+          <ul class="exp-bullets">
+            <li>Developed an educational mobile project on the Mobile internship track</li>
+            <li>Recognized for exceptional dedication and high-quality work delivery</li>
+            <li>Demonstrated continuous improvement mindset and collaborative work ethic</li>
+            <li>Certification in progress</li>
+          </ul>
+        </div>
+
+        <!-- Freelance -->
+        <div class="exp-card reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-title">Flutter Developer</div>
+              <div class="exp-company">Freelance</div>
+            </div>
+            <div class="exp-date">01/2024 – 08/2024</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Built complete mobile applications using Flutter from concept to implementation</li>
+            <li>Implemented UI designs and integrated REST APIs for dynamic data</li>
+            <li>Delivered full-featured solutions independently with minimal supervision</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES / PROJECTS -->
+  <section class="panel section-alt" id="modules">
+    <div class="wrap">
+      <h2 class="kicker reveal">ENGINEERING MODULES</h2>
+      <p class="desc reveal">Tap any module to see the case study.</p>
+
+      <div class="modules">
+
+        <article class="module reveal" data-modal="pharmacy">
+          <div class="module-head">
+            <span class="badge">Flutter</span>
+            <h3>Pharmacy Management App</h3>
+          </div>
+          <p>Medication recommendation & pharmacy inventory management with role-based flows.</p>
+          <div class="module-meta">
+            <span>Bloc</span><span>GetX</span><span>REST API</span><span>In Progress</span>
+          </div>
+          <span class="open">Open Case Study →</span>
+        </article>
+
+        <article class="module reveal" data-modal="civil">
+          <div class="module-head">
+            <span class="badge private">Private</span>
+            <h3>Civil Status Automation — Syria</h3>
+          </div>
+          <p>Digitizing civil status processes in Syria. Team project, active development.</p>
+          <div class="module-meta">
+            <span>Flutter</span><span>Clean Arch</span><span>In Progress</span>
+          </div>
+          <span class="open">Open Case Study →</span>
+        </article>
+
+        <article class="module reveal" data-modal="complaints">
+          <div class="module-head">
+            <span class="badge">Flutter</span>
+            <h3>Government Complaints Mobile</h3>
+          </div>
+          <p>OTP login, complaint submission with attachments, and status tracking.</p>
+          <div class="module-meta">
+            <span>OTP</span><span>Forms</span><span>API</span>
+          </div>
+          <span class="open">Open Case Study →</span>
+        </article>
+
+        <article class="module reveal" data-modal="tasktrove">
+          <div class="module-head">
+            <span class="badge">Flutter</span>
+            <h3>Task Trove — Job Platform</h3>
+          </div>
+          <p>Mobile app connecting job seekers with companies. Auth, listings, and admin UI.</p>
+          <div class="module-meta">
+            <span>GetX</span><span>Animations</span><span>Admin UI</span>
+          </div>
+          <span class="open">Open Case Study →</span>
+        </article>
+
+        <article class="module reveal" data-modal="banking">
+          <div class="module-head">
+            <span class="badge">Java</span>
+            <h3>Advanced Banking System</h3>
+          </div>
+          <p>Modular banking system built on OOP + Design Patterns. University project.</p>
+          <div class="module-meta">
+            <span>OOP</span><span>Data Structures</span><span>Patterns</span>
+          </div>
+          <span class="open">Open Case Study →</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap reveal">
+      <div class="footer-line"></div>
+      <p class="mono" style="margin-bottom:14px; font-size:12px; letter-spacing:2px; opacity:.7;">CONTACT</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:mohammadghazal423@gmail.com">Email Me</a>
+        <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/ghazal-mohammad-0b9067" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn ghost" href="#top">↑ Top</a>
+      </div>
+      <p class="tiny">© <span id="y"></span> Ghazal Mohammad — Flutter Developer</p>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Case study modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <p class="modal-kicker" id="modalKicker">MODULE</p>
+      <h3 class="modal-title" id="modalTitle">Title</h3>
+      <p class="modal-desc" id="modalDesc">Description</p>
+      <div class="modal-images" id="modalImages"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-actions">
+        <a class="btn primary" id="modalLink" href="#" target="_blank" rel="noopener">Open Repo</a>
+        <button class="btn ghost" id="modalBack" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// ===== YEAR =====
 const y = document.getElementById("y");
 if (y) y.textContent = new Date().getFullYear();
 
-// ===== THEME toggle (CYAN <-> ROSE) =====
+// ===== THEME =====
 const themeBtn = document.getElementById("themeToggle");
 let theme = localStorage.getItem("theme") || "cyan";
 applyTheme(theme);
-
-function applyTheme(t){
+function applyTheme(t) {
   document.documentElement.setAttribute("data-theme", t);
   if (themeBtn) themeBtn.textContent = `Theme: ${t.toUpperCase()}`;
 }
-
-if (themeBtn){
+if (themeBtn) {
   themeBtn.addEventListener("click", () => {
-    theme = (theme === "cyan") ? "rose" : "cyan";
+    theme = theme === "cyan" ? "rose" : "cyan";
     localStorage.setItem("theme", theme);
     applyTheme(theme);
-    softClick();
   });
 }
 
-// cursor
+// ===== CURSOR (desktop only) =====
 const cursor = document.querySelector(".cursor");
-window.addEventListener("mousemove", (e) => {
-  cursor.style.left = e.clientX + "px";
-  cursor.style.top  = e.clientY + "px";
-});
-
-// reveal
-const revealEls = document.querySelectorAll(".reveal");
-const io = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) entry.target.classList.add("on");
+if (cursor && window.matchMedia("(hover:hover)").matches) {
+  window.addEventListener("mousemove", (e) => {
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top  = e.clientY + "px";
   });
-}, { threshold: 0.15 });
-revealEls.forEach(el => io.observe(el));
+  document.querySelectorAll("a, button, .module, .exp-card").forEach(el => {
+    el.addEventListener("mouseenter", () => {
+      cursor.style.width = "26px";
+      cursor.style.height = "26px";
+      cursor.style.borderColor = "rgba(255,255,255,.35)";
+    });
+    el.addEventListener("mouseleave", () => {
+      cursor.style.width = "16px";
+      cursor.style.height = "16px";
+      cursor.style.borderColor = "rgba(255,255,255,.22)";
+    });
+  });
+}
 
 // ===== SOUND =====
 let soundEnabled = false;
 let audioCtx = null;
-
 const soundBtn = document.getElementById("soundToggle");
 if (soundBtn) {
   soundBtn.addEventListener("click", async () => {
@@ -54,194 +779,150 @@ if (soundBtn) {
     soundEnabled ? softBoot() : softOff();
   });
 }
-
-function playTone(freq, t = 0.06, type = "sine", gainVal = 0.015) {
+function playTone(freq, t = 0.06, type = "sine", gainVal = 0.012) {
   if (!soundEnabled || !audioCtx) return;
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   const now = audioCtx.currentTime;
-
   o.type = type;
   o.frequency.setValueAtTime(freq, now);
-
   g.gain.setValueAtTime(0.0001, now);
   g.gain.exponentialRampToValueAtTime(gainVal, now + 0.01);
   g.gain.exponentialRampToValueAtTime(0.0001, now + t);
-
   o.connect(g); g.connect(audioCtx.destination);
   o.start(now); o.stop(now + t);
 }
+function softOpen()  { playTone(392,.05,"sine",.012); playTone(784,.06,"triangle",.010); }
+function softClose() { playTone(196,.06,"sine",.012); }
+function softBoot()  { playTone(330,.06,"sine",.012); setTimeout(()=>playTone(659,.07,"sine",.010),120); }
+function softOff()   { playTone(247,.07,"sine",.010); }
 
-function softClick(){ playTone(240, 0.03, "triangle", 0.010); playTone(480, 0.02, "sine", 0.006); }
-function softOpen(){  playTone(392, 0.05, "sine", 0.012); playTone(784, 0.06, "triangle", 0.010); }
-function softClose(){ playTone(196, 0.06, "sine", 0.012); }
-function softBoot(){
-  playTone(330, 0.06, "sine", 0.012);
-  setTimeout(() => playTone(494, 0.06, "triangle", 0.010), 70);
-  setTimeout(() => playTone(659, 0.07, "sine", 0.010), 140);
-}
-function softOff(){ playTone(247, 0.07, "sine", 0.010); }
+// ===== REVEAL on scroll =====
+const revealEls = document.querySelectorAll(".reveal");
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("on"); });
+}, { threshold: 0.1 });
+revealEls.forEach(el => io.observe(el));
 
-// hover
-document.querySelectorAll("a, button, .module").forEach(el => {
-  el.addEventListener("mouseenter", () => {
-    cursor.style.width = "28px";
-    cursor.style.height = "28px";
-    cursor.style.borderColor = "rgba(255,255,255,.35)";
-    softClick();
-  });
-  el.addEventListener("mouseleave", () => {
-    cursor.style.width = "16px";
-    cursor.style.height = "16px";
-    cursor.style.borderColor = "rgba(255,255,255,.22)";
-  });
-});
-
-// typing terminal
+// ===== TERMINAL TYPING =====
 const terminalBox = document.querySelector(".terminal");
 const lines = [
-  "Initializing system...",
-  "Loading engineer profile...",
-  "Status: ACTIVE",
-  "Role: Engineer"
+  "> Initializing profile...",
+  "> Flutter Developer: LOADED",
+  "> Status: AVAILABLE",
+  "> Location: Damascus, Syria"
 ];
-
-function typeLine(text, cb){
+function typeLine(text, cb) {
   const p = document.createElement("p");
   terminalBox.appendChild(p);
   let i = 0;
   const tick = () => {
     p.textContent = text.slice(0, i++);
-    if (i <= text.length) setTimeout(tick, 18);
-    else cb && setTimeout(cb, 160);
+    if (i <= text.length) setTimeout(tick, 22);
+    else cb && setTimeout(cb, 140);
   };
   tick();
 }
-
-if (terminalBox){
+if (terminalBox) {
   terminalBox.innerHTML = "";
   let idx = 0;
-  const next = () => {
-    if (idx >= lines.length) return;
-    typeLine(lines[idx++], next);
-  };
+  const next = () => { if (idx < lines.length) typeLine(lines[idx++], next); };
   next();
 }
 
-// modal data
-const data = {
-  banking: {
-    kicker: "SE3 · DESIGN PATTERNS",
-    title: "Advanced Banking System",
-    desc: "Modular banking system demonstrating design patterns. My contribution: Decorator + unit tests + admin UI.",
-    tags: ["Decorator", "Unit Tests", "Admin UI"],
-    link: "https://github.com/ghazal-mohammad/advanced_banking_system",
-    images: ["assets/screens/banking-1.png"]
+// ===== MODAL DATA =====
+const modalData = {
+  pharmacy: {
+    kicker: "FLUTTER · IN PROGRESS",
+    title: "Pharmacy Management & Medication Recommendation App",
+    desc: "Full Flutter app for managing pharmacy inventory and recommending medications. Built role-based flows for users and pharmacy admins. Integrated REST APIs for dynamic data, implemented Bloc and GetX state management. Focused on clean UI and smooth performance across all device sizes.",
+    tags: ["Flutter", "Dart", "Bloc", "GetX", "REST API", "In Progress"],
+    link: "https://github.com/ghazal-mohammad",
+    images: []
+  },
+  civil: {
+    kicker: "SYSTEMS · IN PROGRESS",
+    title: "Civil Status Automation — Syria",
+    desc: "Team project aiming to digitize civil status processes in Syria. Contributing as a developer on modular architecture and scalable UI components. Active development — actively collaborating and iterating on features.",
+    tags: ["Flutter", "Dart", "Clean Architecture", "Team Project", "Private"],
+    link: "#",
+    images: []
   },
   complaints: {
     kicker: "FLUTTER · MOBILE APP",
     title: "Government Complaints Mobile",
-    desc: "Flutter app: OTP login, complaint submission with attachments, and status tracking.",
-    tags: ["Flutter", "OTP", "Forms", "API"],
+    desc: "Flutter app with OTP login, complaint submission with attachments, and real-time status tracking. Built for citizens to interact with government services digitally.",
+    tags: ["Flutter", "OTP", "Forms", "REST API", "UX Flow"],
     link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
-    images: ["assets/screens/flutter-1.png"]
+    images: []
   },
-  civil: {
-    kicker: "SYSTEMS · REQUIREMENTS",
-    title: "Civil Registry Automation",
-    desc: "Requirements analysis + workflow re-engineering. Private until milestones are ready.",
-    tags: ["Requirements", "Workflows", "Traceability"],
+  tasktrove: {
+    kicker: "FLUTTER · JOB PLATFORM",
+    title: "Task Trove — Job Platform Mobile App",
+    desc: "Mobile application connecting job seekers with companies. Implemented authentication, profile screens, job listing flows, and admin interfaces. Added animations to improve user experience throughout the app.",
+    tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI"],
     link: "#",
-    images: ["assets/screens/civil-1.png"]
+    images: []
   },
-  security: {
-    kicker: "SECURITY · ACADEMIC LABS",
-    title: "Information Systems Security",
-    desc: "Academic labs organized safely (redacted). Focus on defense & mitigation.",
-    tags: ["CSRF", "XSS", "SQLi"],
-    link: "#",
-    images: ["assets/screens/security-1.png"]
+  banking: {
+    kicker: "JAVA · UNIVERSITY PROJECT",
+    title: "Advanced Banking System",
+    desc: "Modular banking system demonstrating software engineering concepts. Designed system structure using OOP principles, implemented account management (create, update, delete), deposit, withdrawal, and transfer operations with data validation and error handling.",
+    tags: ["Java", "OOP", "Data Structures", "Design Patterns"],
+    link: "https://github.com/ghazal-mohammad/advanced_banking_system",
+    images: []
   }
 };
 
-// modal logic
-const modal = document.getElementById("modal");
+// ===== MODAL LOGIC =====
+const modal      = document.getElementById("modal");
 const modalClose = document.getElementById("modalClose");
-const modalBack = document.getElementById("modalBack");
+const modalBack  = document.getElementById("modalBack");
 const modalKicker = document.getElementById("modalKicker");
-const modalTitle = document.getElementById("modalTitle");
-const modalDesc = document.getElementById("modalDesc");
-const modalTags = document.getElementById("modalTags");
+const modalTitle  = document.getElementById("modalTitle");
+const modalDesc   = document.getElementById("modalDesc");
+const modalTags   = document.getElementById("modalTags");
 const modalImages = document.getElementById("modalImages");
-const modalLink = document.getElementById("modalLink");
+const modalLink   = document.getElementById("modalLink");
 
-function openModal(key){
-  const d = data[key];
+function openModal(key) {
+  const d = modalData[key];
   if (!d) return;
-
   modalKicker.textContent = d.kicker;
-  modalTitle.textContent = d.title;
-  modalDesc.textContent = d.desc;
-
+  modalTitle.textContent  = d.title;
+  modalDesc.textContent   = d.desc;
   modalTags.innerHTML = "";
   d.tags.forEach(t => {
     const s = document.createElement("span");
     s.textContent = t;
     modalTags.appendChild(s);
   });
-
   modalImages.innerHTML = "";
   (d.images || []).forEach(src => {
     const img = document.createElement("img");
-    img.src = src;
-    img.alt = d.title + " screenshot";
+    img.src = src; img.alt = d.title;
     modalImages.appendChild(img);
   });
-
-  if (d.link === "#") modalLink.style.display = "none";
+  if (d.link === "#") { modalLink.style.display = "none"; }
   else { modalLink.style.display = "inline-flex"; modalLink.href = d.link; }
-
   modal.classList.add("on");
   modal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
   softOpen();
 }
-
-function closeModal(){
+function closeModal() {
   modal.classList.remove("on");
   modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
   softClose();
 }
-
 document.querySelectorAll("[data-modal]").forEach(el => {
   el.addEventListener("click", () => openModal(el.dataset.modal));
 });
-
 if (modalClose) modalClose.addEventListener("click", closeModal);
-if (modalBack) modalBack.addEventListener("click", closeModal);
-if (modal) modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("on")) closeModal(); });
-
-const enterBtn = document.getElementById("enterBtn");
-if (enterBtn) enterBtn.addEventListener("click", () => softOpen());
-// ===== FORCE THEME TOGGLE (FINAL PATCH) =====
-window.addEventListener("DOMContentLoaded", () => {
-  const themeBtn = document.getElementById("themeToggle");
-  if (!themeBtn) {
-    console.log("themeToggle button not found");
-    return;
-  }
-
-  const saved = localStorage.getItem("theme") || "cyan";
-  document.documentElement.setAttribute("data-theme", saved);
-  themeBtn.textContent = `Theme: ${saved.toUpperCase()}`;
-
-  themeBtn.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme") || "cyan";
-    const next = current === "cyan" ? "rose" : "cyan";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-    themeBtn.textContent = `Theme: ${next.toUpperCase()}`;
-  });
-});
+if (modalBack)  modalBack.addEventListener("click", closeModal);
+if (modal) modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+window.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("on")) closeModal(); });
+  </script>
+</body>
+</html>
