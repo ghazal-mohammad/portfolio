@@ -728,7 +728,7 @@ h1.glitch:hover::after {
   var audioCtx = null;
 
   function playTone(freq, t, type, gainVal) {
-    t = t || 0.06; type = type || "sine"; gainVal = gainVal || 0.012;
+    t = t || 0.06; type = type || "sine"; gainVal = gainVal || 0.045;
     if (!soundEnabled || !audioCtx) return;
     try {
       var o = audioCtx.createOscillator();
@@ -743,10 +743,10 @@ h1.glitch:hover::after {
       o.start(now); o.stop(now + t);
     } catch(e) {}
   }
-  function softOpen()  { playTone(392,.05,"sine",.012); setTimeout(function(){playTone(784,.06,"triangle",.010);},60); }
-  function softClose() { playTone(196,.06,"sine",.012); }
-  function softBoot()  { playTone(330,.06,"sine",.012); setTimeout(function(){playTone(659,.07,"sine",.010);},120); }
-  function softOff()   { playTone(247,.07,"sine",.010); }
+  function softOpen()  { playTone(392,.08,"sine",.045); setTimeout(function(){playTone(784,.07,"triangle",.035);},60); }
+  function softClose() { playTone(196,.08,"sine",.045); }
+  function softBoot()  { playTone(330,.08,"sine",.045); setTimeout(function(){playTone(659,.09,"sine",.035);},120); }
+  function softOff()   { playTone(247,.09,"sine",.040); }
 
   window.addEventListener("DOMContentLoaded", function() {
 
