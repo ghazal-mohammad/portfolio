@@ -574,12 +574,15 @@ h1.glitch:hover::after {
   grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
   gap:10px;
 }
-.modal-images img {
-  width:100%;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.02);
+.modal-images { margin-top:16px; }
+.modal-phone-row {
+  display:flex;
+  gap:16px;
+  justify-content:center;
+  flex-wrap:wrap;
 }
+.modal-phone-row .phone-frame { width:140px; }
+.modal-browser img { max-height:220px; }
 .modal-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:7px; }
 .modal-tags span {
   font-family:'JetBrains Mono', monospace;
@@ -718,9 +721,6 @@ h1.glitch:hover::after {
           <div class="module-meta">
             <span>Flutter Web</span><span>REST API</span><span>Complete</span><span>Private</span>
           </div>
-          <div class="module-preview">
-            <div class="browser-frame"><img src="assets/screens/Pharmacio.png" alt="Pharmacy Admin Panel" loading="lazy"></div>
-          </div>
           <span class="open">Open Case Study →</span>
         </article>
 
@@ -734,9 +734,6 @@ h1.glitch:hover::after {
             <span>Flutter</span><span>Clean Arch</span><span>In Progress</span>
           </div>
           <div class="module-locked-note">Pending official announcement by project management</div>
-          <div class="module-preview" style="margin-top:12px;">
-            <div class="browser-frame"><img src="assets/screens/civil-1.png" alt="Civil Status Automation Flow" loading="lazy"></div>
-          </div>
           <span class="open">View Details →</span>
         </article>
 
@@ -748,9 +745,6 @@ h1.glitch:hover::after {
           <p>Mobile app for filing and tracking government complaints with OTP login and attachments.</p>
           <div class="module-meta">
             <span>Flutter</span><span>OTP</span><span>REST API</span>
-          </div>
-          <div class="module-preview">
-            <div class="phone-frame"><img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily App" loading="lazy"></div>
           </div>
           <span class="open">Open Case Study →</span>
         </article>
@@ -764,12 +758,6 @@ h1.glitch:hover::after {
           <div class="module-meta">
             <span>Flutter</span><span>UI/UX</span><span>Widespheres</span>
           </div>
-          <div class="module-preview">
-            <div class="phone-duo">
-              <div class="phone-frame"><img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy"></div>
-              <div class="phone-frame"><img src="assets/screens/Design.png" alt="Course Overview" loading="lazy"></div>
-            </div>
-          </div>
           <span class="open">Open Case Study →</span>
         </article>
 
@@ -782,9 +770,6 @@ h1.glitch:hover::after {
           <div class="module-meta">
             <span>Flutter</span><span>GetX</span><span>Animations</span><span>Admin UI</span>
           </div>
-          <div class="module-preview">
-            <div class="phone-frame"><img src="assets/screens/Task Trove.png" alt="Task Trove App" loading="lazy"></div>
-          </div>
           <span class="open">Open Case Study →</span>
         </article>
 
@@ -796,9 +781,6 @@ h1.glitch:hover::after {
           <p>Modular banking system built on OOP + Design Patterns. University project.</p>
           <div class="module-meta">
             <span>OOP</span><span>Data Structures</span><span>Patterns</span>
-          </div>
-          <div class="module-preview">
-            <div class="browser-frame"><img src="assets/screens/Advanced Banking System.png" alt="Banking System" loading="lazy"></div>
           </div>
           <span class="open">Open Case Study →</span>
         </article>
@@ -972,7 +954,8 @@ h1.glitch:hover::after {
         desc: "<b>My Role:</b> Flutter Web Developer<br><br><b>About:</b> A complete web-based system for pharmacy management — including inventory control, medication recommendations, and role-based admin panel.<br><br><b>What I built:</b><br>→ Full web frontend using Flutter Web<br>→ Role-based admin panel (permissions, users, inventory)<br>→ REST API integration with backend<br>→ Dashboard, uploads, offers, proposals & comparison modules<br><br><span style='opacity:.65;font-size:13px;'>Web and backend are fully complete. Source code is private.</span>",
         tags: ["Flutter Web", "REST API", "Admin Panel", "Role-Based Auth", "Complete", "Private"],
         link: "#",
-        images: ["assets/screens/Pharmacio.png"]
+        images: ["assets/screens/Pharmacio.png"],
+        frameType: "browser"
       },
       civil: {
         kicker: "FLUTTER · IN PROGRESS · PRIVATE",
@@ -980,7 +963,8 @@ h1.glitch:hover::after {
         desc: "<b>My Role:</b> Developer<br><br><b>About:</b> A team project to digitize civil status processes at Sharia courts in Syria — automating paperwork, improving access, and modernizing government workflows.<br><br><b>What I work on:</b><br>→ Developing modular UI components with Flutter<br>→ Applying Clean Architecture principles<br>→ Collaborating across a distributed development team<br><br><span style='opacity:.65;font-size:13px;'>This project is in active development. Full details will be announced officially by project management.</span>",
         tags: ["Flutter", "Dart", "Clean Architecture", "Team Project", "Private"],
         link: "#",
-        images: [],
+        images: ["assets/screens/civil-1.png"],
+        frameType: "browser",
         locked: true
       },
       complaints: {
@@ -989,7 +973,8 @@ h1.glitch:hover::after {
         desc: "<b>My Role:</b> Flutter Mobile Developer<br><br><b>About:</b> A Flutter mobile app enabling Syrian citizens to submit government complaints, track their status, and receive updates — with a clean Arabic RTL interface.<br><br><b>Key Features:</b><br>→ OTP-based secure login<br>→ Complaint submission with photo/file attachments<br>→ Real-time status tracking per complaint<br>→ Category-based filing: rights violations, administrative corruption, service delays<br>→ Arabic RTL interface with city-based filtering",
         tags: ["Flutter", "Dart", "OTP Auth", "REST API", "Arabic RTL", "Mobile"],
         link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
-        images: ["assets/screens/Government Complaints Mobile (Eshtikily).png"]
+        images: ["assets/screens/Government Complaints Mobile (Eshtikily).png"],
+        frameType: "mobile"
       },
       education: {
         kicker: "FLUTTER · WIDESPHERES INTERNSHIP",
@@ -997,7 +982,8 @@ h1.glitch:hover::after {
         desc: "<b>My Role:</b> Flutter Mobile Trainee (under Widespheres supervision)<br><br><b>About:</b> A mobile learning platform built during my internship at Widespheres on the Mobile development track. The app allows users to browse courses, view lesson details, and access video/PDF content.<br><br><b>What I built:</b><br>→ Course browsing with ratings, levels, and duration<br>→ Course detail screen with lesson breakdown<br>→ Video and PDF lesson support<br>→ Clean, modern UI with smooth navigation<br>→ Payment integration UI",
         tags: ["Flutter", "Dart", "UI/UX", "Widespheres", "Internship Project"],
         link: "#",
-        images: ["assets/screens/Course Details.png", "assets/screens/Design.png"]
+        images: ["assets/screens/Course Details.png", "assets/screens/Design.png"],
+        frameType: "mobile"
       },
       tasktrove: {
         kicker: "FLUTTER MOBILE · DEVELOPER",
@@ -1005,7 +991,8 @@ h1.glitch:hover::after {
         desc: "<b>My Role:</b> Flutter Mobile Developer<br><br><b>About:</b> A Flutter mobile app connecting job seekers with companies — featuring smart filtering, animated UI, and a full admin panel.<br><br><b>Key Features:</b><br>→ Multi-role auth (Job Seeker / Company / Admin)<br>→ Job listing feed with category & location filters<br>→ Smooth animated transitions and polished UI<br>→ Admin interface for managing listings and users<br>→ GetX state management",
         tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI", "Mobile"],
         link: "#",
-        images: ["assets/screens/Task Trove.png"]
+        images: ["assets/screens/Task Trove.png"],
+        frameType: "mobile"
       },
       banking: {
         kicker: "JAVA · UNIVERSITY PROJECT",
@@ -1013,7 +1000,8 @@ h1.glitch:hover::after {
         desc: "<b>About:</b> A modular banking simulation demonstrating mastery of OOP and Software Design Patterns.<br><br><b>What was built:</b><br>→ Account types: Checking, Savings, Loan<br>→ Transactions: Deposit, Withdraw, Transfer<br>→ Design Patterns: Factory, Strategy, Observer<br>→ Data Structures: Custom linked lists & queues<br>→ Full input validation and error handling",
         tags: ["Java", "OOP", "Data Structures", "Design Patterns", "University Project"],
         link: "https://github.com/ghazal-mohammad/advanced_banking_system",
-        images: ["assets/screens/Advanced Banking System.png"]
+        images: ["assets/screens/Advanced Banking System.png"],
+        frameType: "browser"
       }
     };
 
@@ -1041,11 +1029,30 @@ h1.glitch:hover::after {
         modalTags.appendChild(s);
       });
       modalImages.innerHTML = "";
-      (d.images || []).forEach(function(src) {
-        var img = document.createElement("img");
-        img.src = src; img.alt = d.title;
-        modalImages.appendChild(img);
-      });
+      if (d.images && d.images.length) {
+        if (d.frameType === "mobile") {
+          var duo = document.createElement("div");
+          duo.className = "modal-phone-row";
+          d.images.forEach(function(src) {
+            var frame = document.createElement("div");
+            frame.className = "phone-frame";
+            var img = document.createElement("img");
+            img.src = src; img.alt = d.title; img.loading = "lazy";
+            frame.appendChild(img);
+            duo.appendChild(frame);
+          });
+          modalImages.appendChild(duo);
+        } else {
+          d.images.forEach(function(src) {
+            var frame = document.createElement("div");
+            frame.className = "browser-frame modal-browser";
+            var img = document.createElement("img");
+            img.src = src; img.alt = d.title; img.loading = "lazy";
+            frame.appendChild(img);
+            modalImages.appendChild(frame);
+          });
+        }
+      }
       if (d.link === "#") { modalLink.style.display = "none"; }
       else { modalLink.style.display = "inline-flex"; modalLink.href = d.link; }
       // Locked project indicator
