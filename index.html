@@ -365,6 +365,8 @@ h1.glitch:hover::after {
   overflow:hidden;
   transition:transform .25s ease, border-color .25s ease;
   cursor:pointer;
+  display:flex;
+  flex-direction:column;
 }
 .module::after {
   content:"";
@@ -409,7 +411,8 @@ h1.glitch:hover::after {
 }
 .open {
   display:inline-block;
-  margin-top:14px;
+  margin-top:auto;
+  padding-top:16px;
   font-weight:800;
   font-size:13px;
   color:color-mix(in srgb, var(--primary) 85%, white 0%);
@@ -582,7 +585,17 @@ h1.glitch:hover::after {
   flex-wrap:wrap;
 }
 .modal-phone-row .phone-frame { width:140px; }
-.modal-browser img { max-height:220px; }
+.modal-browser {
+  margin-bottom:12px;
+}
+.modal-browser img {
+  max-height:300px;
+  width:100%;
+  border-radius:6px;
+  object-fit:cover;
+  object-position:top left;
+  display:block;
+}
 .modal-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:7px; }
 .modal-tags span {
   font-family:'JetBrains Mono', monospace;
