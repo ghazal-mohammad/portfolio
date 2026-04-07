@@ -415,29 +415,73 @@ h1.glitch:hover::after {
   color:color-mix(in srgb, var(--primary) 85%, white 0%);
 }
 
-/* ===== MODULE HOVER THUMBNAIL ===== */
-.module-thumb {
-  margin-top:0;
-  border-radius:8px;
-  overflow:hidden;
-  max-height:0;
-  opacity:0;
-  transition:max-height .35s ease, opacity .3s ease, margin-top .3s ease;
+/* ===== MODULE PREVIEW FRAMES ===== */
+.module-preview {
+  margin-top:14px;
+  display:flex;
+  justify-content:center;
 }
-.module:hover .module-thumb {
-  max-height:140px;
-  opacity:.88;
-  margin-top:12px;
+/* Phone mockup for mobile app screenshots */
+.phone-frame {
+  width:120px;
+  padding:6px 5px 10px;
+  background:linear-gradient(145deg, #1a1a2e, #16162a);
+  border-radius:18px;
+  border:2px solid rgba(255,255,255,.14);
+  box-shadow:0 8px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+  position:relative;
+  flex-shrink:0;
 }
-.module-thumb img {
+.phone-frame::before {
+  content:"";
+  display:block;
+  width:32px; height:4px;
+  background:rgba(255,255,255,.12);
+  border-radius:2px;
+  margin:0 auto 5px;
+}
+.phone-frame img {
   width:100%;
-  height:130px;
+  border-radius:10px;
+  display:block;
+  aspect-ratio:9/16;
   object-fit:cover;
   object-position:top;
-  display:block;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.10);
 }
+/* Browser mockup for web screenshots */
+.browser-frame {
+  width:100%;
+  padding:22px 4px 4px;
+  background:linear-gradient(145deg, #1a1a2e, #16162a);
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 8px 28px rgba(0,0,0,.45);
+  position:relative;
+}
+.browser-frame::before {
+  content:"";
+  position:absolute;
+  top:7px; left:10px;
+  width:8px; height:8px;
+  border-radius:50%;
+  background:#ff5f57;
+  box-shadow:14px 0 0 #febc2e, 28px 0 0 #28c840;
+}
+.browser-frame img {
+  width:100%;
+  border-radius:6px;
+  display:block;
+  max-height:140px;
+  object-fit:cover;
+  object-position:top left;
+}
+/* Multiple phone frames side by side */
+.phone-duo {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
+.phone-duo .phone-frame { width:100px; }
 
 /* ===== MODULE LOCKED STATE ===== */
 .module-locked-note {
@@ -629,13 +673,20 @@ h1.glitch:hover::after {
             </div>
             <div class="exp-date">2025 · Damascus</div>
           </div>
-          <div class="exp-badge">🏆 Top Intern of the Week</div>
+          <div class="exp-badge">🏆 Trainee of the Week</div>
           <ul class="exp-bullets">
-            <li>Developed an educational mobile project on the Mobile internship track</li>
-            <li>Recognized for exceptional dedication and high-quality work delivery</li>
-            <li>Demonstrated continuous improvement mindset and collaborative work ethic</li>
-            <li>Certification in progress</li>
+            <li>Built an educational course mobile app under company supervision on the Mobile track</li>
+            <li>Selected as <strong>Trainee of the Week</strong> — recognized by the company publicly for dedication and quality</li>
+            <li>Received an official <strong>recommendation letter</strong> from Widespheres</li>
+            <li>Demonstrated continuous improvement, proactive communication, and collaborative work ethic</li>
           </ul>
+          <div style="margin-top:14px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(230,230,235,.12);">
+            <img src="assets/screens/trainee-award.png" alt="Trainee of the Week — Ghazal Mohammad" style="width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,.12);" loading="lazy">
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+              <strong style="color:var(--text);">Trainee of the Week</strong><br>
+              Recognized by Widespheres · Recommendation letter available upon request
+            </div>
+          </div>
         </div>
 
         <!-- Freelance -->
@@ -668,15 +719,17 @@ h1.glitch:hover::after {
 
         <article class="module reveal" data-modal="pharmacy">
           <div class="module-head">
-            <span class="badge">Flutter</span>
-            <h3>Pharmacy Management App</h3>
+            <span class="badge">Flutter Web</span>
+            <h3>Pharmacy Management System</h3>
           </div>
-          <p>Medication recommendation & pharmacy inventory management with role-based flows.</p>
+          <p>Full web system for pharmacy inventory management and medication recommendations. Role-based admin panel.</p>
           <div class="module-meta">
-            <span>Bloc</span><span>GetX</span><span>REST API</span><span>UI Complete</span><span>Backend: WIP</span>
+            <span>Flutter Web</span><span>REST API</span><span>Complete</span><span>Private</span>
+          </div>
+          <div class="module-preview">
+            <div class="browser-frame"><img src="assets/screens/pharmacy-1.png" alt="Pharmacy Admin Panel" loading="lazy"></div>
           </div>
           <span class="open">Open Case Study →</span>
-          <div class="module-thumb"><img src="assets/screens/flutter-1.png" alt="Pharmacy App Preview" loading="lazy"></div>
         </article>
 
         <article class="module reveal" data-modal="civil">
@@ -684,26 +737,45 @@ h1.glitch:hover::after {
             <span class="badge private">Private</span>
             <h3>Civil Status Automation — Syria</h3>
           </div>
-          <p>Digitizing civil status processes in Syria. Team project, active development.</p>
+          <p>Digitizing civil status processes at Sharia courts. Team project, active development.</p>
           <div class="module-meta">
             <span>Flutter</span><span>Clean Arch</span><span>In Progress</span>
           </div>
           <div class="module-locked-note">Pending official announcement by project management</div>
           <span class="open">View Details →</span>
-          <div class="module-thumb"><img src="assets/screens/civil-1.png.png" alt="Civil Project Preview" loading="lazy"></div>
         </article>
 
         <article class="module reveal" data-modal="complaints">
           <div class="module-head">
             <span class="badge">Flutter</span>
-            <h3>Government Complaints Mobile</h3>
+            <h3>Eshtikily — Government Complaints</h3>
           </div>
-          <p>OTP login, complaint submission with attachments, and status tracking.</p>
+          <p>Mobile app for filing and tracking government complaints with OTP login and attachments.</p>
           <div class="module-meta">
-            <span>OTP</span><span>Forms</span><span>API</span>
+            <span>Flutter</span><span>OTP</span><span>REST API</span>
+          </div>
+          <div class="module-preview">
+            <div class="phone-frame"><img src="assets/screens/eshtikily-1.png" alt="Eshtikily App" loading="lazy"></div>
           </div>
           <span class="open">Open Case Study →</span>
-          <div class="module-thumb"><img src="assets/screens/security-1.png.png" alt="Complaints App Preview" loading="lazy"></div>
+        </article>
+
+        <article class="module reveal" data-modal="education">
+          <div class="module-head">
+            <span class="badge">Flutter</span>
+            <h3>Educational Course App</h3>
+          </div>
+          <p>Mobile learning platform with course browsing, lessons, and content management. Built during Widespheres internship.</p>
+          <div class="module-meta">
+            <span>Flutter</span><span>UI/UX</span><span>Widespheres</span>
+          </div>
+          <div class="module-preview">
+            <div class="phone-duo">
+              <div class="phone-frame"><img src="assets/screens/course-1.png" alt="Course Details" loading="lazy"></div>
+              <div class="phone-frame"><img src="assets/screens/course-2.png" alt="Course Overview" loading="lazy"></div>
+            </div>
+          </div>
+          <span class="open">Open Case Study →</span>
         </article>
 
         <article class="module reveal" data-modal="tasktrove">
@@ -716,7 +788,6 @@ h1.glitch:hover::after {
             <span>GetX</span><span>Animations</span><span>Admin UI</span>
           </div>
           <span class="open">Open Case Study →</span>
-          <div class="module-thumb"><img src="assets/screens/flutter-1.png" alt="Task Trove Preview" loading="lazy"></div>
         </article>
 
         <article class="module reveal" data-modal="banking">
@@ -729,7 +800,6 @@ h1.glitch:hover::after {
             <span>OOP</span><span>Data Structures</span><span>Patterns</span>
           </div>
           <span class="open">Open Case Study →</span>
-          <div class="module-thumb"><img src="assets/screens/banking-1.png" alt="Banking System Preview" loading="lazy"></div>
         </article>
 
       </div>
@@ -896,42 +966,50 @@ h1.glitch:hover::after {
     // MODAL DATA
     var modalData = {
       pharmacy: {
-        kicker: "FLUTTER · UI COMPLETE · BACKEND IN PROGRESS",
-        title: "Pharmacy Management & Medication Recommendation App",
-        desc: "<b>Problem:</b> Pharmacies lack a digital tool for managing inventory and recommending the right medications to patients.<br><br><b>Solution:</b> Full Flutter app with role-based flows for Patients and Pharmacy Admins. Figma UI is fully designed and implemented. REST API backend integration is currently in progress.<br><br><b>Key Features:</b><br>→ Role-based authentication (Patient / Admin)<br>→ Medication search and recommendation engine<br>→ Inventory management dashboard<br>→ Bloc + GetX state management<br>→ Clean Architecture structure",
-        tags: ["Flutter", "Dart", "Bloc", "GetX", "REST API", "Figma UI Done", "Backend WIP"],
-        link: "https://github.com/ghazal-mohammad",
-        images: ["assets/screens/flutter-1.png"]
+        kicker: "FLUTTER WEB · COMPLETE · PRIVATE",
+        title: "Pharmacy Management System",
+        desc: "<b>My Role:</b> Flutter Web Developer<br><br><b>About:</b> A complete web-based system for pharmacy management — including inventory control, medication recommendations, and role-based admin panel.<br><br><b>What I built:</b><br>→ Full web frontend using Flutter Web<br>→ Role-based admin panel (permissions, users, inventory)<br>→ REST API integration with backend<br>→ Dashboard, uploads, offers, proposals & comparison modules<br><br><span style='opacity:.65;font-size:13px;'>Web and backend are fully complete. Source code is private.</span>",
+        tags: ["Flutter Web", "REST API", "Admin Panel", "Role-Based Auth", "Complete", "Private"],
+        link: "#",
+        images: ["assets/screens/pharmacy-1.png"]
       },
       civil: {
-        kicker: "SYSTEMS · IN PROGRESS · PRIVATE",
+        kicker: "FLUTTER · IN PROGRESS · PRIVATE",
         title: "Civil Status Automation — Syria",
-        desc: "<b>About this project:</b><br>A team initiative to digitize civil status processes in Syria — reducing paperwork, improving access, and modernizing government workflows.<br><br><b>My Role:</b><br>→ Developing modular UI components with Flutter<br>→ Applying Clean Architecture principles<br>→ Collaborating across a distributed team<br><br><span style='opacity:.65;font-size:13px;'>This project is currently in active development. Full details will be announced officially by project management.</span>",
+        desc: "<b>My Role:</b> Developer<br><br><b>About:</b> A team project to digitize civil status processes at Sharia courts in Syria — automating paperwork, improving access, and modernizing government workflows.<br><br><b>What I work on:</b><br>→ Developing modular UI components with Flutter<br>→ Applying Clean Architecture principles<br>→ Collaborating across a distributed development team<br><br><span style='opacity:.65;font-size:13px;'>This project is in active development. Full details will be announced officially by project management.</span>",
         tags: ["Flutter", "Dart", "Clean Architecture", "Team Project", "Private"],
         link: "#",
-        images: ["assets/screens/civil-1.png.png"],
+        images: [],
         locked: true
       },
       complaints: {
         kicker: "FLUTTER · MOBILE APP",
-        title: "Government Complaints Mobile (Eshtikily)",
-        desc: "<b>Problem:</b> Citizens had no efficient digital channel to file government complaints or track their resolution.<br><br><b>Solution:</b> A Flutter mobile app with a streamlined UX for filing, tracking, and managing complaints.<br><br><b>Key Features:</b><br>→ OTP-based secure login<br>→ Complaint submission with photo/file attachments<br>→ Real-time status tracking per complaint<br>→ Clean navigation with UX-focused form flows",
-        tags: ["Flutter", "Dart", "OTP Auth", "REST API", "Forms", "UX Flow"],
+        title: "Eshtikily — Government Complaints Mobile",
+        desc: "<b>About:</b> A Flutter mobile app enabling citizens to file government complaints, track their resolution status, and receive updates.<br><br><b>Key Features:</b><br>→ OTP-based secure login<br>→ Complaint submission with photo/file attachments<br>→ Real-time status tracking per complaint<br>→ Category-based complaint filing (rights violations, administrative corruption, service delays)<br>→ Arabic RTL interface",
+        tags: ["Flutter", "Dart", "OTP Auth", "REST API", "Arabic RTL"],
         link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
-        images: ["assets/screens/security-1.png.png"]
+        images: ["assets/screens/eshtikily-1.png"]
+      },
+      education: {
+        kicker: "FLUTTER · WIDESPHERES INTERNSHIP",
+        title: "Educational Course Platform",
+        desc: "<b>My Role:</b> Flutter Mobile Trainee (under Widespheres supervision)<br><br><b>About:</b> A mobile learning platform built during my internship at Widespheres on the Mobile development track. The app allows users to browse courses, view lesson details, and access video/PDF content.<br><br><b>What I built:</b><br>→ Course browsing with ratings, levels, and duration<br>→ Course detail screen with lesson breakdown<br>→ Video and PDF lesson support<br>→ Clean, modern UI with smooth navigation<br>→ Payment integration UI",
+        tags: ["Flutter", "Dart", "UI/UX", "Widespheres", "Internship Project"],
+        link: "#",
+        images: ["assets/screens/course-1.png", "assets/screens/course-2.png"]
       },
       tasktrove: {
         kicker: "FLUTTER · JOB PLATFORM",
         title: "Task Trove — Job Platform Mobile App",
-        desc: "<b>Problem:</b> Job seekers and employers lacked a focused mobile-first platform for connecting efficiently.<br><br><b>Solution:</b> A Flutter mobile app with smooth authentication flows, job listings, and a dedicated admin panel.<br><br><b>Key Features:</b><br>→ Multi-role auth (Job Seeker / Company / Admin)<br>→ Job listing feed with filtering<br>→ Animated transitions and polished UI<br>→ Admin interface for managing listings and users<br>→ GetX state management",
-        tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI", "Multi-role Auth"],
+        desc: "<b>About:</b> A Flutter mobile app connecting job seekers with companies through a clean, animated interface.<br><br><b>Key Features:</b><br>→ Multi-role auth (Job Seeker / Company / Admin)<br>→ Job listing feed with filtering<br>→ Animated transitions and polished UI<br>→ Admin interface for managing listings and users<br>→ GetX state management",
+        tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI"],
         link: "#",
-        images: ["assets/screens/flutter-1.png"]
+        images: []
       },
       banking: {
         kicker: "JAVA · UNIVERSITY PROJECT",
         title: "Advanced Banking System",
-        desc: "<b>Goal:</b> Build a complete, modular banking simulation that demonstrates mastery of Object-Oriented Programming and Software Design Patterns.<br><br><b>What was built:</b><br>→ Account types: Checking, Savings, Loan<br>→ Transactions: Deposit, Withdraw, Transfer<br>→ Design Patterns: Factory, Strategy, Observer<br>→ Data Structures: Custom linked lists & queues<br>→ Full input validation and error handling",
+        desc: "<b>About:</b> A modular banking simulation demonstrating mastery of OOP and Software Design Patterns.<br><br><b>What was built:</b><br>→ Account types: Checking, Savings, Loan<br>→ Transactions: Deposit, Withdraw, Transfer<br>→ Design Patterns: Factory, Strategy, Observer<br>→ Data Structures: Custom linked lists & queues<br>→ Full input validation and error handling",
         tags: ["Java", "OOP", "Data Structures", "Design Patterns", "University Project"],
         link: "https://github.com/ghazal-mohammad/advanced_banking_system",
         images: ["assets/screens/banking-1.png"]
