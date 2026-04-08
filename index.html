@@ -432,64 +432,63 @@ h1.glitch:hover::after {
 }
 .preview-stage {
   border-radius:18px;
-  overflow:hidden;
-  aspect-ratio:4/3;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(230,230,235,.09);
+  overflow:visible;
+  min-height:260px;
+  background:transparent;
+  border:none;
   position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  /* hidden until a project is hovered */
+  opacity:0;
+  transition:opacity .35s ease;
 }
-/* empty grid texture */
-.preview-stage::after {
-  content:"";
-  position:absolute; inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-  background-size:22px 22px;
-  pointer-events:none;
-  z-index:0;
-}
-/* gradient fade at bottom */
-.preview-stage::before {
-  content:"";
-  position:absolute;
-  bottom:0; left:0; right:0;
-  height:45%;
-  background:linear-gradient(transparent, rgba(10,12,16,.85));
-  z-index:2;
-  pointer-events:none;
-}
+.preview-stage.has-active { opacity:1; }
+
 .preview-item {
   position:absolute; inset:0;
   opacity:0;
-  transition:opacity .38s ease;
+  transition:opacity .35s ease;
   z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+  gap:14px;
 }
 .preview-item.active { opacity:1; }
-.preview-item img {
-  width:100%; height:100%;
+
+/* browser frame inside preview */
+.preview-item .browser-frame {
+  width:100%;
+}
+.preview-item .browser-frame img {
+  max-height:200px;
+  width:100%;
   object-fit:cover;
   object-position:top left;
+  border-radius:6px;
   display:block;
 }
-/* mobile preview: center the image */
-.preview-item.is-mobile img {
-  object-position:top center;
-  object-fit:contain;
-  background:rgba(255,255,255,.02);
+
+/* phone frame inside preview */
+.preview-item .phone-frame {
+  width:110px;
+  flex-shrink:0;
 }
+
 .preview-label {
-  position:absolute;
-  bottom:0; left:0; right:0;
-  padding:14px 16px;
-  z-index:3;
+  margin-top:12px;
   font-family:'JetBrains Mono', monospace;
   font-size:11px;
-  color:rgba(230,230,235,.45);
+  color:rgba(230,230,235,.4);
   letter-spacing:1px;
   text-align:center;
   pointer-events:none;
+  transition:opacity .35s;
 }
+.preview-label.hidden { opacity:0; }
 
 @media (max-width:800px) {
   .modules-layout { grid-template-columns:1fr; }
@@ -930,27 +929,41 @@ h1.glitch:hover::after {
 
         <!-- ——— RIGHT: sticky hover preview ——— -->
         <div class="modules-preview" aria-hidden="true">
-          <div class="preview-stage">
+          <div class="preview-stage" id="previewStage">
+
+            <!-- Pharmacy: browser frame -->
             <div class="preview-item" data-for="pharmacy">
-              <img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy">
+              <div class="browser-frame"><img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy"></div>
             </div>
+
+            <!-- Civil: browser frame (flowchart) -->
             <div class="preview-item" data-for="civil">
-              <img src="assets/screens/civil-1.png" alt="Civil" loading="lazy">
+              <div class="browser-frame"><img src="assets/screens/civil-1.png" alt="Civil" loading="lazy"></div>
             </div>
-            <div class="preview-item is-mobile" data-for="complaints">
-              <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
+
+            <!-- Eshtikily: phone frame -->
+            <div class="preview-item" data-for="complaints">
+              <div class="phone-frame"><img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy"></div>
             </div>
-            <div class="preview-item is-mobile" data-for="education">
-              <img src="assets/screens/Course Details.png" alt="Education" loading="lazy">
+
+            <!-- Education: two phone frames -->
+            <div class="preview-item" data-for="education">
+              <div class="phone-frame"><img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy"></div>
+              <div class="phone-frame"><img src="assets/screens/Design.png" alt="Course Design" loading="lazy"></div>
             </div>
-            <div class="preview-item is-mobile" data-for="tasktrove">
-              <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy">
+
+            <!-- Task Trove: browser frame -->
+            <div class="preview-item" data-for="tasktrove">
+              <div class="browser-frame"><img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy"></div>
             </div>
+
+            <!-- Banking: browser frame -->
             <div class="preview-item" data-for="banking">
-              <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
+              <div class="browser-frame"><img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy"></div>
             </div>
+
           </div>
-          <p class="preview-label" id="prevLabel">hover a project</p>
+          <p class="preview-label" id="prevLabel"></p>
         </div>
 
       </div>
@@ -1251,19 +1264,20 @@ h1.glitch:hover::after {
     // ===== HOVER PREVIEW (modules list) =====
     var prevItems = document.querySelectorAll(".preview-item");
     var prevLabel = document.getElementById("prevLabel");
+    var previewStage = document.getElementById("previewStage");
     document.querySelectorAll(".mod-row[data-modal]").forEach(function(row) {
       row.addEventListener("mouseenter", function() {
         var key = row.dataset.modal;
         prevItems.forEach(function(item) {
           item.classList.toggle("active", item.dataset.for === key);
         });
-        if (prevLabel) {
-          prevLabel.textContent = row.querySelector(".mod-name").textContent;
-        }
+        if (previewStage) previewStage.classList.add("has-active");
+        if (prevLabel) prevLabel.textContent = row.querySelector(".mod-name").textContent;
       });
       row.addEventListener("mouseleave", function() {
         prevItems.forEach(function(item) { item.classList.remove("active"); });
-        if (prevLabel) prevLabel.textContent = "hover a project";
+        if (previewStage) previewStage.classList.remove("has-active");
+        if (prevLabel) prevLabel.textContent = "";
       });
     });
 
