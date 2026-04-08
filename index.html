@@ -424,15 +424,16 @@ h1.glitch:hover::after {
 
 /* ——— Right: JS-positioned hover preview ——— */
 .modules-preview {
-  position:absolute;
-  right:-420px;
+  position:fixed;
   top:0;
-  width:380px;
+  left:0;
+  width:400px;
   pointer-events:none;
   opacity:0;
-  transition:opacity .3s ease, top .3s cubic-bezier(.4,0,.2,1);
+  z-index:200;
+  transition:opacity .3s ease, top .25s cubic-bezier(.4,0,.2,1), left .25s cubic-bezier(.4,0,.2,1);
 }
-.modules-preview.visible { opacity:1; pointer-events:auto; }
+.modules-preview.visible { opacity:1; }
 .preview-stage {
   position:relative;
   width:100%;
@@ -1245,28 +1246,33 @@ h1.glitch:hover::after {
     });
 
     // ===== HOVER PREVIEW (modules list) =====
-    var prevItems   = document.querySelectorAll(".preview-item");
-    var prevLabel   = document.getElementById("prevLabel");
-    var previewStage   = document.getElementById("previewStage");
+    var prevItems      = document.querySelectorAll(".preview-item");
+    var prevLabel      = document.getElementById("prevLabel");
     var previewWrapper = document.querySelector(".modules-preview");
-    var modContainer   = document.querySelector(".modules-layout");
+    var modList        = document.querySelector(".modules-list");
 
     document.querySelectorAll(".mod-row[data-modal]").forEach(function(row) {
       row.addEventListener("mouseenter", function() {
         var key = row.dataset.modal;
-        // Switch image
         prevItems.forEach(function(item) {
           item.classList.toggle("active", item.dataset.for === key);
         });
-        // Align vertically with the hovered row
-        if (previewWrapper && modContainer) {
-          var rowRect  = row.getBoundingClientRect();
-          var contRect = modContainer.getBoundingClientRect();
-          var rowCenterInContainer = rowRect.top - contRect.top + rowRect.height / 2;
-          var previewH = previewWrapper.offsetHeight || 240;
-          var maxTop   = modContainer.offsetHeight - previewH;
-          var newTop   = Math.max(0, Math.min(rowCenterInContainer - previewH / 2, maxTop));
-          previewWrapper.style.top = newTop + "px";
+        if (previewWrapper && modList) {
+          var rowRect   = row.getBoundingClientRect();
+          var listRect  = modList.getBoundingClientRect();
+          var previewW  = previewWrapper.offsetWidth  || 400;
+          var previewH  = previewWrapper.offsetHeight || 250;
+          // Place to the right of the list, gap of 40px
+          var newLeft = listRect.right + 40;
+          // Vertically center on the hovered row, clamped to viewport
+          var rowCenterY = rowRect.top + rowRect.height / 2;
+          var newTop  = Math.max(16, Math.min(rowCenterY - previewH / 2, window.innerHeight - previewH - 16));
+          // Clamp left to viewport
+          if (newLeft + previewW > window.innerWidth - 8) {
+            newLeft = window.innerWidth - previewW - 8;
+          }
+          previewWrapper.style.top  = newTop  + "px";
+          previewWrapper.style.left = newLeft + "px";
           previewWrapper.classList.add("visible");
         }
         if (prevLabel) prevLabel.textContent = row.querySelector(".mod-name").textContent;
