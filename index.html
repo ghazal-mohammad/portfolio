@@ -431,43 +431,11 @@ h1.glitch:hover::after {
   top:80px;
 }
 .preview-stage {
-  border-radius:20px;
-  overflow:hidden;
-  background:radial-gradient(ellipse at 50% 60%, rgba(255,255,255,.04) 0%, transparent 70%);
-  border:1px solid rgba(230,230,235,.1);
   position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:28px 20px 20px;
-  gap:0;
-  min-height:340px;
+  min-height:300px;
   opacity:0;
   transition:opacity .35s ease;
-}
-/* ambient glow */
-.preview-stage::before {
-  content:"";
-  position:absolute;
-  width:200px; height:160px;
-  border-radius:50%;
-  background:var(--primary);
-  opacity:.1;
-  filter:blur(60px);
-  pointer-events:none;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-}
-/* grid texture */
-.preview-stage::after {
-  content:"";
-  position:absolute; inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size:24px 24px;
-  pointer-events:none;
+  overflow:visible;
 }
 .preview-stage.has-active { opacity:1; }
 
@@ -479,39 +447,39 @@ h1.glitch:hover::after {
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px 18px;
-  gap:12px;
+  gap:14px;
 }
 .preview-item.active { opacity:1; }
 
-/* web images / video in preview */
+/* web images / video in preview — no box, full clean */
 .preview-item.is-web img,
 .preview-item.is-web video {
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
   object-position:top left;
-  border-radius:14px;
+  border-radius:16px;
   display:block;
-  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
 }
-/* hide fallback img when video loads */
-.preview-item.is-web video + .preview-fallback { display:none; }
+/* fallback: hide image if video can play */
+.preview-item.is-web video { display:block; }
+.preview-item.is-web .preview-fallback { display:none; }
 
 /* mobile images in preview */
 .preview-item.is-mobile img {
-  height:clamp(180px, 30vw, 240px);
+  height:clamp(220px, 35vw, 290px);
   width:auto;
   aspect-ratio:9/16;
   object-fit:cover;
   object-position:top;
-  border-radius:16px;
+  border-radius:20px;
   display:block;
-  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
   flex-shrink:0;
 }
 .preview-item.is-mobile img:nth-child(2) {
-  transform:translateY(-12px);
+  transform:translateY(-16px);
 }
 
 .preview-label {
@@ -936,7 +904,7 @@ h1.glitch:hover::after {
             <span class="mod-num">04</span>
             <div class="mod-body">
               <div class="mod-name">Educational Course App</div>
-              <div class="mod-tech"><span>Flutter</span><span>UI/UX</span><span>Widespheres Internship</span></div>
+              <div class="mod-tech"><span>Flutter</span><span>Bloc</span><span>UI/UX</span><span>Widespheres Internship</span></div>
             </div>
             <span class="mod-arr">↗</span>
           </article>
@@ -1195,10 +1163,10 @@ h1.glitch:hover::after {
         frameType: "mobile"
       },
       education: {
-        kicker: "FLUTTER · WIDESPHERES INTERNSHIP",
+        kicker: "FLUTTER · BLOC · WIDESPHERES INTERNSHIP",
         title: "Educational Course Platform",
-        desc: "<b>My Role:</b> Flutter Mobile Trainee (under Widespheres supervision)<br><br><b>About:</b> A mobile learning platform built during my internship at Widespheres on the Mobile development track. The app allows users to browse courses, view lesson details, and access video/PDF content.<br><br><b>What I built:</b><br>→ Course browsing with ratings, levels, and duration<br>→ Course detail screen with lesson breakdown<br>→ Video and PDF lesson support<br>→ Clean, modern UI with smooth navigation<br>→ Payment integration UI",
-        tags: ["Flutter", "Dart", "UI/UX", "Widespheres", "Internship Project"],
+        desc: "<b>My Role:</b> Flutter Mobile Trainee (under Widespheres supervision)<br><br><b>About:</b> A mobile learning platform built during my internship at Widespheres on the Mobile development track. The app allows users to browse courses, view lesson details, and access video/PDF content.<br><br><b>What I built:</b><br>→ Course browsing with ratings, levels, and duration<br>→ Course detail screen with lesson breakdown<br>→ State management using <b>Bloc</b><br>→ Video and PDF lesson support<br>→ Clean, modern UI with smooth navigation<br>→ Payment integration UI",
+        tags: ["Flutter", "Dart", "Bloc", "UI/UX", "Widespheres", "Internship Project"],
         link: "#",
         images: ["assets/screens/Course Details.png", "assets/screens/Design.png"],
         frameType: "mobile"
