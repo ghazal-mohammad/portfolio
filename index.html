@@ -484,24 +484,34 @@ h1.glitch:hover::after {
 }
 .preview-item.active { opacity:1; }
 
-/* browser frame inside preview */
-.preview-item .browser-frame {
-  width:100%;
-}
-.preview-item .browser-frame img,
-.preview-item .browser-frame video {
+/* web images / video in preview */
+.preview-item.is-web img,
+.preview-item.is-web video {
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
   object-position:top left;
-  border-radius:6px;
+  border-radius:14px;
   display:block;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
 }
+/* hide fallback img when video loads */
+.preview-item.is-web video + .preview-fallback { display:none; }
 
-/* phone frame inside preview */
-.preview-item .phone-frame {
-  width:clamp(120px, 35%, 150px);
+/* mobile images in preview */
+.preview-item.is-mobile img {
+  height:clamp(180px, 30vw, 240px);
+  width:auto;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  object-position:top;
+  border-radius:16px;
+  display:block;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
   flex-shrink:0;
+}
+.preview-item.is-mobile img:nth-child(2) {
+  transform:translateY(-12px);
 }
 
 .preview-label {
@@ -692,34 +702,32 @@ h1.glitch:hover::after {
   margin-top:20px;
 }
 
-/* ===== DEVICE SHOWCASE ===== */
+/* ===== DEVICE SHOWCASE (no frames — direct images) ===== */
 .showcase {
   position:relative;
   display:flex;
   justify-content:center;
   align-items:center;
   gap:16px;
-  padding:40px 20px 32px;
+  padding:32px 0 24px;
   border-radius:20px;
   background:radial-gradient(ellipse at 50% 60%, rgba(255,255,255,.04) 0%, transparent 70%);
   overflow:hidden;
   isolation:isolate;
 }
-/* ambient glow behind device */
 .showcase::before {
   content:"";
   position:absolute;
   width:280px; height:200px;
   border-radius:50%;
   background:var(--primary);
-  opacity:.13;
+  opacity:.12;
   filter:blur(70px);
   pointer-events:none;
   top:50%; left:50%;
   transform:translate(-50%,-50%);
   z-index:0;
 }
-/* subtle grid texture */
 .showcase::after {
   content:"";
   position:absolute; inset:0;
@@ -730,40 +738,40 @@ h1.glitch:hover::after {
   pointer-events:none;
 }
 
-/* ——— MOBILE showcase ——— */
-.showcase.mobile {
-  gap:12px;
-}
-.showcase.mobile .phone-frame {
-  width:clamp(130px, 22vw, 175px);
-  z-index:1;
-  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.1);
-}
-/* second phone slightly elevated for depth */
-.showcase.mobile .phone-frame:nth-child(2) {
-  transform:translateY(-14px);
-}
-
-/* ——— WEB / FLOWCHART showcase ——— */
-.showcase.web .browser-frame {
+/* web / flowchart: full-width image */
+.showcase.web .showcase-img,
+.showcase.web video {
   width:100%;
-  max-width:600px;
-  z-index:1;
-  transform:perspective(1100px) rotateY(-7deg) rotateX(2deg);
-  transform-origin:center center;
-  box-shadow:24px 24px 70px rgba(0,0,0,.6), -4px -4px 20px rgba(255,255,255,.03);
-  transition:transform .4s ease;
-}
-/* tilt controlled by JS mouse tracking */
-.showcase.web .browser-frame img {
-  max-height:none;
-  width:100%;
+  max-width:640px;
   aspect-ratio:16/9;
   object-fit:cover;
   object-position:top left;
+  border-radius:14px;
   display:block;
-  border-radius:6px;
+  position:relative;
+  z-index:1;
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
+  transition:transform .12s ease;
 }
+
+/* mobile: tall portrait images */
+.showcase.mobile .showcase-img {
+  height:clamp(260px, 40vw, 340px);
+  width:auto;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  object-position:top;
+  border-radius:18px;
+  display:block;
+  position:relative;
+  z-index:1;
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
+}
+/* second mobile image slightly elevated */
+.showcase.mobile .showcase-img:nth-child(2) {
+  transform:translateY(-14px);
+}
+
 .modal-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:7px; }
 .modal-tags span {
   font-family:'JetBrains Mono', monospace;
@@ -957,40 +965,38 @@ h1.glitch:hover::after {
         <div class="modules-preview" aria-hidden="true">
           <div class="preview-stage" id="previewStage">
 
-            <!-- Pharmacy: browser frame -->
-            <div class="preview-item" data-for="pharmacy">
-              <div class="browser-frame"><img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy"></div>
+            <!-- Pharmacy -->
+            <div class="preview-item is-web" data-for="pharmacy">
+              <img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy">
             </div>
 
-            <!-- Civil: browser frame (flowchart) -->
-            <div class="preview-item" data-for="civil">
-              <div class="browser-frame"><img src="assets/screens/civil-1.png" alt="Civil" loading="lazy"></div>
+            <!-- Civil (flowchart) -->
+            <div class="preview-item is-web" data-for="civil">
+              <img src="assets/screens/civil-1.png" alt="Civil" loading="lazy">
             </div>
 
-            <!-- Eshtikily: phone frame -->
-            <div class="preview-item" data-for="complaints">
-              <div class="phone-frame"><img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy"></div>
+            <!-- Eshtikily: mobile -->
+            <div class="preview-item is-mobile" data-for="complaints">
+              <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
             </div>
 
-            <!-- Education: two phone frames -->
-            <div class="preview-item" data-for="education">
-              <div class="phone-frame"><img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy"></div>
-              <div class="phone-frame"><img src="assets/screens/Design.png" alt="Course Design" loading="lazy"></div>
+            <!-- Education: two mobile -->
+            <div class="preview-item is-mobile" data-for="education">
+              <img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy">
+              <img src="assets/screens/Design.png" alt="Course Design" loading="lazy">
             </div>
 
-            <!-- Task Trove: browser frame with video -->
-            <div class="preview-item" data-for="tasktrove">
-              <div class="browser-frame">
-                <video autoplay muted loop playsinline>
-                  <source src="assets/screens/Task Trove.mp4" type="video/mp4">
-                  <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy">
-                </video>
-              </div>
+            <!-- Task Trove: video or image -->
+            <div class="preview-item is-web" data-for="tasktrove">
+              <video autoplay muted loop playsinline>
+                <source src="assets/screens/Task Trove.mp4" type="video/mp4">
+              </video>
+              <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy" class="preview-fallback">
             </div>
 
-            <!-- Banking: browser frame -->
-            <div class="preview-item" data-for="banking">
-              <div class="browser-frame"><img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy"></div>
+            <!-- Banking -->
+            <div class="preview-item is-web" data-for="banking">
+              <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
             </div>
 
           </div>
@@ -1242,35 +1248,31 @@ h1.glitch:hover::after {
         modalTags.appendChild(s);
       });
       modalImages.innerHTML = "";
-      if (d.images && d.images.length) {
+      if ((d.images && d.images.length) || d.video) {
         var showcase = document.createElement("div");
         showcase.className = "showcase " + (d.frameType === "mobile" ? "mobile" : "web");
         if (d.frameType === "mobile") {
           d.images.forEach(function(src) {
-            var frame = document.createElement("div");
-            frame.className = "phone-frame";
             var img = document.createElement("img");
             img.src = src; img.alt = d.title; img.loading = "lazy";
-            frame.appendChild(img);
-            showcase.appendChild(frame);
+            img.className = "showcase-img";
+            showcase.appendChild(img);
           });
         } else {
-          var frame = document.createElement("div");
-          frame.className = "browser-frame";
           if (d.video) {
             var vid = document.createElement("video");
             vid.autoplay = true; vid.muted = true; vid.loop = true; vid.playsInline = true;
-            vid.style.cssText = "width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block;";
-            var src = document.createElement("source");
-            src.src = d.video; src.type = "video/mp4";
-            vid.appendChild(src);
-            frame.appendChild(vid);
+            vid.className = "showcase-img";
+            var vsrc = document.createElement("source");
+            vsrc.src = d.video; vsrc.type = "video/mp4";
+            vid.appendChild(vsrc);
+            showcase.appendChild(vid);
           } else {
             var img = document.createElement("img");
             img.src = d.images[0]; img.alt = d.title; img.loading = "lazy";
-            frame.appendChild(img);
+            img.className = "showcase-img";
+            showcase.appendChild(img);
           }
-          showcase.appendChild(frame);
         }
         modalImages.appendChild(showcase);
       }
@@ -1323,20 +1325,20 @@ h1.glitch:hover::after {
       });
     });
 
-    // ===== MOUSE-TRACKING TILT (modal browser frames) =====
+    // ===== MOUSE-TRACKING TILT (modal web showcase images) =====
     document.addEventListener("mousemove", function(e) {
-      var frames = document.querySelectorAll(".showcase.web .browser-frame");
-      frames.forEach(function(frame) {
-        var rect = frame.getBoundingClientRect();
+      var imgs = document.querySelectorAll(".showcase.web .showcase-img");
+      imgs.forEach(function(el) {
+        var rect = el.getBoundingClientRect();
         if (rect.width === 0) return;
         var cx = rect.left + rect.width / 2;
         var cy = rect.top + rect.height / 2;
         var dx = (e.clientX - cx) / (rect.width / 2);
         var dy = (e.clientY - cy) / (rect.height / 2);
-        var rotY = Math.max(-14, Math.min(14, dx * 14));
-        var rotX = Math.max(-6, Math.min(6, -dy * 6));
-        frame.style.transform = "perspective(1100px) rotateY(" + rotY + "deg) rotateX(" + rotX + "deg)";
-        frame.style.transition = "transform .1s ease";
+        var rotY = Math.max(-12, Math.min(12, dx * 12));
+        var rotX = Math.max(-5, Math.min(5, -dy * 5));
+        el.style.transform = "perspective(1000px) rotateY(" + rotY + "deg) rotateX(" + rotX + "deg)";
+        el.style.transition = "transform .1s ease";
       });
     });
     if (modalClose) modalClose.addEventListener("click", closeModal);
