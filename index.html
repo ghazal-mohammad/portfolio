@@ -350,10 +350,9 @@ h1.glitch:hover::after {
 
 /* ===== MODULES — HOVER PREVIEW LAYOUT ===== */
 .modules-layout {
-  display:grid;
-  grid-template-columns:1fr 380px;
-  gap:48px;
-  align-items:start;
+  display:flex;
+  flex-direction:column;
+  gap:0;
   margin-top:32px;
 }
 
@@ -425,15 +424,15 @@ h1.glitch:hover::after {
 }
 .mod-row:hover .mod-arr { opacity:1; transform:translate(3px,-3px); }
 
-/* ——— Right: collage preview ——— */
+/* ——— Top: collage preview ——— */
 .modules-preview {
-  position:sticky;
-  top:80px;
+  width:100%;
+  margin-bottom:36px;
 }
 .preview-stage {
   position:relative;
   width:100%;
-  aspect-ratio:4/5;
+  aspect-ratio:16/7;
   overflow:hidden;
   border-radius:20px;
 }
@@ -471,51 +470,51 @@ h1.glitch:hover::after {
   z-index:10 !important;
 }
 
-/* ── collage positions (6 items) ── */
+/* ── collage positions (6 items) — wide 16/7 format ── */
 .preview-item[data-for="pharmacy"] {
-  width:66%; aspect-ratio:16/9;
-  top:3%; left:2%;
-  transform:rotate(-2deg);
+  width:52%; aspect-ratio:16/9;
+  top:3%; left:1%;
+  transform:rotate(-1.5deg);
   z-index:4;
 }
 .preview-item[data-for="civil"] {
-  width:56%; aspect-ratio:16/9;
-  top:6%; right:1%;
-  transform:rotate(2.5deg);
+  width:44%; aspect-ratio:16/9;
+  top:5%; right:0%;
+  transform:rotate(2deg);
   z-index:3;
 }
 .preview-item[data-for="complaints"] {
-  width:30%; aspect-ratio:9/16;
-  top:36%; left:4%;
-  transform:rotate(3deg);
+  width:20%; aspect-ratio:9/16;
+  top:28%; left:3%;
+  transform:rotate(2.5deg);
   z-index:5;
 }
 .preview-item[data-for="education"] {
-  width:28%; aspect-ratio:9/16;
-  top:34%; right:6%;
-  transform:rotate(-2.5deg);
+  width:18%; aspect-ratio:9/16;
+  top:26%; right:4%;
+  transform:rotate(-2deg);
   z-index:4;
 }
 .preview-item[data-for="tasktrove"] {
-  width:60%; aspect-ratio:16/9;
-  bottom:3%; left:2%;
-  transform:rotate(-1.5deg);
+  width:50%; aspect-ratio:16/9;
+  bottom:2%; left:2%;
+  transform:rotate(-1deg);
   z-index:3;
 }
 .preview-item[data-for="banking"] {
-  width:52%; aspect-ratio:16/9;
-  bottom:2%; right:1%;
-  transform:rotate(1.5deg);
+  width:43%; aspect-ratio:16/9;
+  bottom:1%; right:1%;
+  transform:rotate(1deg);
   z-index:2;
 }
 
 /* active overrides — scale up without losing position */
-.preview-item[data-for="pharmacy"].active  { transform:rotate(-2deg) scale(1.06); }
-.preview-item[data-for="civil"].active     { transform:rotate(2.5deg) scale(1.06); }
-.preview-item[data-for="complaints"].active{ transform:rotate(3deg) scale(1.08); }
-.preview-item[data-for="education"].active { transform:rotate(-2.5deg) scale(1.08); }
-.preview-item[data-for="tasktrove"].active { transform:rotate(-1.5deg) scale(1.06); }
-.preview-item[data-for="banking"].active   { transform:rotate(1.5deg) scale(1.06); }
+.preview-item[data-for="pharmacy"].active  { transform:rotate(-1.5deg) scale(1.06); }
+.preview-item[data-for="civil"].active     { transform:rotate(2deg) scale(1.06); }
+.preview-item[data-for="complaints"].active{ transform:rotate(2.5deg) scale(1.08); }
+.preview-item[data-for="education"].active { transform:rotate(-2deg) scale(1.08); }
+.preview-item[data-for="tasktrove"].active { transform:rotate(-1deg) scale(1.06); }
+.preview-item[data-for="banking"].active   { transform:rotate(1deg) scale(1.06); }
 
 
 .preview-label {
@@ -531,7 +530,6 @@ h1.glitch:hover::after {
 .preview-label.hidden { opacity:0; }
 
 @media (max-width:800px) {
-  .modules-layout { grid-template-columns:1fr; }
   .modules-preview { display:none; }
   .mod-name { font-size:16px; }
 }
@@ -905,7 +903,48 @@ h1.glitch:hover::after {
 
       <div class="modules-layout">
 
-        <!-- ——— LEFT: numbered project list ——— -->
+        <!-- ——— TOP: collage preview ——— -->
+        <div class="modules-preview" aria-hidden="true">
+          <div class="preview-stage" id="previewStage">
+
+            <!-- Pharmacy -->
+            <div class="preview-item is-web" data-for="pharmacy">
+              <img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy">
+            </div>
+
+            <!-- Civil (flowchart) -->
+            <div class="preview-item is-web" data-for="civil">
+              <img src="assets/screens/civil-1.png" alt="Civil" loading="lazy">
+            </div>
+
+            <!-- Eshtikily: mobile -->
+            <div class="preview-item is-mobile" data-for="complaints">
+              <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
+            </div>
+
+            <!-- Education: mobile -->
+            <div class="preview-item is-mobile" data-for="education">
+              <img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy">
+            </div>
+
+            <!-- Task Trove: video or image -->
+            <div class="preview-item is-web" data-for="tasktrove">
+              <video autoplay muted loop playsinline>
+                <source src="assets/screens/tasktrove.mp4" type="video/mp4">
+              </video>
+              <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy" class="preview-fallback">
+            </div>
+
+            <!-- Banking -->
+            <div class="preview-item is-web" data-for="banking">
+              <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
+            </div>
+
+          </div>
+          <p class="preview-label" id="prevLabel"></p>
+        </div>
+
+        <!-- ——— BOTTOM: numbered project list ——— -->
         <div class="modules-list">
 
           <article class="mod-row reveal" data-modal="pharmacy">
@@ -965,46 +1004,6 @@ h1.glitch:hover::after {
 
         </div>
 
-        <!-- ——— RIGHT: sticky hover preview ——— -->
-        <div class="modules-preview" aria-hidden="true">
-          <div class="preview-stage" id="previewStage">
-
-            <!-- Pharmacy -->
-            <div class="preview-item is-web" data-for="pharmacy">
-              <img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy">
-            </div>
-
-            <!-- Civil (flowchart) -->
-            <div class="preview-item is-web" data-for="civil">
-              <img src="assets/screens/civil-1.png" alt="Civil" loading="lazy">
-            </div>
-
-            <!-- Eshtikily: mobile -->
-            <div class="preview-item is-mobile" data-for="complaints">
-              <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
-            </div>
-
-            <!-- Education: mobile -->
-            <div class="preview-item is-mobile" data-for="education">
-              <img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy">
-            </div>
-
-            <!-- Task Trove: video or image -->
-            <div class="preview-item is-web" data-for="tasktrove">
-              <video autoplay muted loop playsinline>
-                <source src="assets/screens/tasktrove.mp4" type="video/mp4">
-              </video>
-              <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy" class="preview-fallback">
-            </div>
-
-            <!-- Banking -->
-            <div class="preview-item is-web" data-for="banking">
-              <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
-            </div>
-
-          </div>
-          <p class="preview-label" id="prevLabel"></p>
-        </div>
 
       </div>
     </div>
