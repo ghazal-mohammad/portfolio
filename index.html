@@ -431,18 +431,43 @@ h1.glitch:hover::after {
   top:80px;
 }
 .preview-stage {
-  border-radius:18px;
-  overflow:visible;
-  min-height:260px;
-  background:transparent;
-  border:none;
+  border-radius:20px;
+  overflow:hidden;
+  background:radial-gradient(ellipse at 50% 60%, rgba(255,255,255,.04) 0%, transparent 70%);
+  border:1px solid rgba(230,230,235,.1);
   position:relative;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  /* hidden until a project is hovered */
+  padding:28px 20px 20px;
+  gap:0;
+  min-height:340px;
   opacity:0;
   transition:opacity .35s ease;
+}
+/* ambient glow */
+.preview-stage::before {
+  content:"";
+  position:absolute;
+  width:200px; height:160px;
+  border-radius:50%;
+  background:var(--primary);
+  opacity:.1;
+  filter:blur(60px);
+  pointer-events:none;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+/* grid texture */
+.preview-stage::after {
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:24px 24px;
+  pointer-events:none;
 }
 .preview-stage.has-active { opacity:1; }
 
@@ -454,8 +479,8 @@ h1.glitch:hover::after {
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:8px;
-  gap:14px;
+  padding:24px 18px;
+  gap:12px;
 }
 .preview-item.active { opacity:1; }
 
@@ -463,9 +488,10 @@ h1.glitch:hover::after {
 .preview-item .browser-frame {
   width:100%;
 }
-.preview-item .browser-frame img {
-  max-height:200px;
+.preview-item .browser-frame img,
+.preview-item .browser-frame video {
   width:100%;
+  aspect-ratio:16/9;
   object-fit:cover;
   object-position:top left;
   border-radius:6px;
@@ -474,7 +500,7 @@ h1.glitch:hover::after {
 
 /* phone frame inside preview */
 .preview-item .phone-frame {
-  width:110px;
+  width:clamp(120px, 35%, 150px);
   flex-shrink:0;
 }
 
@@ -952,9 +978,14 @@ h1.glitch:hover::after {
               <div class="phone-frame"><img src="assets/screens/Design.png" alt="Course Design" loading="lazy"></div>
             </div>
 
-            <!-- Task Trove: browser frame -->
+            <!-- Task Trove: browser frame with video -->
             <div class="preview-item" data-for="tasktrove">
-              <div class="browser-frame"><img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy"></div>
+              <div class="browser-frame">
+                <video autoplay muted loop playsinline>
+                  <source src="assets/screens/Task Trove.mp4" type="video/mp4">
+                  <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy">
+                </video>
+              </div>
             </div>
 
             <!-- Banking: browser frame -->
@@ -1173,6 +1204,7 @@ h1.glitch:hover::after {
         tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI", "Mobile"],
         link: "#",
         images: ["assets/screens/Task Trove.png"],
+        video: "assets/screens/Task Trove.mp4",
         frameType: "browser"
       },
       banking: {
@@ -1225,9 +1257,19 @@ h1.glitch:hover::after {
         } else {
           var frame = document.createElement("div");
           frame.className = "browser-frame";
-          var img = document.createElement("img");
-          img.src = d.images[0]; img.alt = d.title; img.loading = "lazy";
-          frame.appendChild(img);
+          if (d.video) {
+            var vid = document.createElement("video");
+            vid.autoplay = true; vid.muted = true; vid.loop = true; vid.playsInline = true;
+            vid.style.cssText = "width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block;";
+            var src = document.createElement("source");
+            src.src = d.video; src.type = "video/mp4";
+            vid.appendChild(src);
+            frame.appendChild(vid);
+          } else {
+            var img = document.createElement("img");
+            img.src = d.images[0]; img.alt = d.title; img.loading = "lazy";
+            frame.appendChild(img);
+          }
           showcase.appendChild(frame);
         }
         modalImages.appendChild(showcase);
