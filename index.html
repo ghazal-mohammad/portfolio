@@ -350,10 +350,7 @@ h1.glitch:hover::after {
 
 /* ===== MODULES — HOVER PREVIEW LAYOUT ===== */
 .modules-layout {
-  display:grid;
-  grid-template-columns:1fr 400px;
-  gap:48px;
-  align-items:start;
+  position:relative;
   margin-top:32px;
 }
 
@@ -425,23 +422,23 @@ h1.glitch:hover::after {
 }
 .mod-row:hover .mod-arr { opacity:1; transform:translate(3px,-3px); }
 
-/* ——— Right: single-image hover preview ——— */
+/* ——— Right: JS-positioned hover preview ——— */
 .modules-preview {
-  position:sticky;
-  top:calc(50vh - 180px);
+  position:absolute;
+  right:-420px;
+  top:0;
+  width:380px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .3s ease, top .3s cubic-bezier(.4,0,.2,1);
 }
+.modules-preview.visible { opacity:1; pointer-events:auto; }
 .preview-stage {
   position:relative;
   width:100%;
   aspect-ratio:16/10;
   border-radius:16px;
   overflow:hidden;
-  opacity:0;
-  box-shadow:0 0 0 rgba(0,0,0,0);
-  transition:opacity .3s ease, box-shadow .35s ease;
-}
-.preview-stage.has-hover {
-  opacity:1;
   box-shadow:0 24px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
 }
 .preview-item {
@@ -482,7 +479,6 @@ h1.glitch:hover::after {
 .preview-label.hidden { opacity:0; }
 
 @media (max-width:900px) {
-  .modules-layout { grid-template-columns:1fr; }
   .modules-preview { display:none; }
   .mod-name { font-size:16px; }
 }
@@ -916,7 +912,7 @@ h1.glitch:hover::after {
 
         </div>
 
-        <!-- ——— RIGHT: sticky collage preview ——— -->
+        <!-- ——— RIGHT: absolute JS-positioned preview ——— -->
         <div class="modules-preview" aria-hidden="true">
           <div class="preview-stage" id="previewStage">
 
@@ -1249,21 +1245,35 @@ h1.glitch:hover::after {
     });
 
     // ===== HOVER PREVIEW (modules list) =====
-    var prevItems = document.querySelectorAll(".preview-item");
-    var prevLabel = document.getElementById("prevLabel");
-    var previewStage = document.getElementById("previewStage");
+    var prevItems   = document.querySelectorAll(".preview-item");
+    var prevLabel   = document.getElementById("prevLabel");
+    var previewStage   = document.getElementById("previewStage");
+    var previewWrapper = document.querySelector(".modules-preview");
+    var modContainer   = document.querySelector(".modules-layout");
+
     document.querySelectorAll(".mod-row[data-modal]").forEach(function(row) {
       row.addEventListener("mouseenter", function() {
         var key = row.dataset.modal;
+        // Switch image
         prevItems.forEach(function(item) {
           item.classList.toggle("active", item.dataset.for === key);
         });
-        if (previewStage) previewStage.classList.add("has-hover");
+        // Align vertically with the hovered row
+        if (previewWrapper && modContainer) {
+          var rowRect  = row.getBoundingClientRect();
+          var contRect = modContainer.getBoundingClientRect();
+          var rowCenterInContainer = rowRect.top - contRect.top + rowRect.height / 2;
+          var previewH = previewWrapper.offsetHeight || 240;
+          var maxTop   = modContainer.offsetHeight - previewH;
+          var newTop   = Math.max(0, Math.min(rowCenterInContainer - previewH / 2, maxTop));
+          previewWrapper.style.top = newTop + "px";
+          previewWrapper.classList.add("visible");
+        }
         if (prevLabel) prevLabel.textContent = row.querySelector(".mod-name").textContent;
       });
       row.addEventListener("mouseleave", function() {
         prevItems.forEach(function(item) { item.classList.remove("active"); });
-        if (previewStage) previewStage.classList.remove("has-hover");
+        if (previewWrapper) previewWrapper.classList.remove("visible");
         if (prevLabel) prevLabel.textContent = "";
       });
     });
