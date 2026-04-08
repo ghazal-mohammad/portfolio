@@ -254,7 +254,7 @@ h1.glitch:hover::after {
 
 /* ===== PANELS ===== */
 .panel { padding:clamp(50px, 8vw, 90px) 16px; }
-.wrap  { max-width:980px; margin:0 auto; }
+.wrap  { max-width:1100px; margin:0 auto; }
 
 .kicker {
   font-family:'JetBrains Mono', monospace;
@@ -350,7 +350,10 @@ h1.glitch:hover::after {
 
 /* ===== MODULES — HOVER PREVIEW LAYOUT ===== */
 .modules-layout {
-  position:relative;
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:56px;
+  align-items:start;
   margin-top:32px;
 }
 
@@ -422,25 +425,25 @@ h1.glitch:hover::after {
 }
 .mod-row:hover .mod-arr { opacity:1; transform:translate(3px,-3px); }
 
-/* ——— Right: JS-positioned hover preview ——— */
+/* ——— Right: sticky preview column ——— */
 .modules-preview {
-  position:fixed;
-  top:0;
-  left:0;
-  width:400px;
-  pointer-events:none;
-  opacity:0;
-  z-index:200;
-  transition:opacity .3s ease, top .25s cubic-bezier(.4,0,.2,1), left .25s cubic-bezier(.4,0,.2,1);
+  position:sticky;
+  top:80px;
+  align-self:start;
 }
-.modules-preview.visible { opacity:1; }
 .preview-stage {
   position:relative;
   width:100%;
   aspect-ratio:16/10;
   border-radius:16px;
   overflow:hidden;
-  box-shadow:0 24px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+  box-shadow:0 4px 30px rgba(0,0,0,.3);
+  transition:box-shadow .35s;
+}
+.preview-stage.has-hover {
+  box-shadow:0 20px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.09);
 }
 .preview-item {
   position:absolute;
@@ -480,6 +483,7 @@ h1.glitch:hover::after {
 .preview-label.hidden { opacity:0; }
 
 @media (max-width:900px) {
+  .modules-layout { grid-template-columns:1fr; }
   .modules-preview { display:none; }
   .mod-name { font-size:16px; }
 }
@@ -1246,10 +1250,9 @@ h1.glitch:hover::after {
     });
 
     // ===== HOVER PREVIEW (modules list) =====
-    var prevItems      = document.querySelectorAll(".preview-item");
-    var prevLabel      = document.getElementById("prevLabel");
-    var previewWrapper = document.querySelector(".modules-preview");
-    var modList        = document.querySelector(".modules-list");
+    var prevItems    = document.querySelectorAll(".preview-item");
+    var prevLabel    = document.getElementById("prevLabel");
+    var previewStage = document.getElementById("previewStage");
 
     document.querySelectorAll(".mod-row[data-modal]").forEach(function(row) {
       row.addEventListener("mouseenter", function() {
@@ -1257,29 +1260,12 @@ h1.glitch:hover::after {
         prevItems.forEach(function(item) {
           item.classList.toggle("active", item.dataset.for === key);
         });
-        if (previewWrapper && modList) {
-          var rowRect   = row.getBoundingClientRect();
-          var listRect  = modList.getBoundingClientRect();
-          var previewW  = previewWrapper.offsetWidth  || 400;
-          var previewH  = previewWrapper.offsetHeight || 250;
-          // Place to the right of the list, gap of 40px
-          var newLeft = listRect.right + 40;
-          // Vertically center on the hovered row, clamped to viewport
-          var rowCenterY = rowRect.top + rowRect.height / 2;
-          var newTop  = Math.max(16, Math.min(rowCenterY - previewH / 2, window.innerHeight - previewH - 16));
-          // Clamp left to viewport
-          if (newLeft + previewW > window.innerWidth - 8) {
-            newLeft = window.innerWidth - previewW - 8;
-          }
-          previewWrapper.style.top  = newTop  + "px";
-          previewWrapper.style.left = newLeft + "px";
-          previewWrapper.classList.add("visible");
-        }
+        if (previewStage) previewStage.classList.add("has-hover");
         if (prevLabel) prevLabel.textContent = row.querySelector(".mod-name").textContent;
       });
       row.addEventListener("mouseleave", function() {
         prevItems.forEach(function(item) { item.classList.remove("active"); });
-        if (previewWrapper) previewWrapper.classList.remove("visible");
+        if (previewStage) previewStage.classList.remove("has-hover");
         if (prevLabel) prevLabel.textContent = "";
       });
     });
