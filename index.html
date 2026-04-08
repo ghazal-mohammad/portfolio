@@ -348,40 +348,156 @@ h1.glitch:hover::after {
   color:var(--primary);
 }
 
-/* ===== MODULES ===== */
-.modules {
-  margin-top:28px;
+/* ===== MODULES — HOVER PREVIEW LAYOUT ===== */
+.modules-layout {
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap:16px;
+  grid-template-columns:1fr 380px;
+  gap:48px;
+  align-items:start;
+  margin-top:32px;
 }
-.module {
-  position:relative;
-  padding:22px;
-  border-radius:18px;
-  border:1px solid rgba(230,230,235,.12);
-  background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transition:transform .25s ease, border-color .25s ease;
-  cursor:pointer;
+
+/* ——— Left list ——— */
+.mod-row {
   display:flex;
-  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  padding:24px 14px;
+  border-bottom:1px solid rgba(230,230,235,.09);
+  cursor:pointer;
+  position:relative;
+  transition:padding-left .25s ease, background .25s ease;
 }
-.module::after {
+.mod-row:first-child { border-top:1px solid rgba(230,230,235,.09); }
+.mod-row::before {
+  content:"";
+  position:absolute; left:0; top:0; bottom:0;
+  width:0;
+  background:var(--primary);
+  border-radius:0 2px 2px 0;
+  transition:width .25s ease;
+}
+.mod-row:hover { padding-left:20px; background:rgba(255,255,255,.018); }
+.mod-row:hover::before { width:2px; }
+
+.mod-num {
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:var(--muted);
+  width:26px;
+  flex-shrink:0;
+  opacity:.6;
+}
+.mod-body { flex:1; min-width:0; }
+.mod-name {
+  font-size:clamp(17px, 2.2vw, 22px);
+  font-weight:700;
+  line-height:1.25;
+  transition:color .25s;
+}
+.mod-row:hover .mod-name { color:var(--primary); }
+.mod-tech {
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  margin-top:5px;
+}
+.mod-tech span {
+  font-size:12px;
+  color:var(--muted);
+  opacity:.7;
+}
+.mod-tech span:not(:last-child)::after { content:" · "; opacity:.4; }
+.mod-lock {
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px;
+  color:var(--muted);
+  opacity:.5;
+  margin-top:4px;
+}
+.mod-arr {
+  margin-left:auto;
+  flex-shrink:0;
+  font-size:15px;
+  color:var(--primary);
+  opacity:0;
+  transition:.25s;
+}
+.mod-row:hover .mod-arr { opacity:1; transform:translate(3px,-3px); }
+
+/* ——— Right sticky preview panel ——— */
+.modules-preview {
+  position:sticky;
+  top:80px;
+}
+.preview-stage {
+  border-radius:18px;
+  overflow:hidden;
+  aspect-ratio:4/3;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(230,230,235,.09);
+  position:relative;
+}
+/* empty grid texture */
+.preview-stage::after {
   content:"";
   position:absolute; inset:0;
-  background:linear-gradient(120deg, transparent, color-mix(in srgb, var(--primary) 18%, transparent), transparent);
-  transform:translateX(-120%);
-  transition:transform .5s ease;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:22px 22px;
+  pointer-events:none;
+  z-index:0;
+}
+/* gradient fade at bottom */
+.preview-stage::before {
+  content:"";
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:45%;
+  background:linear-gradient(transparent, rgba(10,12,16,.85));
+  z-index:2;
   pointer-events:none;
 }
-.module:hover { transform:translateY(-6px); border-color:color-mix(in srgb, var(--primary) 35%, rgba(230,230,235,.12)); }
-.module:hover::after { transform:translateX(120%); }
-/* tap state for mobile */
-.module:active { transform:translateY(-2px) scale(.99); }
+.preview-item {
+  position:absolute; inset:0;
+  opacity:0;
+  transition:opacity .38s ease;
+  z-index:1;
+}
+.preview-item.active { opacity:1; }
+.preview-item img {
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:top left;
+  display:block;
+}
+/* mobile preview: center the image */
+.preview-item.is-mobile img {
+  object-position:top center;
+  object-fit:contain;
+  background:rgba(255,255,255,.02);
+}
+.preview-label {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  padding:14px 16px;
+  z-index:3;
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:rgba(230,230,235,.45);
+  letter-spacing:1px;
+  text-align:center;
+  pointer-events:none;
+}
 
-.module-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+@media (max-width:800px) {
+  .modules-layout { grid-template-columns:1fr; }
+  .modules-preview { display:none; }
+  .mod-name { font-size:16px; }
+}
+
+/* ===== BADGE (reused in modal kicker) ===== */
 .badge {
   font-family:'JetBrains Mono', monospace;
   font-size:11px;
@@ -398,32 +514,8 @@ h1.glitch:hover::after {
   border-color:var(--stroke);
   color:var(--muted);
 }
-.module h3 { font-size:clamp(15px, 2.5vw, 17px); line-height:1.3; }
-.module p  { margin-top:8px; color:var(--muted); line-height:1.7; font-size:14px; }
-.module-meta { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
-.module-meta span {
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:5px 10px;
-  border-radius:999px;
-  border:1px solid rgba(230,230,235,.14);
-  background:rgba(255,255,255,.03);
-}
-.open {
-  display:inline-block;
-  margin-top:auto;
-  padding-top:16px;
-  font-weight:800;
-  font-size:13px;
-  color:color-mix(in srgb, var(--primary) 85%, white 0%);
-}
 
 /* ===== MODULE PREVIEW FRAMES ===== */
-.module-preview {
-  margin-top:14px;
-  display:flex;
-  justify-content:center;
-}
 /* Phone mockup for mobile app screenshots */
 .phone-frame {
   width:120px;
@@ -637,9 +729,7 @@ h1.glitch:hover::after {
   box-shadow:24px 24px 70px rgba(0,0,0,.6), -4px -4px 20px rgba(255,255,255,.03);
   transition:transform .4s ease;
 }
-.showcase.web .browser-frame:hover {
-  transform:perspective(1100px) rotateY(0deg) rotateX(0deg);
-}
+/* tilt controlled by JS mouse tracking */
 .showcase.web .browser-frame img {
   max-height:none;
   width:100%;
@@ -774,82 +864,94 @@ h1.glitch:hover::after {
   <section class="panel section-alt" id="modules">
     <div class="wrap">
       <h2 class="kicker reveal">ENGINEERING MODULES</h2>
-      <p class="desc reveal">Tap any module to see the case study.</p>
+      <p class="desc reveal">Hover to preview · click for full case study.</p>
 
-      <div class="modules">
+      <div class="modules-layout">
 
-        <article class="module reveal" data-modal="pharmacy">
-          <div class="module-head">
-            <span class="badge">Flutter Web</span>
-            <h3>Pharmacy Management System</h3>
-          </div>
-          <p>Full web system for pharmacy inventory management and medication recommendations. Role-based admin panel.</p>
-          <div class="module-meta">
-            <span>Flutter Web</span><span>REST API</span><span>Complete</span><span>Private</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
+        <!-- ——— LEFT: numbered project list ——— -->
+        <div class="modules-list">
 
-        <article class="module reveal" data-modal="civil">
-          <div class="module-head">
-            <span class="badge private">Private</span>
-            <h3>Civil Status Automation — Syria</h3>
-          </div>
-          <p>Digitizing civil status processes at Sharia courts. Team project, active development.</p>
-          <div class="module-meta">
-            <span>Flutter</span><span>Clean Arch</span><span>In Progress</span>
-          </div>
-          <div class="module-locked-note">Pending official announcement by project management</div>
-          <span class="open">View Details →</span>
-        </article>
+          <article class="mod-row reveal" data-modal="pharmacy">
+            <span class="mod-num">01</span>
+            <div class="mod-body">
+              <div class="mod-name">Pharmacy Management System</div>
+              <div class="mod-tech"><span>Flutter Web</span><span>REST API</span><span>Role-Based Auth</span><span>Private</span></div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
 
-        <article class="module reveal" data-modal="complaints">
-          <div class="module-head">
-            <span class="badge">Flutter</span>
-            <h3>Eshtikily — Government Complaints</h3>
-          </div>
-          <p>Mobile app for filing and tracking government complaints with OTP login and attachments.</p>
-          <div class="module-meta">
-            <span>Flutter</span><span>OTP</span><span>REST API</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
+          <article class="mod-row reveal" data-modal="civil">
+            <span class="mod-num">02</span>
+            <div class="mod-body">
+              <div class="mod-name">Civil Status Automation — Syria</div>
+              <div class="mod-tech"><span>Flutter</span><span>Clean Architecture</span><span>Team Project</span></div>
+              <div class="mod-lock">⟳ Pending official announcement</div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
 
-        <article class="module reveal" data-modal="education">
-          <div class="module-head">
-            <span class="badge">Flutter</span>
-            <h3>Educational Course App</h3>
-          </div>
-          <p>Mobile learning platform with course browsing, lessons, and content management. Built during Widespheres internship.</p>
-          <div class="module-meta">
-            <span>Flutter</span><span>UI/UX</span><span>Widespheres</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
+          <article class="mod-row reveal" data-modal="complaints">
+            <span class="mod-num">03</span>
+            <div class="mod-body">
+              <div class="mod-name">Eshtikily — Government Complaints</div>
+              <div class="mod-tech"><span>Flutter</span><span>OTP Auth</span><span>REST API</span><span>Arabic RTL</span></div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
 
-        <article class="module reveal" data-modal="tasktrove">
-          <div class="module-head">
-            <span class="badge">Flutter</span>
-            <h3>Task Trove — Job Platform</h3>
-          </div>
-          <p>Mobile app connecting job seekers with companies. Auth, job listings with filters, and admin UI.</p>
-          <div class="module-meta">
-            <span>Flutter</span><span>GetX</span><span>Animations</span><span>Admin UI</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
+          <article class="mod-row reveal" data-modal="education">
+            <span class="mod-num">04</span>
+            <div class="mod-body">
+              <div class="mod-name">Educational Course App</div>
+              <div class="mod-tech"><span>Flutter</span><span>UI/UX</span><span>Widespheres Internship</span></div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
 
-        <article class="module reveal" data-modal="banking">
-          <div class="module-head">
-            <span class="badge">Java</span>
-            <h3>Advanced Banking System</h3>
+          <article class="mod-row reveal" data-modal="tasktrove">
+            <span class="mod-num">05</span>
+            <div class="mod-body">
+              <div class="mod-name">Task Trove — Job Platform</div>
+              <div class="mod-tech"><span>Flutter</span><span>GetX</span><span>Animations</span><span>Admin UI</span></div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
+
+          <article class="mod-row reveal" data-modal="banking">
+            <span class="mod-num">06</span>
+            <div class="mod-body">
+              <div class="mod-name">Advanced Banking System</div>
+              <div class="mod-tech"><span>Java</span><span>OOP</span><span>Design Patterns</span><span>University Project</span></div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
+
+        </div>
+
+        <!-- ——— RIGHT: sticky hover preview ——— -->
+        <div class="modules-preview" aria-hidden="true">
+          <div class="preview-stage">
+            <div class="preview-item" data-for="pharmacy">
+              <img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy">
+            </div>
+            <div class="preview-item" data-for="civil">
+              <img src="assets/screens/civil-1.png" alt="Civil" loading="lazy">
+            </div>
+            <div class="preview-item is-mobile" data-for="complaints">
+              <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
+            </div>
+            <div class="preview-item is-mobile" data-for="education">
+              <img src="assets/screens/Course Details.png" alt="Education" loading="lazy">
+            </div>
+            <div class="preview-item is-mobile" data-for="tasktrove">
+              <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy">
+            </div>
+            <div class="preview-item" data-for="banking">
+              <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
+            </div>
           </div>
-          <p>Modular banking system built on OOP + Design Patterns. University project.</p>
-          <div class="module-meta">
-            <span>OOP</span><span>Data Structures</span><span>Patterns</span>
-          </div>
-          <span class="open">Open Case Study →</span>
-        </article>
+          <p class="preview-label" id="prevLabel">hover a project</p>
+        </div>
 
       </div>
     </div>
@@ -1058,7 +1160,7 @@ h1.glitch:hover::after {
         tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI", "Mobile"],
         link: "#",
         images: ["assets/screens/Task Trove.png"],
-        frameType: "mobile"
+        frameType: "browser"
       },
       banking: {
         kicker: "JAVA · UNIVERSITY PROJECT",
@@ -1144,6 +1246,42 @@ h1.glitch:hover::after {
 
     document.querySelectorAll("[data-modal]").forEach(function(el) {
       el.addEventListener("click", function() { openModal(el.dataset.modal); });
+    });
+
+    // ===== HOVER PREVIEW (modules list) =====
+    var prevItems = document.querySelectorAll(".preview-item");
+    var prevLabel = document.getElementById("prevLabel");
+    document.querySelectorAll(".mod-row[data-modal]").forEach(function(row) {
+      row.addEventListener("mouseenter", function() {
+        var key = row.dataset.modal;
+        prevItems.forEach(function(item) {
+          item.classList.toggle("active", item.dataset.for === key);
+        });
+        if (prevLabel) {
+          prevLabel.textContent = row.querySelector(".mod-name").textContent;
+        }
+      });
+      row.addEventListener("mouseleave", function() {
+        prevItems.forEach(function(item) { item.classList.remove("active"); });
+        if (prevLabel) prevLabel.textContent = "hover a project";
+      });
+    });
+
+    // ===== MOUSE-TRACKING TILT (modal browser frames) =====
+    document.addEventListener("mousemove", function(e) {
+      var frames = document.querySelectorAll(".showcase.web .browser-frame");
+      frames.forEach(function(frame) {
+        var rect = frame.getBoundingClientRect();
+        if (rect.width === 0) return;
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dx = (e.clientX - cx) / (rect.width / 2);
+        var dy = (e.clientY - cy) / (rect.height / 2);
+        var rotY = Math.max(-14, Math.min(14, dx * 14));
+        var rotX = Math.max(-6, Math.min(6, -dy * 6));
+        frame.style.transform = "perspective(1100px) rotateY(" + rotY + "deg) rotateX(" + rotX + "deg)";
+        frame.style.transition = "transform .1s ease";
+      });
     });
     if (modalClose) modalClose.addEventListener("click", closeModal);
     if (modalBack)  modalBack.addEventListener("click", closeModal);
