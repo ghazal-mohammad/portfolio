@@ -425,73 +425,98 @@ h1.glitch:hover::after {
 }
 .mod-row:hover .mod-arr { opacity:1; transform:translate(3px,-3px); }
 
-/* ——— Right sticky preview panel ——— */
+/* ——— Right: collage preview ——— */
 .modules-preview {
   position:sticky;
   top:80px;
 }
 .preview-stage {
   position:relative;
-  min-height:300px;
-  opacity:0;
-  transition:opacity .35s ease;
-  overflow:visible;
-}
-.preview-stage.has-active { opacity:1; }
-
-.preview-item {
-  position:absolute; inset:0;
-  opacity:0;
-  transition:opacity .35s ease;
-  z-index:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-}
-.preview-item.active { opacity:1; }
-
-/* web images / video in preview — no box, full clean */
-.preview-item.is-web {
-  position:relative;
-}
-.preview-item.is-web img,
-.preview-item.is-web video {
   width:100%;
-  aspect-ratio:16/9;
+  aspect-ratio:4/5;
+  overflow:hidden;
+  border-radius:20px;
+}
+
+/* each item: absolutely positioned in collage */
+.preview-item {
+  position:absolute;
+  overflow:hidden;
+  border-radius:12px;
+  box-shadow:0 8px 28px rgba(0,0,0,.45);
+  opacity:.82;
+  transition:opacity .3s ease, transform .3s ease, box-shadow .3s ease, z-index 0s;
+  cursor:pointer;
+}
+.preview-item img,
+.preview-item video {
+  width:100%; height:100%;
   object-fit:cover;
   object-position:top left;
-  border-radius:16px;
   display:block;
-  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
+  border-radius:0;
 }
-/* video stacks on top of fallback image */
-.preview-item.is-web video {
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  background:transparent;
+.preview-item.is-mobile img { object-position:top center; }
+
+/* dim others when any is hovered */
+.preview-stage.has-hover .preview-item:not(.active) {
+  opacity:.28;
+  filter:brightness(.6);
 }
-.preview-item.is-web .preview-fallback {
-  display:block;
-  position:relative;
+/* highlight active */
+.preview-item.active {
+  opacity:1 !important;
+  filter:none !important;
+  box-shadow:0 16px 50px rgba(0,0,0,.65), 0 0 0 2px color-mix(in srgb, var(--primary) 70%, transparent);
+  z-index:10 !important;
 }
 
-/* mobile images in preview */
-.preview-item.is-mobile img {
-  height:clamp(220px, 35vw, 290px);
-  width:auto;
-  aspect-ratio:9/16;
-  object-fit:cover;
-  object-position:top;
-  border-radius:20px;
-  display:block;
-  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
-  flex-shrink:0;
+/* ── collage positions (6 items) ── */
+.preview-item[data-for="pharmacy"] {
+  width:66%; aspect-ratio:16/9;
+  top:3%; left:2%;
+  transform:rotate(-2deg);
+  z-index:4;
 }
-.preview-item.is-mobile img:nth-child(2) {
-  transform:translateY(-16px);
+.preview-item[data-for="civil"] {
+  width:56%; aspect-ratio:16/9;
+  top:6%; right:1%;
+  transform:rotate(2.5deg);
+  z-index:3;
 }
+.preview-item[data-for="complaints"] {
+  width:30%; aspect-ratio:9/16;
+  top:36%; left:4%;
+  transform:rotate(3deg);
+  z-index:5;
+}
+.preview-item[data-for="education"] {
+  width:28%; aspect-ratio:9/16;
+  top:34%; right:6%;
+  transform:rotate(-2.5deg);
+  z-index:4;
+}
+.preview-item[data-for="tasktrove"] {
+  width:60%; aspect-ratio:16/9;
+  bottom:3%; left:2%;
+  transform:rotate(-1.5deg);
+  z-index:3;
+}
+.preview-item[data-for="banking"] {
+  width:52%; aspect-ratio:16/9;
+  bottom:2%; right:1%;
+  transform:rotate(1.5deg);
+  z-index:2;
+}
+
+/* active overrides — scale up without losing position */
+.preview-item[data-for="pharmacy"].active  { transform:rotate(-2deg) scale(1.06); }
+.preview-item[data-for="civil"].active     { transform:rotate(2.5deg) scale(1.06); }
+.preview-item[data-for="complaints"].active{ transform:rotate(3deg) scale(1.08); }
+.preview-item[data-for="education"].active { transform:rotate(-2.5deg) scale(1.08); }
+.preview-item[data-for="tasktrove"].active { transform:rotate(-1.5deg) scale(1.06); }
+.preview-item[data-for="banking"].active   { transform:rotate(1.5deg) scale(1.06); }
+
 
 .preview-label {
   margin-top:12px;
@@ -959,10 +984,9 @@ h1.glitch:hover::after {
               <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
             </div>
 
-            <!-- Education: two mobile -->
+            <!-- Education: mobile -->
             <div class="preview-item is-mobile" data-for="education">
               <img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy">
-              <img src="assets/screens/Design.png" alt="Course Design" loading="lazy">
             </div>
 
             <!-- Task Trove: video or image -->
@@ -1294,12 +1318,12 @@ h1.glitch:hover::after {
         prevItems.forEach(function(item) {
           item.classList.toggle("active", item.dataset.for === key);
         });
-        if (previewStage) previewStage.classList.add("has-active");
+        if (previewStage) previewStage.classList.add("has-hover");
         if (prevLabel) prevLabel.textContent = row.querySelector(".mod-name").textContent;
       });
       row.addEventListener("mouseleave", function() {
         prevItems.forEach(function(item) { item.classList.remove("active"); });
-        if (previewStage) previewStage.classList.remove("has-active");
+        if (previewStage) previewStage.classList.remove("has-hover");
         if (prevLabel) prevLabel.textContent = "";
       });
     });
