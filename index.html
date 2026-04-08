@@ -572,29 +572,82 @@ h1.glitch:hover::after {
 .modal-title { font-size:clamp(20px, 3vw, 26px); margin-bottom:10px; }
 .modal-desc { color:var(--muted); line-height:1.8; font-size:clamp(13px, 2vw, 15px); }
 .modal-images {
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
-  gap:10px;
+  margin-top:20px;
 }
-.modal-images { margin-top:16px; }
-.modal-phone-row {
+
+/* ===== DEVICE SHOWCASE ===== */
+.showcase {
+  position:relative;
   display:flex;
-  gap:16px;
   justify-content:center;
-  flex-wrap:wrap;
+  align-items:center;
+  gap:16px;
+  padding:40px 20px 32px;
+  border-radius:20px;
+  background:radial-gradient(ellipse at 50% 60%, rgba(255,255,255,.04) 0%, transparent 70%);
+  overflow:hidden;
+  isolation:isolate;
 }
-.modal-phone-row .phone-frame { width:140px; }
-.modal-browser {
-  margin-bottom:12px;
+/* ambient glow behind device */
+.showcase::before {
+  content:"";
+  position:absolute;
+  width:280px; height:200px;
+  border-radius:50%;
+  background:var(--primary);
+  opacity:.13;
+  filter:blur(70px);
+  pointer-events:none;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  z-index:0;
 }
-.modal-browser img {
-  max-height:300px;
+/* subtle grid texture */
+.showcase::after {
+  content:"";
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:28px 28px;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* ——— MOBILE showcase ——— */
+.showcase.mobile {
+  gap:12px;
+}
+.showcase.mobile .phone-frame {
+  width:clamp(130px, 22vw, 175px);
+  z-index:1;
+  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.1);
+}
+/* second phone slightly elevated for depth */
+.showcase.mobile .phone-frame:nth-child(2) {
+  transform:translateY(-14px);
+}
+
+/* ——— WEB / FLOWCHART showcase ——— */
+.showcase.web .browser-frame {
   width:100%;
-  border-radius:6px;
+  max-width:600px;
+  z-index:1;
+  transform:perspective(1100px) rotateY(-7deg) rotateX(2deg);
+  transform-origin:center center;
+  box-shadow:24px 24px 70px rgba(0,0,0,.6), -4px -4px 20px rgba(255,255,255,.03);
+  transition:transform .4s ease;
+}
+.showcase.web .browser-frame:hover {
+  transform:perspective(1100px) rotateY(0deg) rotateX(0deg);
+}
+.showcase.web .browser-frame img {
+  max-height:none;
+  width:100%;
+  aspect-ratio:16/9;
   object-fit:cover;
   object-position:top left;
   display:block;
+  border-radius:6px;
 }
 .modal-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:7px; }
 .modal-tags span {
@@ -1043,28 +1096,26 @@ h1.glitch:hover::after {
       });
       modalImages.innerHTML = "";
       if (d.images && d.images.length) {
+        var showcase = document.createElement("div");
+        showcase.className = "showcase " + (d.frameType === "mobile" ? "mobile" : "web");
         if (d.frameType === "mobile") {
-          var duo = document.createElement("div");
-          duo.className = "modal-phone-row";
           d.images.forEach(function(src) {
             var frame = document.createElement("div");
             frame.className = "phone-frame";
             var img = document.createElement("img");
             img.src = src; img.alt = d.title; img.loading = "lazy";
             frame.appendChild(img);
-            duo.appendChild(frame);
+            showcase.appendChild(frame);
           });
-          modalImages.appendChild(duo);
         } else {
-          d.images.forEach(function(src) {
-            var frame = document.createElement("div");
-            frame.className = "browser-frame modal-browser";
-            var img = document.createElement("img");
-            img.src = src; img.alt = d.title; img.loading = "lazy";
-            frame.appendChild(img);
-            modalImages.appendChild(frame);
-          });
+          var frame = document.createElement("div");
+          frame.className = "browser-frame";
+          var img = document.createElement("img");
+          img.src = d.images[0]; img.alt = d.title; img.loading = "lazy";
+          frame.appendChild(img);
+          showcase.appendChild(frame);
         }
+        modalImages.appendChild(showcase);
       }
       if (d.link === "#") { modalLink.style.display = "none"; }
       else { modalLink.style.display = "inline-flex"; modalLink.href = d.link; }
