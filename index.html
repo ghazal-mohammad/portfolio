@@ -452,6 +452,9 @@ h1.glitch:hover::after {
 .preview-item.active { opacity:1; }
 
 /* web images / video in preview — no box, full clean */
+.preview-item.is-web {
+  position:relative;
+}
 .preview-item.is-web img,
 .preview-item.is-web video {
   width:100%;
@@ -462,9 +465,17 @@ h1.glitch:hover::after {
   display:block;
   box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
 }
-/* fallback: hide image if video can play */
-.preview-item.is-web video { display:block; }
-.preview-item.is-web .preview-fallback { display:none; }
+/* video stacks on top of fallback image */
+.preview-item.is-web video {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  background:transparent;
+}
+.preview-item.is-web .preview-fallback {
+  display:block;
+  position:relative;
+}
 
 /* mobile images in preview */
 .preview-item.is-mobile img {
@@ -957,7 +968,7 @@ h1.glitch:hover::after {
             <!-- Task Trove: video or image -->
             <div class="preview-item is-web" data-for="tasktrove">
               <video autoplay muted loop playsinline>
-                <source src="assets/screens/WhatsApp Video 2026-04-07 at 1.40.58 PM.mp4" type="video/mp4">
+                <source src="assets/screens/tasktrove.mp4" type="video/mp4">
               </video>
               <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy" class="preview-fallback">
             </div>
@@ -1178,7 +1189,7 @@ h1.glitch:hover::after {
         tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI", "Mobile"],
         link: "#",
         images: ["assets/screens/Task Trove.png"],
-        video: "assets/screens/WhatsApp Video 2026-04-07 at 1.40.58 PM.mp4",
+        video: "assets/screens/tasktrove.mp4",
         frameType: "browser"
       },
       banking: {
@@ -1291,6 +1302,19 @@ h1.glitch:hover::after {
         if (previewStage) previewStage.classList.remove("has-active");
         if (prevLabel) prevLabel.textContent = "";
       });
+    });
+
+    // ===== VIDEO FALLBACK (show image if video fails) =====
+    document.querySelectorAll(".preview-item.is-web video").forEach(function(vid) {
+      function hidVid() {
+        vid.style.display = "none";
+      }
+      vid.addEventListener("error", hidVid);
+      vid.addEventListener("stalled", hidVid);
+      // If no source can play, hide after short delay
+      setTimeout(function() {
+        if (vid.readyState === 0) hidVid();
+      }, 2000);
     });
 
     // ===== MOUSE-TRACKING TILT (modal web showcase images) =====
