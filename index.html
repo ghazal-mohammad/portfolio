@@ -741,6 +741,92 @@ h1.glitch:hover::after {
 
 /* ===== SECTION DIVIDER ===== */
 .section-alt { background:rgba(255,255,255,.018); }
+
+/* ===== CERTIFICATIONS ===== */
+.cert-grid { margin-top:24px; display:grid; gap:14px; }
+.cert-card {
+  padding:20px 22px;
+  border-radius:16px;
+  border:1px solid rgba(230,230,235,.12);
+  background:linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  transition:border-color .25s, transform .25s;
+}
+.cert-card:hover { border-color:color-mix(in srgb, var(--primary) 25%, rgba(230,230,235,.12)); transform:translateY(-2px); }
+.cert-info { flex:1; min-width:200px; }
+.cert-name { font-size:15px; font-weight:700; }
+.cert-issuer { font-size:13px; color:var(--primary); margin-top:3px; }
+.cert-date { font-size:11px; color:var(--muted); margin-top:4px; font-family:'JetBrains Mono',monospace; }
+.cert-actions { display:flex; gap:8px; flex-shrink:0; }
+.cert-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:7px 13px; border-radius:999px;
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  text-decoration:none; font-weight:600;
+  border:1px solid rgba(230,230,235,.18);
+  background:rgba(255,255,255,.05); color:var(--text);
+  transition:.2s; white-space:nowrap;
+}
+.cert-btn:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.28); }
+.cert-btn.accent { border-color:color-mix(in srgb, var(--primary) 30%, transparent); background:color-mix(in srgb, var(--primary) 10%, transparent); }
+
+/* ===== GRADUATION PROJECT SPOTLIGHT ===== */
+.grad-spotlight {
+  position:relative;
+  margin-top:28px;
+  padding:30px 26px;
+  border-radius:20px;
+  border:1px solid color-mix(in srgb, var(--pink) 25%, rgba(230,230,235,.08));
+  background:linear-gradient(135deg, color-mix(in srgb, var(--pink) 7%, rgba(10,12,16,.92)), color-mix(in srgb, var(--primary) 4%, rgba(10,12,16,.92)));
+  box-shadow:0 0 50px rgba(0,0,0,.5), 0 0 0 1px color-mix(in srgb, var(--pink) 10%, transparent);
+  overflow:hidden;
+}
+.grad-spotlight::before {
+  content:""; position:absolute; top:0; right:0;
+  width:240px; height:240px;
+  background:radial-gradient(circle at top right, color-mix(in srgb, var(--pink) 15%, transparent), transparent 70%);
+  pointer-events:none;
+}
+.grad-spotlight::after {
+  content:""; position:absolute; bottom:0; left:0;
+  width:180px; height:120px;
+  background:radial-gradient(circle at bottom left, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%);
+  pointer-events:none;
+}
+.grad-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  padding:6px 13px; border-radius:999px;
+  background:color-mix(in srgb, var(--pink) 16%, transparent);
+  border:1px solid color-mix(in srgb, var(--pink) 32%, transparent);
+  color:var(--pink);
+  position:relative; z-index:1;
+  margin-bottom:14px;
+}
+.grad-badge::before { content:"⚡ "; }
+.grad-spot-title {
+  font-size:clamp(22px, 3.5vw, 30px);
+  font-weight:700; margin-bottom:10px;
+  line-height:1.3; position:relative; z-index:1;
+  color:var(--text);
+}
+.grad-spot-desc {
+  color:var(--muted); line-height:1.8;
+  font-size:clamp(13px, 2vw, 15px);
+  max-width:70ch; margin-bottom:14px;
+  position:relative; z-index:1;
+}
+.grad-spot-stack {
+  display:flex; flex-wrap:wrap; gap:7px;
+  position:relative; z-index:1;
+}
+.grad-chip {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  padding:5px 10px; border-radius:999px;
+  border:1px solid color-mix(in srgb, var(--pink) 18%, rgba(230,230,235,.08));
+  background:color-mix(in srgb, var(--pink) 6%, transparent);
+  color:rgba(230,230,235,.78);
+}
   </style>
 </head>
 
@@ -849,6 +935,55 @@ h1.glitch:hover::after {
     </div>
   </section>
 
+  <!-- CERTIFICATIONS -->
+  <section class="panel" id="certifications">
+    <div class="wrap">
+      <h2 class="kicker reveal">CERTIFICATIONS</h2>
+      <h3 class="title reveal">Verified credentials.</h3>
+      <div class="cert-grid">
+        <div class="cert-card reveal">
+          <div class="cert-info">
+            <div class="cert-name">Flutter Mobile Internship</div>
+            <div class="cert-issuer">Widespheres</div>
+            <div class="cert-date">06 MAY 2026 · CERT-2026-P9BHRKXL</div>
+          </div>
+          <div class="cert-actions">
+            <a class="cert-btn accent" href="https://widespheres.com/public/certificates/CERT-2026-P9BHRKXL" target="_blank" rel="noopener">Verify ↗</a>
+            <a class="cert-btn" href="assets/widespheres-cert.pdf" target="_blank" rel="noopener">PDF ↓</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRADUATION PROJECT SPOTLIGHT -->
+  <section class="panel section-alt" id="graduation">
+    <div class="wrap">
+      <h2 class="kicker reveal">GRADUATION PROJECT</h2>
+      <h3 class="title reveal">The project that defines my degree.</h3>
+      <p class="desc reveal">This is the capstone of my B.Sc. in Information Technology Engineering — a multi-platform dental clinic management system. Leading development of critical modules with a multi-developer team.</p>
+      <div class="grad-spotlight reveal">
+        <div class="grad-badge">FLAGSHIP PROJECT</div>
+        <div class="grad-spot-title">DT.Teeth — Dental Clinic Management System</div>
+        <div class="grad-spot-desc">
+          A comprehensive multi-platform system for managing dental clinics — from patient records and appointments to warehouse inventory and lab management. Built with Flutter Web for administrators, a React dashboard for analytics, and Flutter Mobile for on-the-go access. Powered by a Laravel 11 REST backend with real-time Firebase Cloud Messaging.
+        </div>
+        <div class="grad-spot-stack">
+          <div class="grad-chip">Flutter Web</div>
+          <div class="grad-chip">Laravel 11</div>
+          <div class="grad-chip">MySQL</div>
+          <div class="grad-chip">Firebase FCM</div>
+          <div class="grad-chip">Clean Architecture</div>
+          <div class="grad-chip">Dart</div>
+          <div class="grad-chip">REST API</div>
+          <div class="grad-chip">Multi-Platform</div>
+          <div class="grad-chip">Team Project</div>
+          <div class="grad-chip">Dark/Light Theme</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- MODULES / PROJECTS -->
   <section class="panel section-alt" id="modules">
     <div class="wrap">
@@ -915,6 +1050,16 @@ h1.glitch:hover::after {
             <span class="mod-arr">↗</span>
           </article>
 
+          <article class="mod-row reveal mod-grad" data-modal="dtteeth">
+            <span class="mod-num">🎓</span>
+            <div class="mod-body">
+              <div class="mod-name">DT.Teeth — Dental Clinic System</div>
+              <div class="mod-tech"><span>Flutter Web</span><span>Laravel 11</span><span>MySQL</span><span>FCM</span><span>Graduation Project</span></div>
+              <div class="mod-lock" style="color:var(--pink);opacity:.8;">⬤ In Active Development</div>
+            </div>
+            <span class="mod-arr">↗</span>
+          </article>
+
         </div>
 
         <!-- ——— RIGHT: absolute JS-positioned preview ——— -->
@@ -941,6 +1086,11 @@ h1.glitch:hover::after {
             </div>
             <div class="preview-item is-web" data-for="banking">
               <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
+            </div>
+            <div class="preview-item is-web" data-for="dtteeth">
+              <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pink);text-align:center;padding:20px;">
+                🎓<br>Graduation Project<br><span style="font-size:10px;opacity:.6;">Active Development</span>
+              </div>
             </div>
 
           </div>
@@ -1165,6 +1315,16 @@ h1.glitch:hover::after {
         link: "https://github.com/ghazal-mohammad/advanced_banking_system",
         images: ["assets/screens/Advanced Banking System.png"],
         frameType: "browser"
+      },
+      dtteeth: {
+        kicker: "🎓 GRADUATION PROJECT · FLUTTER WEB · LARAVEL · IN PROGRESS",
+        title: "DT.Teeth — Dental Clinic Management System",
+        desc: "<b>My Role:</b> Flutter Web Developer — Warehouse & Lab Manager Modules<br><br><b>About:</b> A multi-platform dental clinic management system connecting Flutter Web (admin), React dashboard (analytics), and Flutter Mobile (staff). Powered by Laravel 11 REST backend with MySQL and Firebase Cloud Messaging for real-time notifications.<br><br><b>What I'm building:</b><br>→ Warehouse Management Module — full inventory tracking with CRUD operations<br>→ Lab Manager Module — lab case tracking and workflow management<br>→ Dark/Light theme support with responsive layouts<br>→ Real-time push notifications via Firebase FCM<br>→ Integration with Laravel 11 REST API<br>→ Multi-developer team coordination (Flutter Web, React, Flutter Mobile)<br><br><span style='opacity:.65;font-size:13px;'>⬤ In active development — this is my B.Sc. capstone project at Damascus University.</span>",
+        tags: ["Flutter Web", "Laravel 11", "MySQL", "Firebase FCM", "Clean Architecture", "Dart", "REST API", "Multi-Platform", "Graduation Project"],
+        link: "https://github.com/ghazal-mohammad/dtteeth",
+        images: [],
+        frameType: "browser",
+        locked: true
       }
     };
 
