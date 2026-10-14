@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ghazal-mohammad.github.io/portfolio/sitemap.xml

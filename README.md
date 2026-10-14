@@ -1,18 +1,11 @@
-# Portfolio Website (HTML + CSS)
+# Ghazal Mohammad — Portfolio
 
-A clean, engineering-style portfolio website built with **HTML & CSS**.
+Personal portfolio of **Ghazal Mohammad**, Flutter Developer and Software Engineer (Damascus, Syria).
 
-## Live Demo
-(https://mellifluous-sunshine-88e94f.netlify.app/)
+**Live:** https://ghazal-mohammad.github.io/portfolio/ · Arabic: https://ghazal-mohammad.github.io/portfolio/ar/
 
-## Features
-- Responsive layout
-- Projects section linked to GitHub repositories
-- Simple, elegant UI
+- Static HTML/CSS, no build step — fast, accessible, bilingual (English / Arabic RTL)
+- Selected work: DT.Teeth (graduation project, with video walkthrough), Syrian Premier League app, Pharmacy Management, Eshtikily, Educational Course App
+- CV: [`assets/Ghazal-Mohammad-CV.pdf`](assets/Ghazal-Mohammad-CV.pdf)
 
-## Tech
-- HTML5
-- CSS3
-
-## How to run locally
-Just open `index.html` in your browser.
+The previous version of the site is kept on the `legacy-site` branch.

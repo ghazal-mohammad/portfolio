@@ -1,1473 +1,207 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="cyan">
+<!doctype html>
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ghazal — Flutter Developer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Ghazal Mohammad — Flutter Developer & Software Engineer. Portfolio showcasing mobile projects and engineering work.">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-/* ===== VARIABLES ===== */
-:root {
-  --bg: #0b0d10;
-  --text: #e6e6eb;
-  --muted: rgba(230,230,235,.72);
-  --primary: #2de2e6;
-  --accent: #8f7bff;
-  --pink: #ff4ecd;
-  --bg1: rgba(45,226,230,.16);
-  --bg2: rgba(143,123,255,.10);
-  --gridA: rgba(45,226,230,.12);
-  --gridB: rgba(143,123,255,.08);
-  --stroke: rgba(230,230,235,.14);
-  --shadow: 0 22px 70px rgba(0,0,0,.45);
-}
-:root[data-theme="rose"] {
-  --primary: #ff9ad5;
-  --accent: #2de2e6;
-  --pink: #c77dff;
-  --bg1: rgba(255,154,213,.20);
-  --bg2: rgba(45,226,230,.10);
-  --gridA: rgba(255,154,213,.14);
-  --gridB: rgba(45,226,230,.07);
-}
-
-/* ===== RESET ===== */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  background:
-    radial-gradient(1200px 600px at 50% 0%, var(--bg1), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, var(--bg2), transparent 55%),
-    var(--bg);
-  color:var(--text);
-  font-family:'Space Grotesk', sans-serif;
-  padding-top:64px;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-.mono { font-family:'JetBrains Mono', monospace; }
-
-/* ===== BG LAYERS ===== */
-.bg-grid {
-  position:fixed; inset:0; z-index:-3;
-  background:
-    linear-gradient(var(--gridA) 1px, transparent 1px),
-    linear-gradient(90deg, var(--gridB) 1px, transparent 1px);
-  background-size:64px 64px;
-  transform:perspective(900px) rotateX(55deg) translateY(-120px);
-  transform-origin:top;
-  opacity:.2;
-  /* Slowed down grid animation for performance */
-  animation:gridMove 18s linear infinite;
-}
-@keyframes gridMove {
-  from { background-position:0 0,0 0; }
-  to   { background-position:0 140px,140px 0; }
-}
-.scanlines {
-  position:fixed; inset:0; z-index:-2; pointer-events:none;
-  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.025), rgba(255,255,255,.025) 1px, transparent 2px, transparent 6px);
-  opacity:.08; mix-blend-mode:overlay;
-}
-.noise {
-  position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
-  opacity:.04;
-}
-
-/* ===== CURSOR (desktop only) ===== */
-.cursor {
-  width:16px; height:16px;
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:50%;
-  position:fixed; left:0; top:0;
-  pointer-events:none;
-  transform:translate(-50%,-50%);
-  z-index:999;
-  transition:width .15s ease, height .15s ease, border-color .15s ease;
-  display:none;
-}
-@media (hover:hover) { .cursor { display:block; } }
-
-/* ===== TOPBAR ===== */
-.topbar {
-  position:fixed; top:0; left:0; right:0;
-  height:64px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 16px;
-  background:linear-gradient(to bottom, rgba(10,12,16,.92), rgba(10,12,16,.6), transparent);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  z-index:40;
-  gap:10px;
-}
-.brand {
-  letter-spacing:2px;
-  color:var(--primary);
-  font-size:clamp(11px, 2.5vw, 14px);
-  white-space:nowrap;
-  flex-shrink:0;
-}
-.top-actions {
-  display:flex;
-  gap:6px;
-  align-items:center;
-  flex-wrap:nowrap;
-  overflow:hidden;
-}
-.pill {
-  padding:7px 11px;
-  border-radius:999px;
-  border:1px solid rgba(230,230,235,.18);
-  background:rgba(255,255,255,.05);
-  color:var(--text);
-  font-weight:700;
-  font-size:clamp(10px, 2vw, 13px);
-  cursor:pointer;
-  text-decoration:none;
-  white-space:nowrap;
-  transition:transform .2s ease, border-color .2s ease;
-  font-family:'Space Grotesk', sans-serif;
-}
-.pill:hover { border-color:rgba(255,255,255,.35); transform:translateY(-1px); }
-@media (max-width:480px) {
-  .pill { padding:6px 9px; font-size:10px; }
-  .brand { font-size:11px; }
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:12px 20px;
-  border-radius:14px;
-  text-decoration:none;
-  font-weight:700;
-  font-size:clamp(13px, 2vw, 15px);
-  color:var(--text);
-  border:1px solid rgba(230,230,235,.16);
-  background:rgba(255,255,255,.04);
-  box-shadow:0 8px 24px rgba(0,0,0,.25);
-  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-  cursor:pointer;
-  white-space:nowrap;
-  font-family:'Space Grotesk', sans-serif;
-}
-.btn:hover {
-  transform:translateY(-3px);
-  border-color:rgba(255,255,255,.28);
-  box-shadow:0 16px 36px rgba(0,0,0,.35);
-}
-.btn.primary {
-  background:linear-gradient(135deg, color-mix(in srgb, var(--primary) 22%, transparent), color-mix(in srgb, var(--pink) 18%, transparent));
-  border-color:color-mix(in srgb, var(--primary) 40%, rgba(255,255,255,.18));
-}
-.btn.ghost { background:rgba(255,255,255,.03); }
-
-/* ===== INTRO ===== */
-.intro {
-  min-height:calc(100vh - 64px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:40px 16px 32px;
-}
-.terminal {
-  font-family:'JetBrains Mono', monospace;
-  font-size:clamp(11px, 2vw, 13px);
-  line-height:1.6;
-  color:var(--primary);
-  margin-bottom:18px;
-  min-height:72px;
-}
-h1.glitch {
-  font-size:clamp(48px, 12vw, 100px);
-  font-weight:700;
-  letter-spacing:4px;
-  line-height:1;
-  position:relative;
-  display:inline-block;
-}
-/* reduced glitch - only on hover for performance */
-h1.glitch::before,
-h1.glitch::after {
-  content:attr(data-text);
-  position:absolute; left:0; top:0;
-  width:100%;
-  overflow:hidden;
-  opacity:0;
-}
-h1.glitch:hover::before {
-  color:var(--pink);
-  clip-path:polygon(0 20%, 100% 20%, 100% 45%, 0 45%);
-  transform:translateX(-3px);
-  opacity:.8;
-  animation:glitch1 .3s steps(2) forwards;
-}
-h1.glitch:hover::after {
-  color:var(--accent);
-  clip-path:polygon(0 55%, 100% 55%, 100% 80%, 0 80%);
-  transform:translateX(3px);
-  opacity:.8;
-  animation:glitch2 .3s steps(2) forwards;
-}
-@keyframes glitch1 { 0%,100%{transform:translateX(-3px);} 50%{transform:translateX(3px);} }
-@keyframes glitch2 { 0%,100%{transform:translateX(3px);}  50%{transform:translateX(-3px);} }
-
-.role {
-  margin-top:10px;
-  letter-spacing:1px;
-  color:var(--muted);
-}
-.role.strong { font-size:clamp(14px, 2.5vw, 17px); color:rgba(230,230,235,.88); }
-.role.small  { font-size:clamp(11px, 1.8vw, 13px); opacity:.85; }
-
-.cta {
-  margin-top:24px;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  width:100%;
-  max-width:480px;
-}
-/* Full-width buttons on small phones */
-@media (max-width:380px) {
-  .cta { flex-direction:column; align-items:stretch; }
-  .cta .btn { text-align:center; justify-content:center; }
-}
-
-.hintline {
-  margin-top:18px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  opacity:.6;
-  font-size:12px;
-}
-.dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.35); }
-
-/* ===== PANELS ===== */
-.panel { padding:clamp(50px, 8vw, 90px) 16px; }
-.wrap  { max-width:1100px; margin:0 auto; }
-
-.kicker {
-  font-family:'JetBrains Mono', monospace;
-  letter-spacing:3px;
-  font-size:11px;
-  color:color-mix(in srgb, var(--primary) 80%, white 0%);
-  margin-bottom:14px;
-}
-.title { font-size:clamp(22px, 4vw, 38px); margin-bottom:12px; line-height:1.2; }
-.desc  { color:var(--muted); line-height:1.8; max-width:70ch; font-size:clamp(14px, 2vw, 16px); }
-
-.mini-grid { margin-top:22px; display:flex; flex-wrap:wrap; gap:8px; }
-.chip {
-  padding:7px 12px;
-  border-radius:999px;
-  border:1px solid var(--stroke);
-  background:rgba(255,255,255,.03);
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  color:rgba(230,230,235,.85);
-}
-.actions {
-  margin-top:22px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-/* ===== EXPERIENCE SECTION ===== */
-.experience-grid {
-  margin-top:28px;
-  display:grid;
-  gap:16px;
-}
-.exp-card {
-  padding:20px 22px;
-  border-radius:18px;
-  border:1px solid rgba(230,230,235,.12);
-  background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  box-shadow:var(--shadow);
-  transition:transform .25s ease, border-color .25s ease;
-}
-.exp-card:hover {
-  transform:translateY(-4px);
-  border-color:color-mix(in srgb, var(--primary) 30%, rgba(230,230,235,.12));
-}
-.exp-header {
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:8px;
-}
-.exp-title { font-size:17px; font-weight:700; }
-.exp-company { color:var(--primary); font-weight:600; font-size:14px; margin-top:2px; }
-.exp-date {
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  color:var(--muted);
-  white-space:nowrap;
-  margin-top:2px;
-  padding:4px 10px;
-  border:1px solid var(--stroke);
-  border-radius:999px;
-}
-.exp-badge {
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:4px 10px;
-  border-radius:999px;
-  background:color-mix(in srgb, var(--pink) 14%, transparent);
-  border:1px solid color-mix(in srgb, var(--pink) 30%, transparent);
-  color:color-mix(in srgb, var(--pink) 90%, white 0%);
-  margin-bottom:10px;
-}
-.exp-bullets { list-style:none; margin-top:10px; }
-.exp-bullets li {
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.7;
-  padding-left:14px;
-  position:relative;
-}
-.exp-bullets li::before {
-  content:"›";
-  position:absolute; left:0;
-  color:var(--primary);
-}
-
-/* ===== MODULES — HOVER PREVIEW LAYOUT ===== */
-.modules-layout {
-  display:grid;
-  grid-template-columns:1fr 420px;
-  gap:56px;
-  align-items:start;
-  margin-top:32px;
-}
-
-/* ——— Left list ——— */
-.mod-row {
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:24px 14px;
-  border-bottom:1px solid rgba(230,230,235,.09);
-  cursor:pointer;
-  position:relative;
-  transition:padding-left .25s ease, background .25s ease;
-}
-.mod-row:first-child { border-top:1px solid rgba(230,230,235,.09); }
-.mod-row::before {
-  content:"";
-  position:absolute; left:0; top:0; bottom:0;
-  width:0;
-  background:var(--primary);
-  border-radius:0 2px 2px 0;
-  transition:width .25s ease;
-}
-.mod-row:hover { padding-left:20px; background:rgba(255,255,255,.018); }
-.mod-row:hover::before { width:2px; }
-
-.mod-num {
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  color:var(--muted);
-  width:26px;
-  flex-shrink:0;
-  opacity:.6;
-}
-.mod-body { flex:1; min-width:0; }
-.mod-name {
-  font-size:clamp(17px, 2.2vw, 22px);
-  font-weight:700;
-  line-height:1.25;
-  transition:color .25s;
-}
-.mod-row:hover .mod-name { color:var(--primary); }
-.mod-tech {
-  display:flex;
-  flex-wrap:wrap;
-  gap:0;
-  margin-top:5px;
-}
-.mod-tech span {
-  font-size:12px;
-  color:var(--muted);
-  opacity:.7;
-}
-.mod-tech span:not(:last-child)::after { content:" · "; opacity:.4; }
-.mod-lock {
-  font-family:'JetBrains Mono', monospace;
-  font-size:10px;
-  color:var(--muted);
-  opacity:.5;
-  margin-top:4px;
-}
-.mod-arr {
-  margin-left:auto;
-  flex-shrink:0;
-  font-size:15px;
-  color:var(--primary);
-  opacity:0;
-  transition:.25s;
-}
-.mod-row:hover .mod-arr { opacity:1; transform:translate(3px,-3px); }
-
-/* ——— Right: sticky preview column ——— */
-.modules-preview {
-  position:sticky;
-  top:80px;
-  align-self:start;
-}
-.preview-stage {
-  position:relative;
-  width:100%;
-  aspect-ratio:16/10;
-  border-radius:16px;
-  overflow:hidden;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-  box-shadow:0 4px 30px rgba(0,0,0,.3);
-  transition:box-shadow .35s;
-}
-.preview-stage.has-hover {
-  box-shadow:0 20px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.09);
-}
-.preview-item {
-  position:absolute;
-  inset:0;
-  opacity:0;
-  transition:opacity .35s ease;
-  overflow:hidden;
-}
-.preview-item.active { opacity:1; }
-.preview-item img,
-.preview-item video {
-  width:100%; height:100%;
-  object-fit:cover;
-  display:block;
-}
-.preview-item.is-mobile img {
-  object-fit:contain;
-  background:rgba(8,8,12,.85);
-}
-/* video fallback image sits behind video */
-.preview-item .preview-fallback {
-  position:absolute; inset:0; z-index:-1;
-  width:100%; height:100%; object-fit:cover;
-}
-
-
-.preview-label {
-  margin-top:12px;
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  color:rgba(230,230,235,.4);
-  letter-spacing:1px;
-  text-align:center;
-  pointer-events:none;
-  transition:opacity .35s;
-}
-.preview-label.hidden { opacity:0; }
-
-@media (max-width:900px) {
-  .modules-layout { grid-template-columns:1fr; }
-  .modules-preview { display:none; }
-  .mod-name { font-size:16px; }
-}
-
-/* ===== BADGE (reused in modal kicker) ===== */
-.badge {
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:5px 10px;
-  border-radius:999px;
-  background:color-mix(in srgb, var(--primary) 14%, transparent);
-  border:1px solid color-mix(in srgb, var(--primary) 25%, transparent);
-  color:color-mix(in srgb, var(--primary) 85%, white 0%);
-  white-space:nowrap;
-  flex-shrink:0;
-}
-.badge.private {
-  background:color-mix(in srgb, var(--muted) 10%, transparent);
-  border-color:var(--stroke);
-  color:var(--muted);
-}
-
-/* ===== MODULE PREVIEW FRAMES ===== */
-/* Phone mockup for mobile app screenshots */
-.phone-frame {
-  width:120px;
-  padding:6px 5px 10px;
-  background:linear-gradient(145deg, #1a1a2e, #16162a);
-  border-radius:18px;
-  border:2px solid rgba(255,255,255,.14);
-  box-shadow:0 8px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
-  position:relative;
-  flex-shrink:0;
-}
-.phone-frame::before {
-  content:"";
-  display:block;
-  width:32px; height:4px;
-  background:rgba(255,255,255,.12);
-  border-radius:2px;
-  margin:0 auto 5px;
-}
-.phone-frame img {
-  width:100%;
-  border-radius:10px;
-  display:block;
-  aspect-ratio:9/16;
-  object-fit:cover;
-  object-position:top;
-}
-/* Browser mockup for web screenshots */
-.browser-frame {
-  width:100%;
-  padding:22px 4px 4px;
-  background:linear-gradient(145deg, #1a1a2e, #16162a);
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 8px 28px rgba(0,0,0,.45);
-  position:relative;
-}
-.browser-frame::before {
-  content:"";
-  position:absolute;
-  top:7px; left:10px;
-  width:8px; height:8px;
-  border-radius:50%;
-  background:#ff5f57;
-  box-shadow:14px 0 0 #febc2e, 28px 0 0 #28c840;
-}
-.browser-frame img {
-  width:100%;
-  border-radius:6px;
-  display:block;
-  max-height:140px;
-  object-fit:cover;
-  object-position:top left;
-}
-/* Multiple phone frames side by side */
-.phone-duo {
-  display:flex;
-  gap:10px;
-  justify-content:center;
-}
-.phone-duo .phone-frame { width:100px; }
-
-/* ===== MODULE LOCKED STATE ===== */
-.module-locked-note {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:12px;
-  padding:8px 12px;
-  border-radius:10px;
-  background:rgba(255,255,255,.04);
-  border:1px dashed rgba(230,230,235,.20);
-  font-family:'JetBrains Mono',monospace;
-  font-size:11px;
-  color:var(--muted);
-  line-height:1.5;
-}
-
-/* ===== FOOTER ===== */
-.footer { padding:clamp(40px,6vw,60px) 16px; background:rgba(255,255,255,.015); }
-.footer-line {
-  height:1px;
-  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 40%, transparent), transparent);
-  margin-bottom:18px;
-}
-.tiny { margin-top:16px; color:rgba(230,230,235,.5); font-size:12px; }
-
-/* ===== REVEAL ===== */
-.reveal {
-  opacity:0;
-  transform:translateY(16px);
-  transition:opacity .55s cubic-bezier(.2,.8,.2,1), transform .55s cubic-bezier(.2,.8,.2,1);
-}
-.reveal.on { opacity:1; transform:translateY(0); }
-
-/* ===== MODAL ===== */
-.modal {
-  position:fixed; inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  z-index:50;
-}
-.modal.on { display:flex; }
-.modal-box {
-  width:min(860px, 100%);
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:18px;
-  border:1px solid rgba(230,230,235,.18);
-  background:linear-gradient(135deg, rgba(15,18,24,.96), rgba(10,12,16,.96));
-  box-shadow:0 30px 90px rgba(0,0,0,.6);
-  padding:clamp(18px, 4vw, 28px);
-  position:relative;
-  animation:pop .25s ease-out;
-}
-/* scrollbar styling */
-.modal-box::-webkit-scrollbar { width:4px; }
-.modal-box::-webkit-scrollbar-track { background:transparent; }
-.modal-box::-webkit-scrollbar-thumb { background:var(--stroke); border-radius:4px; }
-
-@keyframes pop { from { transform:translateY(10px) scale(.98); opacity:0; } to { transform:translateY(0) scale(1); opacity:1; } }
-.modal-close {
-  position:absolute; right:12px; top:10px;
-  width:38px; height:38px;
-  border-radius:10px;
-  border:1px solid rgba(230,230,235,.18);
-  background:rgba(255,255,255,.05);
-  color:var(--text);
-  font-size:20px;
-  cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Space Grotesk', sans-serif;
-}
-.modal-kicker {
-  font-family:'JetBrains Mono', monospace;
-  letter-spacing:3px;
-  font-size:11px;
-  color:color-mix(in srgb, var(--primary) 85%, white 0%);
-  margin-bottom:10px;
-}
-.modal-title { font-size:clamp(20px, 3vw, 26px); margin-bottom:10px; }
-.modal-desc { color:var(--muted); line-height:1.8; font-size:clamp(13px, 2vw, 15px); }
-.modal-images {
-  margin-top:20px;
-}
-
-/* ===== DEVICE SHOWCASE (no frames — direct images) ===== */
-.showcase {
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:16px;
-  padding:32px 0 24px;
-  border-radius:20px;
-  background:radial-gradient(ellipse at 50% 60%, rgba(255,255,255,.04) 0%, transparent 70%);
-  overflow:hidden;
-  isolation:isolate;
-}
-.showcase::before {
-  content:"";
-  position:absolute;
-  width:280px; height:200px;
-  border-radius:50%;
-  background:var(--primary);
-  opacity:.12;
-  filter:blur(70px);
-  pointer-events:none;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  z-index:0;
-}
-.showcase::after {
-  content:"";
-  position:absolute; inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-                   linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size:28px 28px;
-  z-index:0;
-  pointer-events:none;
-}
-
-/* web / flowchart: full-width image */
-.showcase.web .showcase-img,
-.showcase.web video {
-  width:100%;
-  max-width:640px;
-  aspect-ratio:16/9;
-  object-fit:cover;
-  object-position:top left;
-  border-radius:14px;
-  display:block;
-  position:relative;
-  z-index:1;
-  box-shadow:0 24px 60px rgba(0,0,0,.55);
-  transition:transform .12s ease;
-}
-
-/* mobile: tall portrait images */
-.showcase.mobile .showcase-img {
-  height:clamp(260px, 40vw, 340px);
-  width:auto;
-  aspect-ratio:9/16;
-  object-fit:cover;
-  object-position:top;
-  border-radius:18px;
-  display:block;
-  position:relative;
-  z-index:1;
-  box-shadow:0 24px 60px rgba(0,0,0,.55);
-}
-/* second mobile image slightly elevated */
-.showcase.mobile .showcase-img:nth-child(2) {
-  transform:translateY(-14px);
-}
-
-.modal-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:7px; }
-.modal-tags span {
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  padding:5px 10px;
-  border-radius:999px;
-  border:1px solid rgba(230,230,235,.14);
-  background:rgba(255,255,255,.03);
-}
-.modal-actions { margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; }
-
-/* ===== SECTION DIVIDER ===== */
-.section-alt { background:rgba(255,255,255,.018); }
-
-/* ===== CERTIFICATIONS ===== */
-.cert-grid { margin-top:24px; display:grid; gap:14px; }
-.cert-card {
-  padding:20px 22px;
-  border-radius:16px;
-  border:1px solid rgba(230,230,235,.12);
-  background:linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
-  transition:border-color .25s, transform .25s;
-}
-.cert-card:hover { border-color:color-mix(in srgb, var(--primary) 25%, rgba(230,230,235,.12)); transform:translateY(-2px); }
-.cert-info { flex:1; min-width:200px; }
-.cert-name { font-size:15px; font-weight:700; }
-.cert-issuer { font-size:13px; color:var(--primary); margin-top:3px; }
-.cert-date { font-size:11px; color:var(--muted); margin-top:4px; font-family:'JetBrains Mono',monospace; }
-.cert-actions { display:flex; gap:8px; flex-shrink:0; }
-.cert-btn {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:7px 13px; border-radius:999px;
-  font-family:'JetBrains Mono',monospace; font-size:11px;
-  text-decoration:none; font-weight:600;
-  border:1px solid rgba(230,230,235,.18);
-  background:rgba(255,255,255,.05); color:var(--text);
-  transition:.2s; white-space:nowrap;
-}
-.cert-btn:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.28); }
-.cert-btn.accent { border-color:color-mix(in srgb, var(--primary) 30%, transparent); background:color-mix(in srgb, var(--primary) 10%, transparent); }
-
-/* ===== GRADUATION PROJECT SPOTLIGHT ===== */
-.grad-spotlight {
-  position:relative;
-  margin-top:28px;
-  padding:30px 26px;
-  border-radius:20px;
-  border:1px solid color-mix(in srgb, var(--pink) 25%, rgba(230,230,235,.08));
-  background:linear-gradient(135deg, color-mix(in srgb, var(--pink) 7%, rgba(10,12,16,.92)), color-mix(in srgb, var(--primary) 4%, rgba(10,12,16,.92)));
-  box-shadow:0 0 50px rgba(0,0,0,.5), 0 0 0 1px color-mix(in srgb, var(--pink) 10%, transparent);
-  overflow:hidden;
-}
-.grad-spotlight::before {
-  content:""; position:absolute; top:0; right:0;
-  width:240px; height:240px;
-  background:radial-gradient(circle at top right, color-mix(in srgb, var(--pink) 15%, transparent), transparent 70%);
-  pointer-events:none;
-}
-.grad-spotlight::after {
-  content:""; position:absolute; bottom:0; left:0;
-  width:180px; height:120px;
-  background:radial-gradient(circle at bottom left, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%);
-  pointer-events:none;
-}
-.grad-badge {
-  display:inline-flex; align-items:center; gap:6px;
-  font-family:'JetBrains Mono',monospace; font-size:11px;
-  padding:6px 13px; border-radius:999px;
-  background:color-mix(in srgb, var(--pink) 16%, transparent);
-  border:1px solid color-mix(in srgb, var(--pink) 32%, transparent);
-  color:var(--pink);
-  position:relative; z-index:1;
-  margin-bottom:14px;
-}
-.grad-badge::before { content:"⚡ "; }
-.grad-spot-title {
-  font-size:clamp(22px, 3.5vw, 30px);
-  font-weight:700; margin-bottom:10px;
-  line-height:1.3; position:relative; z-index:1;
-  color:var(--text);
-}
-.grad-spot-desc {
-  color:var(--muted); line-height:1.8;
-  font-size:clamp(13px, 2vw, 15px);
-  max-width:70ch; margin-bottom:14px;
-  position:relative; z-index:1;
-}
-.grad-spot-stack {
-  display:flex; flex-wrap:wrap; gap:7px;
-  position:relative; z-index:1;
-}
-.grad-chip {
-  font-family:'JetBrains Mono',monospace; font-size:10px;
-  padding:5px 10px; border-radius:999px;
-  border:1px solid color-mix(in srgb, var(--pink) 18%, rgba(230,230,235,.08));
-  background:color-mix(in srgb, var(--pink) 6%, transparent);
-  color:rgba(230,230,235,.78);
-}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghazal Mohammad — Flutter Developer</title>
+<meta name="description" content="Ghazal Mohammad — Flutter Developer and Software Engineer in Damascus, Syria. Cross-platform mobile and web apps with Flutter, Clean Architecture, Bloc, GetX, REST APIs, Firebase and RTL-first Arabic/English interfaces.">
+<link rel="canonical" href="https://ghazal-mohammad.github.io/portfolio/">
+<link rel="alternate" hreflang="en" href="https://ghazal-mohammad.github.io/portfolio/">
+<link rel="alternate" hreflang="ar" href="https://ghazal-mohammad.github.io/portfolio/ar/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ghazal Mohammad — Flutter Developer">
+<meta property="og:description" content="Cross-platform mobile and web apps with Flutter. Selected work: DT.Teeth, Syrian Premier League app, and more.">
+<meta property="og:url" content="https://ghazal-mohammad.github.io/portfolio/">
+<meta property="og:image" content="https://ghazal-mohammad.github.io/portfolio/assets/img/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Ghazal Mohammad","jobTitle":"Flutter Developer","address":{"@type":"PostalAddress","addressLocality":"Damascus","addressCountry":"SY"},"email":"mailto:mohammadghazal423@gmail.com","url":"https://ghazal-mohammad.github.io/portfolio/","sameAs":["https://github.com/ghazal-mohammad","https://www.linkedin.com/in/ghazal-mohammad-0b9067250"],"alumniOf":"Damascus University"}</script>
 </head>
-
 <body>
-  <div class="bg-grid"></div>
-  <div class="scanlines"></div>
-  <div class="noise"></div>
-  <div class="cursor"></div>
+<a class="skip" href="#main">Skip to content</a>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="brand mono">GZL//Portfolio</div>
-    <div class="top-actions">
-      <button class="pill" id="themeToggle" type="button">Theme: CYAN</button>
-      <button class="pill" id="soundToggle" type="button">Sound: OFF</button>
-      <a class="pill" href="assets/cv.pdf" download>↓ CV</a>
-    </div>
-  </header>
-
-  <!-- INTRO -->
-  <section class="intro" id="top">
-    <div class="terminal" aria-label="System terminal"></div>
-    <h1 class="glitch" data-text="GHAZAL">GHAZAL</h1>
-    <p class="role strong">Flutter Developer · Software Engineer</p>
-    <p class="role small mono">Bloc · GetX · REST APIs · Animations · Clean Architecture</p>
-    <div class="cta">
-      <a class="btn primary" href="#core">Enter System ↓</a>
-      <a class="btn ghost" href="mailto:mohammadghazal423@gmail.com">Email</a>
-      <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
-    </div>
-    <div class="hintline">
-      <span class="mono">scroll</span>
-      <span class="dot"></span>
-      <span class="mono">explore modules</span>
-    </div>
-  </section>
-
-  <!-- SYSTEM CORE -->
-  <section class="panel section-alt" id="core">
-    <div class="wrap">
-      <h2 class="kicker reveal">SYSTEM CORE</h2>
-      <h3 class="title reveal">I build mobile systems with an engineering mindset.</h3>
-      <p class="desc reveal">
-        Clean architecture, state management, REST integrations, and UX details —
-        from design to deployment. Recognized as top intern at Widespheres for
-        dedication and continuous improvement.
-      </p>
-      <div class="mini-grid">
-        <div class="chip reveal">Flutter · Dart</div>
-        <div class="chip reveal">Bloc · GetX</div>
-        <div class="chip reveal">REST APIs</div>
-        <div class="chip reveal">Animations & UX</div>
-        <div class="chip reveal">Clean Architecture</div>
-        <div class="chip reveal">Java · C++</div>
-      </div>
-      <div class="actions reveal">
-        <a class="btn primary" href="#experience">Experience</a>
-        <a class="btn ghost" href="#modules">Projects</a>
-        <a class="btn ghost" href="assets/cv.pdf" target="_blank" rel="noopener">Open CV</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section class="panel" id="experience">
-    <div class="wrap">
-      <h2 class="kicker reveal">EXPERIENCE</h2>
-      <h3 class="title reveal">Where I shipped real work.</h3>
-
-      <div class="experience-grid">
-
-        <!-- Widespheres -->
-        <div class="exp-card reveal">
-          <div class="exp-header">
-            <div>
-              <div class="exp-title">Flutter Mobile Intern</div>
-              <div class="exp-company">Widespheres</div>
-            </div>
-            <div class="exp-date">2025 · Damascus</div>
-          </div>
-          <div class="exp-badge">🏆 Trainee of the Week</div>
-          <ul class="exp-bullets">
-            <li>Built an educational course mobile app under company supervision on the Mobile track</li>
-            <li>Selected as <b>Trainee of the Week</b> by Widespheres · official recommendation letter available</li>
-            <li>Demonstrated continuous improvement, proactive communication, and collaborative work ethic</li>
-          </ul>
-        </div>
-
-        <!-- Freelance -->
-        <div class="exp-card reveal">
-          <div class="exp-header">
-            <div>
-              <div class="exp-title">Flutter Developer</div>
-              <div class="exp-company">Freelance</div>
-            </div>
-            <div class="exp-date">01/2024 – 08/2024</div>
-          </div>
-          <ul class="exp-bullets">
-            <li>Built complete mobile applications using Flutter from concept to implementation</li>
-            <li>Implemented UI designs and integrated REST APIs for dynamic data</li>
-            <li>Delivered full-featured solutions independently with minimal supervision</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CERTIFICATIONS -->
-  <section class="panel" id="certifications">
-    <div class="wrap">
-      <h2 class="kicker reveal">CERTIFICATIONS</h2>
-      <h3 class="title reveal">Verified credentials.</h3>
-      <div class="cert-grid">
-        <div class="cert-card reveal">
-          <div class="cert-info">
-            <div class="cert-name">Flutter Mobile Internship</div>
-            <div class="cert-issuer">Widespheres</div>
-            <div class="cert-date">06 MAY 2026 · CERT-2026-P9BHRKXL</div>
-          </div>
-          <div class="cert-actions">
-            <a class="cert-btn accent" href="https://widespheres.com/public/certificates/CERT-2026-P9BHRKXL" target="_blank" rel="noopener">Verify ↗</a>
-            <a class="cert-btn" href="assets/widespheres-cert.pdf" target="_blank" rel="noopener">PDF ↓</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GRADUATION PROJECT SPOTLIGHT -->
-  <section class="panel section-alt" id="graduation">
-    <div class="wrap">
-      <h2 class="kicker reveal">GRADUATION PROJECT</h2>
-      <h3 class="title reveal">The project that defines my degree.</h3>
-      <p class="desc reveal">This is the capstone of my B.Sc. in Information Technology Engineering — a multi-platform dental clinic management system. Leading development of critical modules with a multi-developer team.</p>
-      <div class="grad-spotlight reveal">
-        <div class="grad-badge">FLAGSHIP PROJECT</div>
-        <div class="grad-spot-title">DT.Teeth — Dental Clinic Management System</div>
-        <div class="grad-spot-desc">
-          A comprehensive multi-platform system for managing dental clinics — from patient records and appointments to warehouse inventory and lab management. Built with Flutter Web for administrators, a React dashboard for analytics, and Flutter Mobile for on-the-go access. Powered by a Laravel 11 REST backend with real-time Firebase Cloud Messaging.
-        </div>
-        <div class="grad-spot-stack">
-          <div class="grad-chip">Flutter Web</div>
-          <div class="grad-chip">Laravel 11</div>
-          <div class="grad-chip">MySQL</div>
-          <div class="grad-chip">Firebase FCM</div>
-          <div class="grad-chip">Clean Architecture</div>
-          <div class="grad-chip">Dart</div>
-          <div class="grad-chip">REST API</div>
-          <div class="grad-chip">Multi-Platform</div>
-          <div class="grad-chip">Team Project</div>
-          <div class="grad-chip">Dark/Light Theme</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MODULES / PROJECTS -->
-  <section class="panel section-alt" id="modules">
-    <div class="wrap">
-      <h2 class="kicker reveal">ENGINEERING MODULES</h2>
-      <p class="desc reveal">Hover to preview · click for full case study.</p>
-
-      <div class="modules-layout">
-
-        <!-- ——— LEFT: numbered project list ——— -->
-        <div class="modules-list">
-
-          <article class="mod-row reveal" data-modal="pharmacy">
-            <span class="mod-num">01</span>
-            <div class="mod-body">
-              <div class="mod-name">Pharmacy Management System</div>
-              <div class="mod-tech"><span>Flutter Web</span><span>Cubit</span><span>REST API</span><span>Role-Based Auth</span><span>Private</span></div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-          <article class="mod-row reveal" data-modal="civil">
-            <span class="mod-num">02</span>
-            <div class="mod-body">
-              <div class="mod-name">Civil Status Automation — Syria</div>
-              <div class="mod-tech"><span>Flutter</span><span>Clean Architecture</span><span>Team Project</span></div>
-              <div class="mod-lock">⟳ Pending official announcement</div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-          <article class="mod-row reveal" data-modal="complaints">
-            <span class="mod-num">03</span>
-            <div class="mod-body">
-              <div class="mod-name">Eshtikily — Government Complaints</div>
-              <div class="mod-tech"><span>Flutter</span><span>OTP Auth</span><span>REST API</span><span>Arabic RTL</span></div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-          <article class="mod-row reveal" data-modal="education">
-            <span class="mod-num">04</span>
-            <div class="mod-body">
-              <div class="mod-name">Educational Course App</div>
-              <div class="mod-tech"><span>Flutter</span><span>Bloc</span><span>UI/UX</span><span>Widespheres Internship</span></div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-          <article class="mod-row reveal" data-modal="tasktrove">
-            <span class="mod-num">05</span>
-            <div class="mod-body">
-              <div class="mod-name">Task Trove — Job Platform</div>
-              <div class="mod-tech"><span>Flutter</span><span>GetX</span><span>Animations</span><span>Admin UI</span></div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-          <article class="mod-row reveal" data-modal="banking">
-            <span class="mod-num">06</span>
-            <div class="mod-body">
-              <div class="mod-name">Advanced Banking System</div>
-              <div class="mod-tech"><span>Java</span><span>OOP</span><span>Design Patterns</span><span>University Project</span></div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-          <article class="mod-row reveal mod-grad" data-modal="dtteeth">
-            <span class="mod-num">🎓</span>
-            <div class="mod-body">
-              <div class="mod-name">DT.Teeth — Dental Clinic System</div>
-              <div class="mod-tech"><span>Flutter Web</span><span>Laravel 11</span><span>MySQL</span><span>FCM</span><span>Graduation Project</span></div>
-              <div class="mod-lock" style="color:var(--pink);opacity:.8;">⬤ In Active Development</div>
-            </div>
-            <span class="mod-arr">↗</span>
-          </article>
-
-        </div>
-
-        <!-- ——— RIGHT: absolute JS-positioned preview ——— -->
-        <div class="modules-preview" aria-hidden="true">
-          <div class="preview-stage" id="previewStage">
-
-            <div class="preview-item is-web" data-for="pharmacy">
-              <img src="assets/screens/Pharmacio.png" alt="Pharmacy" loading="lazy">
-            </div>
-            <div class="preview-item is-web" data-for="civil">
-              <img src="assets/screens/civil-1.png" alt="Civil" loading="lazy">
-            </div>
-            <div class="preview-item is-mobile" data-for="complaints">
-              <img src="assets/screens/Government Complaints Mobile (Eshtikily).png" alt="Eshtikily" loading="lazy">
-            </div>
-            <div class="preview-item is-mobile" data-for="education">
-              <img src="assets/screens/Course Details.png" alt="Course Details" loading="lazy">
-            </div>
-            <div class="preview-item is-web" data-for="tasktrove">
-              <video autoplay muted loop playsinline>
-                <source src="assets/screens/tasktrove.mp4" type="video/mp4">
-              </video>
-              <img src="assets/screens/Task Trove.png" alt="Task Trove" loading="lazy" class="preview-fallback">
-            </div>
-            <div class="preview-item is-web" data-for="banking">
-              <img src="assets/screens/Advanced Banking System.png" alt="Banking" loading="lazy">
-            </div>
-            <div class="preview-item is-web" data-for="dtteeth">
-              <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pink);text-align:center;padding:20px;">
-                🎓<br>Graduation Project<br><span style="font-size:10px;opacity:.6;">Active Development</span>
-              </div>
-            </div>
-
-          </div>
-          <p class="preview-label" id="prevLabel"></p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="wrap reveal">
-      <div class="footer-line"></div>
-      <p style="margin-bottom:22px; color:var(--muted); font-size:clamp(13px,2vw,15px); line-height:1.9; max-width:62ch; font-style:italic; opacity:.85;">
-        Thank you for taking the time to visit my portfolio. Every project here was built with care, precision, and a drive to improve. I would be glad to contribute to your team and grow together.
-      </p>
-      <p class="mono" style="margin-bottom:14px; font-size:12px; letter-spacing:2px; opacity:.7;">CONTACT</p>
-      <div class="actions">
-        <a class="btn primary" href="mailto:mohammadghazal423@gmail.com">Email Me</a>
-        <a class="btn ghost" href="https://github.com/ghazal-mohammad" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn ghost" href="https://www.linkedin.com/in/ghazal-mohammad-0b9067250" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn ghost" href="#top">↑ Top</a>
-      </div>
-      <p class="tiny">© <span id="y"></span> Ghazal Mohammad — Flutter Developer</p>
-    </div>
-  </footer>
-
-  <!-- MODAL -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Case study modal">
-      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
-      <p class="modal-kicker" id="modalKicker">MODULE</p>
-      <h3 class="modal-title" id="modalTitle">Title</h3>
-      <p class="modal-desc" id="modalDesc">Description</p>
-      <div class="modal-images" id="modalImages"></div>
-      <div class="modal-tags" id="modalTags"></div>
-      <div class="modal-actions">
-        <a class="btn primary" id="modalLink" href="#" target="_blank" rel="noopener">Open Repo</a>
-        <button class="btn ghost" id="modalBack" type="button">Close</button>
-      </div>
+<header class="site-header" id="top">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Ghazal Mohammad, home">
+      <span class="brand-mark" aria-hidden="true">GM</span>
+      <span class="brand-name">Ghazal Mohammad</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-line" href="ar/" hreflang="ar" lang="ar">عربي</a>
+      <a class="btn btn-dark" href="assets/Ghazal-Mohammad-CV.pdf" download>CV</a>
     </div>
   </div>
+</header>
 
-  <script>
-(function() {
-  // ===== SOUND FUNCTIONS =====
-  var soundEnabled = false;
-  var audioCtx = null;
+<main id="main">
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="pill pill-butter"><span class="dot" aria-hidden="true"></span>Damascus, Syria</span>
+        <h1>Ghazal Mohammad</h1>
+        <p class="hero-role"><mark>Flutter Developer</mark> · Software Engineer</p>
+        <p class="hero-lead">Cross-platform mobile and web applications in Dart and Flutter — Clean Architecture, Bloc and GetX, REST APIs, Firebase, and RTL-first Arabic/English interfaces.</p>
+        <div class="hero-cta">
+          <a class="btn btn-dark btn-lg" href="#work">See projects</a>
+          <a class="btn btn-line btn-lg" href="mailto:mohammadghazal423@gmail.com">mohammadghazal423@gmail.com</a>
+        </div>
+      </div>
+      <div class="stage">
+        <img src="assets/img/dt-teeth-finance.jpg" width="1140" height="1020" alt="DT.Teeth monthly inventory dashboard on the web and the patient payments screen on mobile" fetchpriority="high">
+      </div>
+    </div>
+  </section>
 
-  function playTone(freq, t, type, gainVal) {
-    t = t || 0.06; type = type || "sine"; gainVal = gainVal || 0.045;
-    if (!soundEnabled || !audioCtx) return;
-    try {
-      var o = audioCtx.createOscillator();
-      var g = audioCtx.createGain();
-      var now = audioCtx.currentTime;
-      o.type = type;
-      o.frequency.setValueAtTime(freq, now);
-      g.gain.setValueAtTime(0.0001, now);
-      g.gain.exponentialRampToValueAtTime(gainVal, now + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + t);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start(now); o.stop(now + t);
-    } catch(e) {}
-  }
-  function softOpen()  { playTone(392,.08,"sine",.045); setTimeout(function(){playTone(784,.07,"triangle",.035);},60); }
-  function softClose() { playTone(196,.08,"sine",.045); }
-  function softBoot()  { playTone(330,.08,"sine",.045); setTimeout(function(){playTone(659,.09,"sine",.035);},120); }
-  function softOff()   { playTone(247,.09,"sine",.040); }
+  <section class="wrap" id="work" style="padding-bottom: var(--section)">
+    <h2 class="section-title">Selected work</h2>
+    <div class="bento">
 
-  window.addEventListener("DOMContentLoaded", function() {
+      <article class="feature bg-lilac">
+        <div class="feature-grid">
+          <div>
+            <span class="pill pill-white">Graduation project · 2025–2026</span>
+            <h3>DT.Teeth</h3>
+            <p class="sub">Dental Clinic Management System · Damascus University</p>
+            <p class="desc">Led development of the Warehouse and Lab Manager modules of a multi-platform clinic system. Flutter Web with dark/light themes, RTL-first localization and real-time notifications over a Laravel 11 REST backend and Firebase Cloud Messaging.</p>
+            <div class="feature-cta">
+              <a class="btn btn-dark" href="projects/dt-teeth.html#video"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.8v10.4L12 7z" fill="currentColor"/></svg>Watch walkthrough · 1:43</a>
+              <a class="link-u" href="projects/dt-teeth.html">Case study</a>
+            </div>
+          </div>
+          <div class="feature-media">
+            <img src="assets/img/dt-teeth-dashboard.jpg" width="1126" height="1010" alt="DT.Teeth admin dashboard on the web and the patient app on mobile" loading="lazy">
+          </div>
+        </div>
+      </article>
 
-    // YEAR
-    var y = document.getElementById("y");
-    if (y) y.textContent = new Date().getFullYear();
+      <article class="feature bg-mint">
+        <div class="feature-grid">
+          <div>
+            <span class="pill pill-white">Widespheres · Jun–Aug 2026</span>
+            <h3>Syrian Premier League app</h3>
+            <p class="sub">Flutter Developer · Advanced Training Track · team of 4</p>
+            <p class="desc">Built the Fantasy module end-to-end — pitch lineup with captain and super-sub, transfers, team management and player details — connected to the live API. Also delivered Match Center notifications, a news video player, REST integration, the OTP login flow and Clean Architecture refactors.</p>
+            <div class="tags">
+              <span class="pill pill-white">Flutter</span><span class="pill pill-white">Cubit + Freezed</span><span class="pill pill-white">GoRouter</span><span class="pill pill-white">Dio</span><span class="pill pill-white">AR/EN · RTL</span>
+            </div>
+          </div>
+          <div class="phones" aria-label="Screenshots of the Syrian Premier League app">
+            <div class="phone"><img src="assets/img/spl-home.jpg" width="720" height="1640" alt="Home screen with top scorers, transfers and news" loading="lazy"></div>
+            <div class="phone mid"><img src="assets/img/spl-match-pitch.jpg" width="720" height="1640" alt="Match lineups shown on a football pitch" loading="lazy"></div>
+            <div class="phone"><img src="assets/img/spl-stats.jpg" width="720" height="1640" alt="League statistics: top scorers, assists and ratings" loading="lazy"></div>
+          </div>
+        </div>
+      </article>
 
-    // THEME
-    var themeBtn = document.getElementById("themeToggle");
-    var theme = localStorage.getItem("theme") || "cyan";
-    function applyTheme(t) {
-      document.documentElement.setAttribute("data-theme", t);
-      if (themeBtn) themeBtn.textContent = "Theme: " + t.toUpperCase();
-    }
-    applyTheme(theme);
-    if (themeBtn) {
-      themeBtn.addEventListener("click", function() {
-        theme = theme === "cyan" ? "rose" : "cyan";
-        localStorage.setItem("theme", theme);
-        applyTheme(theme);
-      });
-    }
+      <article class="card bg-sky">
+        <div class="card-media card-media-desktop"><img src="assets/img/pharmacy-admin.jpg" width="1439" height="900" alt="Pharmacy admin panel, permissions management screen" loading="lazy"></div>
+        <div class="card-body">
+          <span class="pill pill-butter">In testing</span>
+          <h3>Pharmacy Management &amp; Medication Recommendation</h3>
+          <p>Role-based flows for users and pharmacy admins, with paginated REST APIs.</p>
+          <p class="card-tech">Flutter · Bloc · GetX · Dio · Freezed</p>
+        </div>
+      </article>
 
-    // SOUND BUTTON
-    var soundBtn = document.getElementById("soundToggle");
-    if (soundBtn) {
-      soundBtn.addEventListener("click", function() {
-        soundEnabled = !soundEnabled;
-        if (soundEnabled && !audioCtx) {
-          try {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === "suspended") {
-              audioCtx.resume().then(function() { softBoot(); });
-              soundBtn.textContent = "Sound: ON";
-              return;
-            }
-          } catch(e) { soundEnabled = false; return; }
-        }
-        soundBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
-        if (soundEnabled) softBoot(); else softOff();
-      });
-    }
+      <article class="card bg-mint">
+        <div class="card-media"><img class="phone-shot" src="assets/img/eshtikily-home.jpg" width="563" height="1280" alt="Eshtikily complaints app, home screen in Arabic" loading="lazy"></div>
+        <div class="card-body">
+          <span class="pill pill-mint">Mobile · Arabic RTL</span>
+          <h3>Eshtikily — Government Complaints</h3>
+          <p>Citizen complaints app with OTP sign-in and REST integration.</p>
+          <p class="card-tech"><a href="https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main" rel="noopener">Source on GitHub</a></p>
+        </div>
+      </article>
 
-    // CURSOR (desktop only)
-    var cursor = document.querySelector(".cursor");
-    if (cursor && window.matchMedia("(hover:hover)").matches) {
-      window.addEventListener("mousemove", function(e) {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top  = e.clientY + "px";
-      });
-      document.querySelectorAll("a, button, .module, .exp-card").forEach(function(el) {
-        el.addEventListener("mouseenter", function() {
-          cursor.style.width = "26px";
-          cursor.style.height = "26px";
-          cursor.style.borderColor = "rgba(255,255,255,.35)";
-        });
-        el.addEventListener("mouseleave", function() {
-          cursor.style.width = "16px";
-          cursor.style.height = "16px";
-          cursor.style.borderColor = "rgba(255,255,255,.22)";
-        });
-      });
-    }
+      <article class="card bg-pink">
+        <div class="card-media"><img class="phone-shot" src="assets/img/course-details.jpg" width="393" height="852" alt="Educational course app, course details screen" loading="lazy"></div>
+        <div class="card-body">
+          <span class="pill pill-pink">Internship · Widespheres</span>
+          <h3>Educational Course App</h3>
+          <p>Clean Architecture, go_router and a custom design system, matched pixel-perfect to Figma.</p>
+          <p class="card-tech">Flutter · Bloc · ScreenUtil</p>
+        </div>
+      </article>
 
-    // REVEAL
-    var revealEls = document.querySelectorAll(".reveal");
-    var io = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("on"); });
-    }, { threshold: 0.1 });
-    revealEls.forEach(function(el) { io.observe(el); });
+    </div>
+  </section>
 
-    // TERMINAL
-    var terminalBox = document.querySelector(".terminal");
-    var lines = [
-      "> Initializing profile...",
-      "> Flutter Developer: LOADED",
-      "> Status: AVAILABLE",
-      "> Location: Damascus, Syria"
-    ];
-    function typeLine(text, cb) {
-      var p = document.createElement("p");
-      terminalBox.appendChild(p);
-      var i = 0;
-      function tick() {
-        p.textContent = text.slice(0, i++);
-        if (i <= text.length) setTimeout(tick, 22);
-        else if (cb) setTimeout(cb, 140);
-      }
-      tick();
-    }
-    if (terminalBox) {
-      terminalBox.innerHTML = "";
-      var idx = 0;
-      function next() { if (idx < lines.length) typeLine(lines[idx++], next); }
-      next();
-    }
+  <section class="skills section" id="skills">
+    <div class="wrap">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        <div class="skill"><span class="bar" style="background:#6EE7D2" aria-hidden="true"></span><h3>Languages &amp; frameworks</h3><p>Flutter, Dart, Java, C++, HTML, CSS</p></div>
+        <div class="skill"><span class="bar" style="background:#C9A7FF" aria-hidden="true"></span><h3>State management</h3><p>Bloc / Cubit, GetX</p></div>
+        <div class="skill"><span class="bar" style="background:#FFC93C" aria-hidden="true"></span><h3>Backend &amp; services</h3><p>REST APIs, Firebase (Auth, Firestore, FCM), Laravel integration</p></div>
+        <div class="skill"><span class="bar" style="background:#FF8FC0" aria-hidden="true"></span><h3>Practices</h3><p>Clean Architecture, Git &amp; GitHub, UI/UX, animations, performance</p></div>
+      </div>
+    </div>
+  </section>
 
-    // MODAL DATA
-    var modalData = {
-      pharmacy: {
-        kicker: "FLUTTER WEB · CUBIT · COMPLETE · PRIVATE",
-        title: "Pharmacy Management System",
-        desc: "<b>My Role:</b> Flutter Web Developer<br><br><b>About:</b> A complete web-based system for pharmacy management — including inventory control, medication recommendations, and role-based admin panel.<br><br><b>What I built:</b><br>→ Full web frontend using Flutter Web<br>→ State management using <b>Cubit</b><br>→ Role-based admin panel (permissions, users, inventory)<br>→ REST API integration with backend<br>→ Dashboard, uploads, offers, proposals & comparison modules<br><br><span style='opacity:.65;font-size:13px;'>Web and backend are fully complete. Source code is private.</span>",
-        tags: ["Flutter Web", "Cubit", "REST API", "Admin Panel", "Role-Based Auth", "Complete", "Private"],
-        link: "#",
-        images: ["assets/screens/Pharmacio.png"],
-        frameType: "browser"
-      },
-      civil: {
-        kicker: "FLUTTER · IN PROGRESS · PRIVATE",
-        title: "Civil Status Automation — Syria",
-        desc: "<b>My Role:</b> Developer<br><br><b>About:</b> A team project to digitize civil status processes at Sharia courts in Syria — automating paperwork, improving access, and modernizing government workflows.<br><br><b>What I work on:</b><br>→ Developing modular UI components with Flutter<br>→ Applying Clean Architecture principles<br>→ Collaborating across a distributed development team<br><br><span style='opacity:.65;font-size:13px;'>This project is in active development. Full details will be announced officially by project management.</span>",
-        tags: ["Flutter", "Dart", "Clean Architecture", "Team Project", "Private"],
-        link: "#",
-        images: ["assets/screens/civil-1.png"],
-        frameType: "browser",
-        locked: true
-      },
-      complaints: {
-        kicker: "FLUTTER MOBILE · DEVELOPER",
-        title: "Eshtikily — Government Complaints Mobile",
-        desc: "<b>My Role:</b> Flutter Mobile Developer<br><br><b>About:</b> A Flutter mobile app enabling Syrian citizens to submit government complaints, track their status, and receive updates — with a clean Arabic RTL interface.<br><br><b>Key Features:</b><br>→ OTP-based secure login<br>→ Complaint submission with photo/file attachments<br>→ Real-time status tracking per complaint<br>→ Category-based filing: rights violations, administrative corruption, service delays<br>→ Arabic RTL interface with city-based filtering",
-        tags: ["Flutter", "Dart", "OTP Auth", "REST API", "Arabic RTL", "Mobile"],
-        link: "https://github.com/ghazal-mohammad/Eshtikily_mobile_app-main",
-        images: ["assets/screens/Government Complaints Mobile (Eshtikily).png"],
-        frameType: "mobile"
-      },
-      education: {
-        kicker: "FLUTTER · BLOC · WIDESPHERES INTERNSHIP",
-        title: "Educational Course Platform",
-        desc: "<b>My Role:</b> Flutter Mobile Trainee (under Widespheres supervision)<br><br><b>About:</b> A mobile learning platform built during my internship at Widespheres on the Mobile development track. The app allows users to browse courses, view lesson details, and access video/PDF content.<br><br><b>What I built:</b><br>→ Course browsing with ratings, levels, and duration<br>→ Course detail screen with lesson breakdown<br>→ State management using <b>Bloc</b><br>→ Video and PDF lesson support<br>→ Clean, modern UI with smooth navigation<br>→ Payment integration UI",
-        tags: ["Flutter", "Dart", "Bloc", "UI/UX", "Widespheres", "Internship Project"],
-        link: "#",
-        images: ["assets/screens/Course Details.png", "assets/screens/Design.png"],
-        frameType: "mobile"
-      },
-      tasktrove: {
-        kicker: "FLUTTER MOBILE · DEVELOPER",
-        title: "Task Trove — Job Platform Mobile App",
-        desc: "<b>My Role:</b> Flutter Mobile Developer<br><br><b>About:</b> A Flutter mobile app connecting job seekers with companies — featuring smart filtering, animated UI, and a full admin panel.<br><br><b>Key Features:</b><br>→ Multi-role auth (Job Seeker / Company / Admin)<br>→ Job listing feed with category & location filters<br>→ Smooth animated transitions and polished UI<br>→ Admin interface for managing listings and users<br>→ GetX state management",
-        tags: ["Flutter", "Dart", "GetX", "Animations", "Admin UI", "Mobile"],
-        link: "#",
-        images: ["assets/screens/Task Trove.png"],
-        video: "assets/screens/tasktrove.mp4",
-        frameType: "browser"
-      },
-      banking: {
-        kicker: "JAVA · UNIVERSITY PROJECT",
-        title: "Advanced Banking System",
-        desc: "<b>About:</b> A modular banking simulation demonstrating mastery of OOP and Software Design Patterns.<br><br><b>What was built:</b><br>→ Account types: Checking, Savings, Loan<br>→ Transactions: Deposit, Withdraw, Transfer<br>→ Design Patterns: Factory, Strategy, Observer<br>→ Data Structures: Custom linked lists & queues<br>→ Full input validation and error handling",
-        tags: ["Java", "OOP", "Data Structures", "Design Patterns", "University Project"],
-        link: "https://github.com/ghazal-mohammad/advanced_banking_system",
-        images: ["assets/screens/Advanced Banking System.png"],
-        frameType: "browser"
-      },
-      dtteeth: {
-        kicker: "🎓 GRADUATION PROJECT · FLUTTER WEB · LARAVEL · IN PROGRESS",
-        title: "DT.Teeth — Dental Clinic Management System",
-        desc: "<b>My Role:</b> Flutter Web Developer — Warehouse & Lab Manager Modules<br><br><b>About:</b> A multi-platform dental clinic management system connecting Flutter Web (admin), React dashboard (analytics), and Flutter Mobile (staff). Powered by Laravel 11 REST backend with MySQL and Firebase Cloud Messaging for real-time notifications.<br><br><b>What I'm building:</b><br>→ Warehouse Management Module — full inventory tracking with CRUD operations<br>→ Lab Manager Module — lab case tracking and workflow management<br>→ Dark/Light theme support with responsive layouts<br>→ Real-time push notifications via Firebase FCM<br>→ Integration with Laravel 11 REST API<br>→ Multi-developer team coordination (Flutter Web, React, Flutter Mobile)<br><br><span style='opacity:.65;font-size:13px;'>⬤ In active development — this is my B.Sc. capstone project at Damascus University.</span>",
-        tags: ["Flutter Web", "Laravel 11", "MySQL", "Firebase FCM", "Clean Architecture", "Dart", "REST API", "Multi-Platform", "Graduation Project"],
-        link: "https://github.com/ghazal-mohammad/dtteeth",
-        images: [],
-        frameType: "browser",
-        locked: true
-      }
-    };
+  <section class="section wrap" id="experience">
+    <h2 class="section-title">Experience</h2>
+    <div class="timeline">
+      <div class="job">
+        <div class="job-main">
+          <h3>Flutter Developer · <span class="org">Widespheres</span></h3>
+          <p class="note">Advanced Training Track · Syrian Premier League app (team of 4)</p>
+          <ul>
+            <li>Built the Fantasy module end-to-end, connected to the live Fantasy API</li>
+            <li>Match Center notifications with unread badge and deep links; news video player (YouTube + HLS)</li>
+            <li>REST integration for teams, players, standings and top scorers; OTP login and auth-gated routing</li>
+          </ul>
+        </div>
+        <span class="pill pill-mint">Jun – Aug 2026</span>
+      </div>
+      <div class="job">
+        <div class="job-main">
+          <h3>Flutter Mobile Intern · <span class="org">Widespheres</span></h3>
+          <p class="note">Foundational Track — a full educational app from Figma, with Git branching and code review. Recognized as Top Intern of the Week.</p>
+        </div>
+        <span class="pill pill-lilac">Mar – May 2026</span>
+      </div>
+      <div class="job">
+        <div class="job-main">
+          <h3>Flutter Developer · <span class="org">Freelance</span></h3>
+          <p class="note">Cross-platform apps from concept to deployment: custom UI, animations, REST APIs, role-based auth and admin interfaces.</p>
+        </div>
+        <span class="pill pill-butter">2024</span>
+      </div>
+      <div class="job">
+        <div class="job-main">
+          <h3>B.Sc. Information Technology Engineering · <span class="org">Damascus University</span></h3>
+          <p class="note">Specialization: Software Engineering · Graduated August 2026</p>
+        </div>
+        <span class="pill pill-pink">2021 – 2026</span>
+      </div>
+    </div>
+  </section>
 
-    // MODAL LOGIC
-    var modal      = document.getElementById("modal");
-    var modalClose = document.getElementById("modalClose");
-    var modalBack  = document.getElementById("modalBack");
-    var modalKicker = document.getElementById("modalKicker");
-    var modalTitle  = document.getElementById("modalTitle");
-    var modalDesc   = document.getElementById("modalDesc");
-    var modalTags   = document.getElementById("modalTags");
-    var modalImages = document.getElementById("modalImages");
-    var modalLink   = document.getElementById("modalLink");
+  <section class="contact wrap" id="contact">
+    <div class="contact-card">
+      <h2>Contact</h2>
+      <a class="contact-mail" href="mailto:mohammadghazal423@gmail.com">mohammadghazal423@gmail.com</a>
+      <div class="contact-links">
+        <a class="btn btn-line" href="https://github.com/ghazal-mohammad" rel="noopener">GitHub</a>
+        <a class="btn btn-line" href="https://www.linkedin.com/in/ghazal-mohammad-0b9067250" rel="noopener">LinkedIn</a>
+        <a class="btn btn-line" href="assets/Ghazal-Mohammad-CV.pdf" download>Download CV</a>
+      </div>
+      <p class="copy">© 2026 Ghazal Mohammad</p>
+    </div>
+  </section>
+</main>
 
-    function openModal(key) {
-      var d = modalData[key];
-      if (!d) return;
-      modalKicker.textContent = d.kicker;
-      modalTitle.textContent  = d.title;
-      modalDesc.innerHTML     = d.desc;
-      modalTags.innerHTML = "";
-      d.tags.forEach(function(t) {
-        var s = document.createElement("span");
-        s.textContent = t;
-        modalTags.appendChild(s);
-      });
-      modalImages.innerHTML = "";
-      if ((d.images && d.images.length) || d.video) {
-        var showcase = document.createElement("div");
-        showcase.className = "showcase " + (d.frameType === "mobile" ? "mobile" : "web");
-        if (d.frameType === "mobile") {
-          d.images.forEach(function(src) {
-            var img = document.createElement("img");
-            img.src = src; img.alt = d.title; img.loading = "lazy";
-            img.className = "showcase-img";
-            showcase.appendChild(img);
-          });
-        } else {
-          if (d.video) {
-            var vid = document.createElement("video");
-            vid.autoplay = true; vid.muted = true; vid.loop = true; vid.playsInline = true;
-            vid.className = "showcase-img";
-            var vsrc = document.createElement("source");
-            vsrc.src = d.video; vsrc.type = "video/mp4";
-            vid.appendChild(vsrc);
-            showcase.appendChild(vid);
-          } else {
-            var img = document.createElement("img");
-            img.src = d.images[0]; img.alt = d.title; img.loading = "lazy";
-            img.className = "showcase-img";
-            showcase.appendChild(img);
-          }
-        }
-        modalImages.appendChild(showcase);
-      }
-      if (d.link === "#") { modalLink.style.display = "none"; }
-      else { modalLink.style.display = "inline-flex"; modalLink.href = d.link; }
-      // Locked project indicator
-      var existingLock = document.getElementById("modalLockNote");
-      if (existingLock) existingLock.remove();
-      if (d.locked) {
-        var lockNote = document.createElement("div");
-        lockNote.id = "modalLockNote";
-        lockNote.style.cssText = "margin-top:16px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px dashed rgba(230,230,235,.22);font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(230,230,235,.6);display:flex;align-items:center;gap:8px;";
-        lockNote.innerHTML = "Details will be published upon official announcement by project management.";
-        document.querySelector(".modal-actions").before(lockNote);
-      }
-      modal.classList.add("on");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-      softOpen();
-    }
-
-    function closeModal() {
-      modal.classList.remove("on");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      softClose();
-    }
-
-    document.querySelectorAll("[data-modal]").forEach(function(el) {
-      el.addEventListener("click", function() { openModal(el.dataset.modal); });
-    });
-
-    // ===== HOVER PREVIEW (modules list) =====
-    var prevItems    = document.querySelectorAll(".preview-item");
-    var prevLabel    = document.getElementById("prevLabel");
-    var previewStage = document.getElementById("previewStage");
-
-    document.querySelectorAll(".mod-row[data-modal]").forEach(function(row) {
-      row.addEventListener("mouseenter", function() {
-        var key = row.dataset.modal;
-        prevItems.forEach(function(item) {
-          item.classList.toggle("active", item.dataset.for === key);
-        });
-        if (previewStage) previewStage.classList.add("has-hover");
-        if (prevLabel) prevLabel.textContent = row.querySelector(".mod-name").textContent;
-      });
-      row.addEventListener("mouseleave", function() {
-        prevItems.forEach(function(item) { item.classList.remove("active"); });
-        if (previewStage) previewStage.classList.remove("has-hover");
-        if (prevLabel) prevLabel.textContent = "";
-      });
-    });
-
-    // ===== VIDEO FALLBACK (show image if video fails) =====
-    document.querySelectorAll(".preview-item.is-web video").forEach(function(vid) {
-      function hidVid() {
-        vid.style.display = "none";
-      }
-      vid.addEventListener("error", hidVid);
-      vid.addEventListener("stalled", hidVid);
-      // If no source can play, hide after short delay
-      setTimeout(function() {
-        if (vid.readyState === 0) hidVid();
-      }, 2000);
-    });
-
-    // ===== MOUSE-TRACKING TILT (modal web showcase images) =====
-    document.addEventListener("mousemove", function(e) {
-      var imgs = document.querySelectorAll(".showcase.web .showcase-img");
-      imgs.forEach(function(el) {
-        var rect = el.getBoundingClientRect();
-        if (rect.width === 0) return;
-        var cx = rect.left + rect.width / 2;
-        var cy = rect.top + rect.height / 2;
-        var dx = (e.clientX - cx) / (rect.width / 2);
-        var dy = (e.clientY - cy) / (rect.height / 2);
-        var rotY = Math.max(-12, Math.min(12, dx * 12));
-        var rotX = Math.max(-5, Math.min(5, -dy * 5));
-        el.style.transform = "perspective(1000px) rotateY(" + rotY + "deg) rotateX(" + rotX + "deg)";
-        el.style.transition = "transform .1s ease";
-      });
-    });
-    if (modalClose) modalClose.addEventListener("click", closeModal);
-    if (modalBack)  modalBack.addEventListener("click", closeModal);
-    if (modal) modal.addEventListener("click", function(e) { if (e.target === modal) closeModal(); });
-    window.addEventListener("keydown", function(e) {
-      if (e.key === "Escape" && modal.classList.contains("on")) closeModal();
-    });
-
-  }); // end DOMContentLoaded
-})(); // end IIFE
-  </script>
+<script src="assets/js/site.js" defer></script>
 </body>
 </html>
