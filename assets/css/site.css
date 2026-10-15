@@ -214,3 +214,15 @@ p { margin: 0; }
   .skills-grid, .facts { grid-template-columns: minmax(0,1fr); }
   .brand-name { font-size: 15px; }
 }
+
+/* Certificates */
+.certs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.cert { border: 1.5px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: var(--ink); background: #fff; transition: transform .15s ease, box-shadow .15s ease; }
+.cert:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(20,22,58,.08); color: var(--ink); }
+.cert-img { background: var(--bg-soft); padding: 20px; display: flex; justify-content: center; }
+.cert-img img { width: 100%; max-width: 480px; border-radius: 10px; box-shadow: 0 6px 18px rgba(20,22,58,.10); }
+.cert-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 6px; }
+.cert-body h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.cert-body p { font-size: 14px; color: var(--muted); }
+.cert-note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+@media (max-width: 900px) { .certs { grid-template-columns: minmax(0, 1fr); } }
