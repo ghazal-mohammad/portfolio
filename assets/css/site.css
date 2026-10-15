@@ -255,3 +255,6 @@ p { margin: 0; }
   .mphone-screen { border-radius: 25px; padding-top: 20px; }
   .mphone-screen::before { top: 6px; height: 9px; }
 }
+.frame-dark { background: #0A0E17; }
+.frame-dark .frame-bar { background: #161B27; border-bottom-color: #232A3A; }
+.feature .frame { box-shadow: 0 0 0 1px rgba(20,22,58,.08), 0 26px 50px -20px rgba(20,22,58,.35); }
