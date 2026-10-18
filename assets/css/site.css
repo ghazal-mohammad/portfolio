@@ -226,6 +226,18 @@ p { margin: 0; }
 .cert-body p { font-size: 14px; color: var(--muted); }
 .cert-note { margin-top: 18px; font-size: 14px; color: var(--muted); }
 @media (max-width: 900px) { .certs { grid-template-columns: minmax(0, 1fr); } }
+.rec { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 0; margin-bottom: 20px; border: 1.5px solid var(--line); border-radius: 22px; overflow: hidden; text-decoration: none; color: var(--ink); background: #fff; transition: transform .15s ease, box-shadow .15s ease; }
+.rec:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(20,22,58,.08); color: var(--ink); }
+.rec-img { background: var(--bg-soft); padding: 24px; display: flex; align-items: center; justify-content: center; }
+.rec-img img { width: 100%; max-width: 230px; height: auto; border-radius: 6px; box-shadow: 0 6px 18px rgba(20,22,58,.12); }
+.rec-body { padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; }
+.rec-body h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+.rec-body blockquote { margin: 4px 0; padding-inline-start: 16px; border-inline-start: 3px solid var(--ink); font-size: 17px; line-height: 1.55; }
+.rec-body p { font-size: 14px; color: var(--muted); }
+.rec-body p b { color: var(--ink); font-weight: 600; }
+.rec-link { font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 700px) { .rec { grid-template-columns: minmax(0, 1fr); } .rec-img img { max-width: 200px; } .rec-body { padding: 22px 22px 26px; } }
+
 
 /* Case-study screenshots */
 .shots-group { margin-top: 56px; }
